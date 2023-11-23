@@ -6,6 +6,7 @@
 #pragma warning (disable:4133)
 #pragma warning (disable:4477)
 
+
 #ifdef _WIN32
 #include <Windows.h>
 #include <stdio.h>
@@ -32,7 +33,30 @@ static wchar_t* string_convert_to_wide_char(const char* str) {
     return wstr;
 }
 
-static void win_get_subdirs(const char* _path) {
+static char* widechar_to_cstr(const wchar_t* wstr) {
+    if (wstr == NULL) {
+        return NULL;
+    }
+
+    int len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
+    if (len == 0) {
+        return NULL;
+    }
+
+    char* str = (char*)malloc(len * sizeof(char));
+    if (str == NULL) {
+        return NULL;
+    }
+
+    if (WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL) == 0) {
+        free(str);
+        return NULL;
+    }
+    return str;
+}
+
+static void win_get_subfiles(const char* _path, cstr output[MAX_FILE_CHILDREN], uint32_t* count) {
+    *count = 0;
     wchar_t* path = string_convert_to_wide_char(_path);
     if (path == NULL) {
         printf("String conversion failed.\n");
@@ -57,17 +81,51 @@ static void win_get_subdirs(const char* _path) {
         if (find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
   
             if (wcscmp(find_file_data.cFileName, L".") != 0 && wcscmp(find_file_data.cFileName, L"..") != 0) {
-                wprintf(L"%ls\n", find_file_data.cFileName); 
+                //wprintf(L"%ls\n", find_file_data.cFileName); 
+                output[(*count)++] = widechar_to_cstr(find_file_data.cFileName);
             }
-        }
-        else {
-            wprintf(L"%ls\n", find_file_data.cFileName);
         }
     } while (FindNextFileW(h_find, &find_file_data));
 
     FindClose(h_find);
     free(path);
 }
+
+static void win_get_subdirs(const char* _path, cstr output[MAX_FILE_CHILDREN], uint32_t* count) {
+    *count = 0;
+    wchar_t* path = string_convert_to_wide_char(_path);
+    if (path == NULL) {
+        printf("String conversion failed.\n");
+        return;
+    }
+
+    WIN32_FIND_DATAW find_file_data;
+    HANDLE h_find = INVALID_HANDLE_VALUE;
+
+    wchar_t search_path[MAX_PATH];
+    swprintf(search_path, MAX_PATH, L"%s\\*", path);
+
+    h_find = FindFirstFileW(search_path, &find_file_data);
+
+    if (h_find == INVALID_HANDLE_VALUE) {
+        wprintf(L"FindFirstFile failed (%d)\n", GetLastError());
+        free(path);
+        return;
+    }
+
+    do {
+        if (find_file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+        }
+        else {
+            //wprintf(L"%ls\n", find_file_data.cFileName);
+            output[(*count)++] = widechar_to_cstr(find_file_data.cFileName);
+        }
+    } while (FindNextFileW(h_find, &find_file_data));
+
+    FindClose(h_find);
+    free(path);
+}
+
 #endif
 
 static char root_path[64];
@@ -113,7 +171,9 @@ void paths_new(cstr path) {
 	}
 	debug_log("%s\n", root_path);
     
-    win_get_subdirs(root_path);
+    cstr children[MAX_FILE_CHILDREN];
+    uint32_t child_count;
+    win_get_subdirs(root_path, children, &child_count);
 }
 
 void paths_del() {
