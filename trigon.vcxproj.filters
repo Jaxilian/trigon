@@ -14,6 +14,7 @@
     <ClCompile Include="src\dev\mem\alloc.c" />
     <ClCompile Include="src\dev\io\file.c" />
     <ClCompile Include="src\dev\mem\cpool.c" />
+    <ClCompile Include="src\dev\cpu\coro.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
@@ -23,5 +24,7 @@
     <ClInclude Include="src\dev\gpu\vk_defines.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
     <ClInclude Include="src\dev\io\io.h" />
+    <ClInclude Include="src\dev\cpu\coro.h" />
+    <ClInclude Include="src\dev\io\backend\stb_image.h" />
   </ItemGroup>
 </Project>

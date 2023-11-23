@@ -172,6 +172,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\dev\cpu\coro.c" />
     <ClCompile Include="src\dev\cpu\threads.c" />
     <ClCompile Include="src\dev\gpu\vk_buffer.c" />
     <ClCompile Include="src\dev\gpu\vk_descriptor.c" />
@@ -187,9 +188,11 @@
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\dev\cpu\coro.h" />
     <ClInclude Include="src\dev\cpu\threads.h" />
     <ClInclude Include="src\dev\gpu\vk.h" />
     <ClInclude Include="src\dev\gpu\vk_defines.h" />
+    <ClInclude Include="src\dev\io\backend\stb_image.h" />
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
     <ClInclude Include="src\dev\std\defines.h" />
