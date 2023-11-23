@@ -99,6 +99,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,6 +121,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +143,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,6 +165,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -182,9 +186,12 @@
     <ClCompile Include="src\dev\gpu\vk_state.c" />
     <ClCompile Include="src\dev\gpu\vk_swapchain.c" />
     <ClCompile Include="src\dev\io\file.c" />
+    <ClCompile Include="src\dev\io\file_image.c" />
+    <ClCompile Include="src\dev\io\paths.c" />
     <ClCompile Include="src\dev\mem\alloc.c" />
     <ClCompile Include="src\dev\mem\cpool.c" />
     <ClCompile Include="src\dev\std\debug.c" />
+    <ClCompile Include="src\dev\std\strings.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -192,7 +199,6 @@
     <ClInclude Include="src\dev\cpu\threads.h" />
     <ClInclude Include="src\dev\gpu\vk.h" />
     <ClInclude Include="src\dev\gpu\vk_defines.h" />
-    <ClInclude Include="src\dev\io\backend\stb_image.h" />
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
     <ClInclude Include="src\dev\std\defines.h" />

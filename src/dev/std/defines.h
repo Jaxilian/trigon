@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <stddef.h>
 
-typedef const char* cstr_t;
+#define cstr const char*
 typedef void* ptr_t;
 typedef void (*event_t)();
 

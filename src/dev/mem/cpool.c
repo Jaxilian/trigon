@@ -45,7 +45,7 @@ void cpool_new(cpool_t* pool, size_t stride, uint32_t preset_length) {
 	pool->max_count = predef_len;
 	pool->length = 0;
 	pool->queue = mem_alloc(sizeof(uint32_t) * pool->max_count);
-	pool->data = mem_alloc(stride * pool->max_count);
+	pool->data = mem_alloc(stride * (size_t)pool->max_count);
 
 	validate(pool->queue, "failed to allocate queue!\n");
 	validate(pool->data, "failed to allocate data!\n");

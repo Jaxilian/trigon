@@ -14,7 +14,7 @@ typedef struct {
 } cpool_t;
 
 #ifdef _DEBUG
-ptr_t cmem_alloc(size_t size, cstr_t file, uint32_t line);
+ptr_t cmem_alloc(size_t size, cstr file, uint32_t line);
 void  cmem_free(ptr_t ptr);
 void  cmem_check();
 

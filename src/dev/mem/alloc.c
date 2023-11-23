@@ -9,7 +9,7 @@
 typedef struct {
     bool        initialized;
     ptr_t       pointer;
-    cstr_t      file;
+    cstr      file;
     uint32_t    line;
     size_t      size;
 } mem_ptr_t;
@@ -46,7 +46,7 @@ static size_t fnv1a_hash_x64(ptr_t ptr, size_t max) {
 }
 
 
-ptr_t cmem_alloc(size_t size, cstr_t file, uint32_t line) {
+ptr_t cmem_alloc(size_t size, cstr file, uint32_t line) {
     validate(allocations < 512, "max allocations reached [512]! change max stack in alloc.c\n");
  
     ptr_t ptr = malloc(size);
