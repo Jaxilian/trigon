@@ -20,6 +20,63 @@ static VkBool32 debug_callback(
 }
 #endif
 
+uint32_t vk_fetch_memory_type(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(ctx->device.gpu, &memProperties);
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+        if ((typeFilter & (1 << i)) &&
+            (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    validate(false, "failed to find suitable memory type!");
+    return 0;
+}
+
+void vk_create_image_with_info(
+    const VkImageCreateInfo* info,
+    VkMemoryPropertyFlags properties,
+    VkImage* image,
+    VkDeviceMemory* imageMemory)
+{
+    bool success = vkCreateImage(ctx->device.device, info, NULL, image) == VK_SUCCESS;
+    validate(success, "failed to create image!\n");
+
+    VkMemoryRequirements memRequirements;
+    vkGetImageMemoryRequirements(ctx->device.device, *image, &memRequirements);
+
+    VkMemoryAllocateInfo allocInfo = { 0 };
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = vk_fetch_memory_type(memRequirements.memoryTypeBits, properties);
+
+    success = vkAllocateMemory(ctx->device.device, &allocInfo, NULL, imageMemory) == VK_SUCCESS;
+    validate(success, "failed to allocate image memory!");
+
+    success = vkBindImageMemory(ctx->device.device, *image, *imageMemory, 0) == VK_SUCCESS;
+    validate(success, "failed to bind image memory!");
+}
+
+VkFormat vk_format_supported(
+    const VkFormat* candidates, uint32_t candidate_count, VkImageTiling tiling, VkFormatFeatureFlags features) {
+
+    for (uint32_t i = 0; i < candidate_count; i++) {
+        VkFormatProperties props;
+        vkGetPhysicalDeviceFormatProperties(ctx->device.gpu, candidates[i], &props);
+        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
+            return  candidates[i];
+        }
+        else if (
+            tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+            return  candidates[i];
+        }
+    }
+
+    validate(false, "failed to find supported format!\n");
+    return 0;
+}
+
 swap_support_t* vk_open_swap_support(VkPhysicalDevice device) {
     validate(!support_open, "swap support cache was already open!\n");
     swap_support_t* support = mem_alloc(sizeof(swap_support_t));

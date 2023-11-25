@@ -9,6 +9,12 @@ static void glfw_error_callback(int code, cstr msg) {
 }
 #endif
 
+static void glfw_resized_event(GLFWwindow* window, int width, int height) {
+	ctx->win.width		= width;
+	ctx->win.height		= height;
+	ctx->win.resized	= true;
+}
+
 static cstr*	extensions = NULL;
 
 bool win_supported() {
@@ -34,10 +40,13 @@ void win_new() {
 #ifdef _DEBUG
 	glfwSetErrorCallback(glfw_error_callback);
 #endif
+	ctx->win.width = 800;
+	ctx->win.height = 600;
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	ctx->win.handle = glfwCreateWindow(800, 600, name, NULL, NULL);
+	ctx->win.handle = glfwCreateWindow(ctx->win.width, ctx->win.height, name, NULL, NULL);
 	validate(ctx->win.handle != NULL, "failed to create window");
+	glfwSetFramebufferSizeCallback(ctx->win.handle, glfw_resized_event);
 
 	ctx->win.running = true;
 }

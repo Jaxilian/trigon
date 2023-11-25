@@ -22,6 +22,7 @@
     <ClCompile Include="src\dev\mem\core_ctx.c" />
     <ClCompile Include="src\dev\gpu\vk_pipeline.c" />
     <ClCompile Include="src\dev\gpu\vk.c" />
+    <ClCompile Include="src\dev\gpu\vk_state.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
@@ -34,5 +35,6 @@
     <ClInclude Include="examples\examples.h" />
     <ClInclude Include="src\dev\win\win.h" />
     <ClInclude Include="src\dev\mem\core_ctx_def.h" />
+    <ClInclude Include="src\dev\gpu\vk_def.h" />
   </ItemGroup>
 </Project>

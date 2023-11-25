@@ -21,6 +21,9 @@ int main(int argc, char* argv[]) {
 
 	while (ctx->win.running) {
 		win_poll_events();
+		vk_frame_begin();
+
+		vk_frame_end();
 	}
 
 	vk_del();
