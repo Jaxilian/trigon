@@ -7,7 +7,6 @@
     <ClCompile Include="src\dev\gpu\vk_instance.c" />
     <ClCompile Include="src\dev\gpu\vk_device.c" />
     <ClCompile Include="src\dev\gpu\vk_swapchain.c" />
-    <ClCompile Include="src\dev\gpu\vk_state.c" />
     <ClCompile Include="src\dev\gpu\vk_buffer.c" />
     <ClCompile Include="src\dev\gpu\vk_image.c" />
     <ClCompile Include="src\dev\gpu\vk_descriptor.c" />
@@ -18,15 +17,22 @@
     <ClCompile Include="src\dev\io\file_image.c" />
     <ClCompile Include="src\dev\io\paths.c" />
     <ClCompile Include="src\dev\std\strings.c" />
+    <ClCompile Include="examples\examples.c" />
+    <ClCompile Include="src\dev\win\win.c" />
+    <ClCompile Include="src\dev\mem\core_ctx.c" />
+    <ClCompile Include="src\dev\gpu\vk_pipeline.c" />
+    <ClCompile Include="src\dev\gpu\vk.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
     <ClInclude Include="src\dev\std\std.h" />
     <ClInclude Include="src\dev\cpu\threads.h" />
     <ClInclude Include="src\dev\gpu\vk.h" />
-    <ClInclude Include="src\dev\gpu\vk_defines.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\cpu\coro.h" />
+    <ClInclude Include="examples\examples.h" />
+    <ClInclude Include="src\dev\win\win.h" />
+    <ClInclude Include="src\dev\mem\core_ctx_def.h" />
   </ItemGroup>
 </Project>

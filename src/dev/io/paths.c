@@ -26,7 +26,7 @@ static void split_path(cstr str, cstr delimiter, cstr output[32], uint32_t* coun
     }
 }
 
-void paths_new(cstr path) {
+void path_new_root(cstr path) {
 
     cstr parts[32];
     uint32_t count = 0; 
@@ -42,20 +42,36 @@ void paths_new(cstr path) {
         root_path[index] = '\\';
         index++;
 	}
-	//debug_log("%s\n", root_path);
 }
 
-cstr paths_get_root() {
+cstr path_get_root() {
     return root_path;
 }
 
-cstr paths_get(cstr path) {
+cstr path_get_path(cstr path) {
+
+    validate(strlen(root_path) + strlen(path) < 255,
+        "max cursor len reached [255] in paths.c, you're using: %zu", strlen(root_path) + strlen(path)
+    );
+
     memset(cursor, 0, 255);
     strcpy(cursor, root_path);
     strcat(cursor, path);
+    strcat(cursor, "\\");
     return cursor;
 }
 
-void paths_del() {
+cstr path_get_file(cstr path, cstr name) {
+    char buffer[255] = { 0 };
+    strcpy(buffer, path);
 
+    validate(strlen(buffer) + strlen(path) < 255,
+        "max cursor len reached [255] in paths.c, you're using: %zu", strlen(buffer) + strlen(path)
+    );
+
+    memset(cursor, 0, 255);
+    strcpy(cursor, buffer);
+    strcat(cursor, name);
+    return cursor;
 }
+

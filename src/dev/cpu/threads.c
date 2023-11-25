@@ -1,7 +1,7 @@
 #include "threads.h"
 
-static void* threads[4]		= { 0 };
-static uint8_t thread_count	= 0;
+static void* threads[CPU_WORKER_COUNT] = { 0 };
+static uint8_t active_workers = 0;
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -11,46 +11,50 @@ static DWORD WINAPI win_thread_function(LPVOID lpParam) {
 	return 0;
 }
 
-inline static uint32_t win_get_cores() {
+static uint32_t win_get_cores() {
 	SYSTEM_INFO si;
 	GetSystemInfo(&si);
 	return si.dwNumberOfProcessors;
 }
 
-inline static void win_start_thread(event_t func) {
+static uint32_t win_get_threads() {
 	uint32_t cores = win_get_cores();
-	validate(cores >= 4, "system does not have more or equal to 4 cores");
+	uint32_t threads = cores * 2;
+	return threads;
+}
 
-	if (thread_count >= 4) {
-		return;
-	}
+static void win_start_thread(event_t func, CPU_WORKER type) {
+	uint32_t cores = win_get_threads();
+	validate(cores >= CPU_WORKER_COUNT, "system does not have more or equal to %d cores", CPU_WORKER_COUNT);
 
 	DWORD id;
-	threads[thread_count] = CreateThread(NULL, 0, win_thread_function, func, 0, &id);
-	if (!threads[thread_count]) {
+	threads[type] = CreateThread(NULL, 0, win_thread_function, func, 0, &id);
+	if (!threads[type]) {
 		return;
 	}
-
-	thread_count++;
 }
 
 inline static void win_thread_await_all() {
-	for (uint8_t i = 0; i < thread_count; i++) {
+	for (uint8_t i = 0; i < CPU_WORKER_COUNT; i++) {
+		if (!active_workers & i) continue;
 		if (threads[i] == NULL) continue;
 		WaitForSingleObject(threads[i], INFINITE);
 		CloseHandle(threads[i]);
 		threads[i] = NULL;
 	}
-
-	thread_count = 0;
+	active_workers = 0;
 }
 
 #endif
 
 
-void thread_start(event_t function) {
+void thread_start(event_t function, CPU_WORKER type) {
+	if (active_workers & type) {
+		return;
+	}
+	active_workers |= type;
 #ifdef _WIN32
-	win_start_thread(function);
+	win_start_thread(function, type);
 #endif
 }
 

@@ -50,7 +50,7 @@ ptr_t cmem_alloc(size_t size, cstr file, uint32_t line) {
     validate(allocations < 512, "max allocations reached [512]! change max stack in alloc.c\n");
  
     ptr_t ptr = malloc(size);
-    validate(ptr == NULL,
+    validate(ptr != NULL,
         "failed to allocate memory!\n"
         "information:\n"
         "    size-> %zu\n"
@@ -83,12 +83,14 @@ void  cmem_free(ptr_t ptr) {
         return;
     }
 
+
     free(ptr);
     memset(&pointers[ptr_id], 0, sizeof(mem_ptr_t));
     allocations--;
 }
 
 void  cmem_check() {
+    bool failed = false;
     for (uint32_t i = 0; i < 512; i++) {
         if (pointers[i].initialized) {
             printf(
@@ -101,7 +103,9 @@ void  cmem_check() {
                 pointers[i].file,
                 pointers[i].line
             );
+            failed = true;
         }
     }
+    validate(failed == false, "memory leak found\n");
 }
 #endif
