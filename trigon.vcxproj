@@ -190,6 +190,7 @@
     <ClCompile Include="src\dev\gpu\vk_image.c" />
     <ClCompile Include="src\dev\gpu\vk_instance.c" />
     <ClCompile Include="src\dev\gpu\vk_pipeline.c" />
+    <ClCompile Include="src\dev\gpu\vk_shaders.c" />
     <ClCompile Include="src\dev\gpu\vk_state.c" />
     <ClCompile Include="src\dev\gpu\vk_swapchain.c" />
     <ClCompile Include="src\dev\io\file.c" />

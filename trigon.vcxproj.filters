@@ -23,6 +23,7 @@
     <ClCompile Include="src\dev\gpu\vk_pipeline.c" />
     <ClCompile Include="src\dev\gpu\vk.c" />
     <ClCompile Include="src\dev\gpu\vk_state.c" />
+    <ClCompile Include="src\dev\gpu\vk_shaders.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />

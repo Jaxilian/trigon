@@ -161,5 +161,14 @@ typedef struct {
 	bool		frame_in_progress;
 } vk_state_t;
 
+typedef struct {
+	bool				initialized;
+	VkBuffer			buffer;
+	VkDeviceMemory		memory;
+	size_t				size;
+	size_t				alignment;
+	uint32_t			count;
+} vk_buffer_t;
+
 #endif // !T_VK_DEF_H
 

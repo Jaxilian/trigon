@@ -19,6 +19,9 @@ typedef struct {
 	uint32_t		channels;
 } file_img_t;
 
+void	file_close();
+char*	file_open(cstr path, size_t* out_size);
+
 void file_img_open(cstr path, file_img_t* image);
 void file_img_close(file_img_t* img);
 void file_img_write(cstr path, file_img_t* image);
