@@ -8,7 +8,9 @@
 #include "dev/cpu/threads.h"
 #include <cglm/cglm.h>
 
-
+#define MAX_DESCRIPTOR_SETS_IN_USE 4
+#define MAX_DESCRIPTOR_SETS 16
+#define MAX_DESCRIPTORS_PER_SET 5
 #define MAX_SHADERS 16
 #define MAX_FRAMES_IN_FLIGHT 2
 
@@ -151,9 +153,9 @@ static const VkVertexInputAttributeDescription default_vertex_attributes[default
 
 typedef struct {
 	bool					initialized;
-	vk_shader_t* shader;
-	vk_pipeline_config_t* config;
-	VkPipelineLayout* layout;
+	vk_shader_t*			shader;
+	vk_pipeline_config_t*	config;
+	VkPipelineLayout*		layout;
 	VkPipeline				instance;
 } vk_pipeline_t;
 
@@ -173,6 +175,14 @@ typedef struct {
 } vk_buffer_t;
 
 
+typedef struct {
+	bool							initialized;
+	VkDescriptorSetLayoutBinding	descriptors[MAX_DESCRIPTORS_PER_SET];
+	uint32_t						descriptor_count;
+	VkDescriptorSetLayout			set_layout;
+	VkDescriptorPool				descriptor_pool;
+	VkDescriptorSet					descriptor_set;
+} vk_descriptor_t;
 
 #endif // !T_VK_DEF_H
 
