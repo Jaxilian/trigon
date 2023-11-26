@@ -172,5 +172,7 @@ typedef struct {
 	uint32_t			count;
 } vk_buffer_t;
 
+
+
 #endif // !T_VK_DEF_H
 

@@ -14,6 +14,13 @@ void vk_swapchain_del();
 void vk_new();
 void vk_del();
 
+uint32_t vk_pipeline_new(VkPipelineLayout* layout, vk_shader_t* shader, vk_pipeline_config_t* config);
+void vk_pipeline_del(uint32_t id);
+void vk_pipeline_clear();
+vk_pipeline_t* vk_pipeline_get(uint32_t id);
+void vk_pipeline_bind(vk_pipeline_t* pipeline);
+void vk_pipeline_rebuild();
+
 VkCommandBuffer vk_command_buffer();
 
 swap_support_t* vk_open_swap_support(VkPhysicalDevice device);

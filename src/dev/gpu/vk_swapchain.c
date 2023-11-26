@@ -367,7 +367,7 @@ void vk_swapchain_new() {
     create_depth_resource();
     create_framebuffers();
     create_sync_objects();
-    //vk_pipeline_rebuild();
+    vk_pipeline_rebuild();
 }
 
 void vk_swapchain_del() {
