@@ -46,10 +46,10 @@ static size_t fnv1a_hash_x64(void* ptr, size_t max) {
 }
 
 
-ptr_t cmem_alloc(size_t size, cstr file, uint32_t line) {
+void* cmem_alloc(size_t size, cstr file, uint32_t line) {
     validate(allocations < 512, "max allocations reached [512]! change max stack in alloc.c\n");
  
-    ptr_t ptr = malloc(size);
+    void* ptr = malloc(size);
     validate(ptr != NULL,
         "failed to allocate memory!\n"
         "information:\n"
