@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _DEBUG
 #ifdef _WIN32
 static void win_set_color(LOG_COL color) {
     switch (color) {
@@ -30,14 +31,17 @@ static void win_set_color(LOG_COL color) {
 #else
 #define set_color
 #endif
+#endif
 
 void debug_log_col(LOG_COL color, cstr format, ...) {
+#ifdef _DEBUG
     set_color(color);
     va_list args;
     va_start(args, format);
     vprintf(format, args);
     va_end(args);
     set_color(LOG_COL_DEFAULT);
+#endif
 }
 
 void debug_dump(cstr file_path, cstr format, ...) {
@@ -53,10 +57,12 @@ void debug_dump(cstr file_path, cstr format, ...) {
 }
 
 void debug_log(cstr format, ...) {
+#ifdef _DEBUG
     va_list args;
     va_start(args, format);
     vprintf(format, args);
     va_end(args);
+#endif
 }
 
 void validate(bool expression, cstr format, ...) {

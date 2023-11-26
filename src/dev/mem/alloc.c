@@ -8,8 +8,8 @@
 
 typedef struct {
     bool        initialized;
-    ptr_t       pointer;
-    cstr      file;
+    void*       pointer;
+    cstr        file;
     uint32_t    line;
     size_t      size;
 } mem_ptr_t;
@@ -17,7 +17,7 @@ typedef struct {
 static mem_ptr_t pointers[512] = { 0 };
 static uint32_t allocations = 0;
 
-static size_t fnv1a_hash_x32(ptr_t ptr, size_t max) {
+static size_t fnv1a_hash_x32(void* ptr, size_t max) {
     uintptr_t val = (uintptr_t)ptr;
     const size_t fnv_prime = 0x811C9DC5; 
     size_t hash = 0x811C9DC5;
@@ -31,7 +31,7 @@ static size_t fnv1a_hash_x32(ptr_t ptr, size_t max) {
     return hash % max;
 }
 
-static size_t fnv1a_hash_x64(ptr_t ptr, size_t max) {
+static size_t fnv1a_hash_x64(void* ptr, size_t max) {
     uintptr_t val = (uintptr_t)ptr;
     const size_t fnv_prime = 0x100000001B3;
     size_t hash = 0xCBF29CE484222325; 
@@ -73,7 +73,7 @@ ptr_t cmem_alloc(size_t size, cstr file, uint32_t line) {
 }
 
 
-void  cmem_free(ptr_t ptr) {
+void  cmem_free(void* ptr) {
     if (ptr == NULL) return;
     uint32_t ptr_id = (uint32_t)fnv1a_hash_x64(ptr, 512);
 

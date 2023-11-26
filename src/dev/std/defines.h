@@ -5,7 +5,6 @@
 #include <stddef.h>
 
 #define cstr const char*
-typedef void* ptr_t;
 typedef void (*event_t)();
 
 

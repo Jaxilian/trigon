@@ -1,12 +1,14 @@
 #ifndef T_MEM_H
 #define T_MEM_H
 #include "dev/std/std.h"
+#include <memory.h>
+#include <stdlib.h>
 
 typedef struct {
 	uint32_t	max_count;
 	uint32_t	length;
 	size_t		stride;
-	ptr_t		data;
+	void*		data;
 
 	uint32_t	queue_out_ptr;
 	uint32_t	queue_in_ptr;
@@ -23,8 +25,8 @@ void		cpool_del(cpool_t* pool);
 size_t		cpool_mem(cpool_t* pool);
 
 #ifdef _DEBUG
-ptr_t cmem_alloc(size_t size, cstr file, uint32_t line);
-void  cmem_free(ptr_t ptr);
+void* cmem_alloc(size_t size, cstr file, uint32_t line);
+void  cmem_free(void* ptr);
 void  cmem_check();
 
 #define mem_alloc(size) cmem_alloc(size,  __FILE__, __LINE__);
@@ -33,7 +35,7 @@ void  cmem_check();
 #else
 #define mem_alloc(size)malloc(size)
 #define mem_free(ptr)free(ptr)
-#define mem_check
+#define mem_check()
 #endif
 
 

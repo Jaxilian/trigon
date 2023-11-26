@@ -1,5 +1,5 @@
 #include "mem.h"
-#include <memory.h>
+
 
 static uint32_t get_next_power_of_two(uint32_t number) {
 	if (number <= 2) {
@@ -14,8 +14,8 @@ static uint32_t get_next_power_of_two(uint32_t number) {
 }
 
 static void cpool_resize(cpool_t* pool) {
-	uint32_t new_max = pool->max_count * 2;
-	void* new_data = mem_alloc(pool->stride * new_max);
+	uint32_t new_max	= pool->max_count * 2;
+	void* new_data		= mem_alloc(pool->stride * new_max);
 	uint32_t* new_queue = mem_alloc(sizeof(uint32_t) * new_max);
 
 	validate(new_data, "failed to allocate queue!\n");

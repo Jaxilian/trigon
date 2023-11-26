@@ -23,6 +23,8 @@ typedef struct {
 	bool			initialized;
 	bool			running;
 	bool			resized;
+	double			prev_time;
+	double			time_now;
 	mutex_t			mutex;
 	GLFWwindow* handle;
 	uint32_t		width;

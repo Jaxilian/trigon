@@ -70,6 +70,9 @@ void win_poll_events() {
 	if (glfwWindowShouldClose(ctx->win.handle)){
 		ctx->win.running = false;
 	}
+	
+	ctx->win.prev_time = ctx->win.time_now;
+	ctx->win.time_now = glfwGetTime();
 }
 
 cstr* win_open_extensions(uint32_t* count) {
@@ -88,7 +91,7 @@ cstr* win_open_extensions(uint32_t* count) {
 	*count = extc;
 	return extensions;
 #else
-	retrun glfwGetRequiredInstanceExtensions(count);
+	return glfwGetRequiredInstanceExtensions(count);
 #endif
 }
 
