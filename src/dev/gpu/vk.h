@@ -29,6 +29,16 @@ void		vk_descriptors_bind(uint32_t descriptor, uint32_t pipeline_layout);
 void		vk_descriptor_del(uint32_t id);
 uint32_t	vk_descriptor_new(VkDescriptorSetLayoutBinding info[MAX_DESCRIPTORS_PER_SET], uint32_t count);
 void		vk_descriptor_clear();
+void		vk_descriptors_update(
+				uint32_t descriptor_id,
+				uint32_t binding_id,
+				vk_buffer_t* buffers[MAX_DESCRIPTOR_SETS_IN_USE]
+			);
+
+void vk_buffer_new(size_t size, uint32_t count, vk_buffer_t* out);
+void vk_buffer_resize(vk_buffer_t* buffer, uint32_t new_count);
+void vk_buffer_set(vk_buffer_t* buffer, void* data);
+void vk_buffer_del(vk_buffer_t* buffer);
 
 VkCommandBuffer vk_command_buffer();
 

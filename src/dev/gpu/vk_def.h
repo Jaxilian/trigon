@@ -174,7 +174,6 @@ typedef struct {
 	uint32_t			count;
 } vk_buffer_t;
 
-
 typedef struct {
 	bool							initialized;
 	VkDescriptorSetLayoutBinding	descriptors[MAX_DESCRIPTORS_PER_SET];
