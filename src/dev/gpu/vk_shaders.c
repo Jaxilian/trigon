@@ -25,5 +25,12 @@ void vk_shader_del(vk_shader_t* shader) {
 	if (!shader->initialized) return;
 	vkDestroyShaderModule(ctx->device.device, shader->vertex_module, NULL);
 	vkDestroyShaderModule(ctx->device.device, shader->fragment_module, NULL);
-	shader->initialized = false;
+	memset(shader, 0, sizeof(vk_shader_t));
+}
+
+void vk_shader_clear() {
+	for (uint32_t i = 0; i < MAX_SHADERS; i++) {
+		if (!ctx->shaders[i].initialized) continue;
+		vk_shader_del(&ctx->shaders[i]);
+	}
 }

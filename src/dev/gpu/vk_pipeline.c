@@ -109,7 +109,7 @@ void vk_pipeline_rebuild() {
         vk_pipeline_t* pipeline = get_pipeline(i);
         if (!pipeline) continue;
 
-        VkPipelineLayout* layout = pipeline->layout;
+        VkPipelineLayout layout = pipeline->layout;
         vk_shader_t* shader = pipeline->shader;
         vk_pipeline_config_t* config = pipeline->config;
 
@@ -142,7 +142,7 @@ void vk_pipeline_rebuild() {
             .pColorBlendState = &config->color_blend_state,
             .pDepthStencilState = &config->depth_stencil,
             .pDynamicState = &config->dynamic_state,
-            .layout = *layout,
+            .layout = layout,
             .renderPass = ctx->swapchain.renderpass,
             .subpass = config->subpass,
             .basePipelineIndex = -1,
@@ -162,12 +162,34 @@ void vk_pipeline_rebuild() {
     }
 }
 
-uint32_t vk_pipeline_new(VkPipelineLayout* layout, vk_shader_t* shader, vk_pipeline_config_t* config) {
+void generate_pipeline_layout(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, VkPipelineLayout* out) {
+    VkDescriptorSetLayout layouts[MAX_DESCRIPTOR_SETS_IN_USE] = { 0 };
+    for (uint32_t i = 0; i < sets_count; ++i) {
+        layouts[i] = sets[i].set_layout;
+    }
+
+    VkPipelineLayoutCreateInfo pipeline_layout_info = {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+        .setLayoutCount = sets_count,
+        .pSetLayouts = layouts
+    };
+
+    validate(
+        vkCreatePipelineLayout(
+            ctx->device.device,
+            &pipeline_layout_info,
+            NULL,
+            out) == VK_SUCCESS,
+        "failed to create pipeline layout!\n");
+}
+
+uint32_t vk_pipeline_new(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config) {
     uint32_t id = get_next_pipeline();
     vk_pipeline_t* pipeline = get_pipeline(id);
 
+    generate_pipeline_layout(sets, sets_count, &pipeline->layout);
+
     pipeline->config = config;
-    pipeline->layout = layout;
     pipeline->shader = shader;
 
     vk_pipeline_config_t default_config = { 0 };
@@ -201,7 +223,7 @@ uint32_t vk_pipeline_new(VkPipelineLayout* layout, vk_shader_t* shader, vk_pipel
         .pColorBlendState = &config->color_blend_state,
         .pDepthStencilState = &config->depth_stencil,
         .pDynamicState = &config->dynamic_state,
-        .layout = *layout,
+        .layout = pipeline->layout,
         .renderPass = ctx->swapchain.renderpass,
         .subpass = config->subpass,
         .basePipelineIndex = -1,
@@ -226,6 +248,7 @@ void vk_pipeline_del(uint32_t id) {
     if (!pipeline) return;
 
     vkDeviceWaitIdle(ctx->device.device);
+    vkDestroyPipelineLayout(ctx->device.device, pipeline->layout, NULL);
     vkDestroyPipeline(ctx->device.device, pipeline->instance, NULL);
     pipeline->initialized = false;
 }

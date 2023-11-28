@@ -14,26 +14,20 @@ void vk_swapchain_del();
 void vk_new();
 void vk_del();
 
-uint32_t	vk_pipeline_new(VkPipelineLayout* layout, vk_shader_t* shader, vk_pipeline_config_t* config);
+uint32_t	vk_pipeline_new(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config);
 void		vk_pipeline_del(uint32_t id);
 void		vk_pipeline_clear();
 void		vk_pipeline_bind(vk_pipeline_t* pipeline);
 void		vk_pipeline_rebuild();
 vk_pipeline_t* vk_pipeline_get(uint32_t id);
 
-uint32_t	vk_pipeline_layout_new(uint32_t descriptors[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t count);
-void		vk_pipeline_layout_del(uint32_t id);
-void		vk_pipeline_layout_clear();
+void vk_shader_new(vk_shader_t* shader, cstr vertex_path, cstr fragment_path);
+void vk_shader_del(vk_shader_t* shader);
+void vk_shader_clear();
 
-void		vk_descriptors_bind(uint32_t descriptor, uint32_t pipeline_layout);
-void		vk_descriptor_del(uint32_t id);
-uint32_t	vk_descriptor_new(VkDescriptorSetLayoutBinding info[MAX_DESCRIPTORS_PER_SET], uint32_t count);
-void		vk_descriptor_clear();
-void		vk_descriptors_update(
-				uint32_t descriptor_id,
-				uint32_t binding_id,
-				vk_buffer_t* buffers[MAX_DESCRIPTOR_SETS_IN_USE]
-			);
+void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, vk_descriptor_t* out);
+void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* out);
+void vk_descriptor_set_del(vk_descriptor_set_t* in);
 
 void vk_buffer_new(size_t size, uint32_t count, vk_buffer_t* out);
 void vk_buffer_resize(vk_buffer_t* buffer, uint32_t new_count);

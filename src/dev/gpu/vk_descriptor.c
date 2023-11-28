@@ -1,198 +1,156 @@
 #include "vk.h"
 
-
-static uint32_t get_next() {
-	for (uint32_t i = 0; i < MAX_DESCRIPTOR_SETS; i++) {
-		if (ctx->sets[i].initialized) continue;
-		return i;
-	}
-	validate(false, "max descriptor set reached [%d]\n", MAX_DESCRIPTOR_SETS);
-	return 0;
+static VkDescriptorType convert_type(shader_property_e type) {
+    switch (type) {
+    case SHADER_STATIC_BUFFER:
+        return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    case SHADER_DYNAMIC_BUFFER:
+        return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    case SHADER_SAMPLER_BUFFER:
+        return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    default:
+        validate(false, "unkown shader property type %s :&d", __FILE__, __LINE__);
+        return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    }
 }
 
-static vk_descriptor_t* get_desc(uint32_t id) {
-	vk_descriptor_t* desc = &ctx->sets[id];
-	if (!desc->initialized) {
-		return NULL;
-	}
-	return desc;
+static void convert_bindings(uint32_t count, vk_descriptor_t descriptors[MAX_DESC_PER_SET], VkDescriptorSetLayoutBinding out[MAX_DESC_PER_SET]) {
+    for (uint32_t i = 0; i < count; i++) {
+        memcpy(&out[i], &descriptors[i].binding, sizeof(VkDescriptorSetLayoutBinding));
+    }
 }
 
-uint32_t vk_descriptor_new(VkDescriptorSetLayoutBinding info[MAX_DESCRIPTORS_PER_SET], uint32_t count) {
-	uint32_t id = get_next();
-	vk_descriptor_t* desc = get_desc(id);
-	if (desc->initialized) return id;
+void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, vk_descriptor_t* out) {
+    VkDescriptorType local_type = { 0 };
+    VkShaderStageFlags stage = { 0 };
 
-	VkDescriptorSetLayoutCreateInfo layout_info = {
-		.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-		.bindingCount = count,
-		.pBindings = info,
-	};
+    switch (type) {
+    case SHADER_STATIC_BUFFER:
+        local_type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        stage = VK_SHADER_STAGE_VERTEX_BIT;
+        break;
+    case SHADER_DYNAMIC_BUFFER:
+        local_type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        stage = VK_SHADER_STAGE_VERTEX_BIT;
+        break;
+    case SHADER_SAMPLER_BUFFER:
+        local_type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+        break;
+    default:
+        validate(false, "unkown shader property type %s :&d", __FILE__, __LINE__);
+        break;
+    }
 
-	validate(vkCreateDescriptorSetLayout(
-		ctx->device.device,
-		&layout_info,
-		NULL,
-		&desc->set_layout) == VK_SUCCESS,
-		"failed to create descriptor set layout!\n"
-	);
-
-	VkDescriptorPoolSize pool_sizes[MAX_DESCRIPTORS_PER_SET] = { 0 };
-	for (uint8_t i = 0; i < count; i++) {
-		pool_sizes[i].type = info->descriptorType;
-		pool_sizes[i].descriptorCount = info->descriptorCount;
-	}
-
-	VkDescriptorPoolCreateInfo pool_info = {
-		.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-		.poolSizeCount = count,
-		.pPoolSizes = pool_sizes,
-		.maxSets = 1,
-	};
-
-	validate(vkCreateDescriptorPool(
-		ctx->device.device,
-		&pool_info,
-		NULL,
-		&desc->descriptor_pool) == VK_SUCCESS,
-		"failed to create descriptor pool layout!\n"
-	);
-
-	VkDescriptorSetAllocateInfo alloc_info = {
-	   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-	   .descriptorPool = desc->descriptor_pool,
-	   .descriptorSetCount = 1,
-	   .pSetLayouts = &desc->set_layout,
-	};
-
-	validate(vkAllocateDescriptorSets(
-		ctx->device.device,
-		&alloc_info,
-		&desc->descriptor_set) == VK_SUCCESS,
-		"failed to create descriptor pool layout!\n"
-	);
-
-	desc->initialized = true;
-	memcpy(desc->descriptors, info, sizeof(VkDescriptorSetLayoutBinding) * MAX_DESCRIPTORS_PER_SET);
-	desc->descriptor_count = count;
-
-	return id;
-
+    out->binding = (VkDescriptorSetLayoutBinding){
+        .binding = location,
+        .descriptorType = local_type,
+        .descriptorCount = count,
+        .stageFlags = stage,
+        .pImmutableSamplers = NULL
+    };
+    out->count = count;
+    out->location = location;
+    out->type = type;
 }
 
-void vk_descriptor_del(uint32_t id) {
-	vk_descriptor_t* desc = get_desc(id);
-	if (!desc) return;
+static vk_desc_create_pool(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* in) {
+    VkDescriptorPoolSize pool_sizes[MAX_DESC_PER_SET] = { 0 };
 
-	vkDestroyDescriptorPool(ctx->device.device, desc->descriptor_pool, NULL);
-	vkDestroyDescriptorSetLayout(ctx->device.device, desc->set_layout, NULL);
-	memset(desc, 0, sizeof(vk_descriptor_t));
+    for (uint32_t i = 0; i < count; i++) {
+        pool_sizes[i] = (VkDescriptorPoolSize){
+              .type = convert_type(descriptors[i].type),
+              .descriptorCount = descriptors[i].count,
+        };
+    }
+
+    VkDescriptorPoolCreateInfo pool_info = {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+        .poolSizeCount = count,
+        .pPoolSizes = pool_sizes,
+        .maxSets = 1,
+    };
+
+    validate(
+        vkCreateDescriptorPool(
+            ctx->device.device,
+            &pool_info,
+            NULL,
+            &in->pool) == VK_SUCCESS,
+        "failed to create descriptor set pool!\n"
+    );
 }
 
-void vk_descriptors_bind(uint32_t descriptor, uint32_t pipeline_layout) {
-	vk_descriptor_t* desc = get_desc(descriptor);
-	if (!desc) return;
+void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count,  vk_descriptor_set_t* out) {
+    out->descriptor_count = count;
+    memcpy(out->descriptors, descriptors, sizeof(descriptors));
+    
+    VkDescriptorSetLayoutBinding bindings[MAX_DESC_PER_SET] = { 0 };
+    convert_bindings(count, descriptors, bindings);
 
-	uint32_t dynamic_offset = 0;
-	uint32_t dynamic_offset_count = (desc->descriptor_count > 0) ? 1 : 0;
-	uint32_t* p_dynamic_offsets = (desc->descriptor_count > 0) ? &dynamic_offset : NULL;
+    VkDescriptorSetLayoutCreateInfo layout_info = {
+      .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+      .bindingCount = count,
+      .pBindings = bindings,
+    };
+    vkCreateDescriptorSetLayout(ctx->device.device, &layout_info, NULL, &out->set_layout);
 
-	vkCmdBindDescriptorSets(
-		vk_command_buffer(),
-		VK_PIPELINE_BIND_POINT_GRAPHICS,
-		ctx->pipeline_layouts[pipeline_layout],
-		0, // First set; adjust if you're binding multiple sets
-		1, // Number of sets to bind
-		&desc->descriptor_set, // Use the descriptor set from the vk_descriptor_t struct
-		dynamic_offset_count,
-		p_dynamic_offsets
-	);
+    vk_desc_create_pool(descriptors, count, out);
+
+    VkDescriptorSetAllocateInfo alloc_info = {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+        .descriptorPool = out->pool,
+        .descriptorSetCount = 1,
+        .pSetLayouts = &out->set_layout,
+    };
+    validate(
+        vkAllocateDescriptorSets(
+            ctx->device.device,
+            &alloc_info,
+            &out->set
+        ) == VK_SUCCESS,
+        "failed to allocate descriptor sets!\n");
 }
 
-static uint32_t get_next_pipeline_layout() {
-	for (uint32_t i = 0; i < MAX_SHADERS; i++) {
-		if (ctx->pipeline_layouts[i] != VK_NULL_HANDLE) continue;
-		return i;
-	}
-	validate(false, "max pipeline layouts reached [%d]\n", MAX_SHADERS);
-	return 0;
+void vk_descriptor_set_del(vk_descriptor_set_t* in) {
+    vkDestroyDescriptorPool(ctx->device.device, in->pool, NULL);
+    vkDestroyDescriptorSetLayout(ctx->device.device, in->set_layout, NULL);
 }
 
-uint32_t vk_pipeline_layout_new(uint32_t descriptors[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t count) {
+void vk_descriptor_set_update_ubo(vk_descriptor_set_t* in, uint32_t descriptor_id, vk_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count) {
+    validate(
+        descriptor_id <= in->descriptor_count &&
+        count >= 0
+        , "index out of bounds!"
+    );
 
-	VkDescriptorSetLayout layouts[MAX_DESCRIPTOR_SETS_IN_USE];
-	for (uint32_t i = 0; i < count; i++) {
-		vk_descriptor_t* desc = get_desc(descriptors[i]);
-		validate(desc->initialized, "descriptor %d was not initialized!\n", i);
-		if (!desc->initialized) continue;
+    vk_descriptor_t* descriptor = &in->descriptors[descriptor_id];
+    validate(
+        count <= descriptor->count &&
+        count >= 0
+        , "index out of bounds!"
+    );
 
-		layouts[i] = desc->set_layout;
-	}
+    VkDescriptorBufferInfo bufferInfos[MAX_DESC_PER_SET];
+    VkWriteDescriptorSet descriptorWrites[MAX_DESC_PER_SET];
 
-	VkPipelineLayoutCreateInfo pipeline_layout_info = {
-		.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-		.setLayoutCount = count,
-		.pSetLayouts = layouts
-	};
+    for (uint32_t i = 0; i < count; i++) {
+        vk_buffer_t* buffer = buffers[i];
+        bufferInfos[i] = (VkDescriptorBufferInfo){
+            .buffer = buffer->buffer,
+            .offset = 0,
+            .range = buffer->size
+        };
 
-	uint32_t id = get_next_pipeline_layout();
-	validate(vkCreatePipelineLayout(
-		ctx->device.device,
-		&pipeline_layout_info,
-		NULL,
-		&ctx->pipeline_layouts[id])
-		, "failed to create pipeline layout!\n"
-	);
-	return id;
-}
+        descriptorWrites[i] = (VkWriteDescriptorSet){
+            .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+            .dstSet = in->set,
+            .dstBinding = descriptor->location,
+            .descriptorCount = 1,
+            .descriptorType = convert_type(descriptor->type),
+            .pBufferInfo = &bufferInfos[i],
+        };
+    }
 
-void vk_pipeline_layout_del(uint32_t id) {
-
-	vkDestroyPipelineLayout(ctx->device.device, ctx->pipeline_layouts[id], NULL);
-	ctx->pipeline_layouts[id] = VK_NULL_HANDLE;
-	
-}
-
-void vk_pipeline_layout_clear() {
-	for (uint32_t i = 0; i < MAX_SHADERS; i++) {
-		if (ctx->pipeline_layouts[i] == VK_NULL_HANDLE) continue;
-		vk_pipeline_layout_del(i);
-	}
-}
-
-void vk_descriptor_clear() {
-	for (uint32_t i = 0; i < MAX_DESCRIPTOR_SETS; i++) {
-		if (!ctx->sets[i].initialized) continue;
-		vk_descriptor_del(i);
-	}
-}
-
-void vk_descriptors_update(uint32_t descriptor_id, uint32_t binding_id, vk_buffer_t* buffers[MAX_DESCRIPTOR_SETS_IN_USE]) {
-	vk_descriptor_t* desc = get_desc(descriptor_id);
-	validate(desc != NULL, "descriptor with id %d was NULL!\n", descriptor_id);
-
-	VkDescriptorBufferInfo buffer_infos[MAX_DESCRIPTORS_PER_SET];
-	VkWriteDescriptorSet descriptor_writes[MAX_DESCRIPTORS_PER_SET];
-	VkDescriptorSetLayoutBinding* binding = &desc->descriptors[binding_id];
-
-	for (uint32_t i = 0; i < binding->descriptorCount; i++) {
-		validate(buffers[i] != NULL, "Buffer at index %d is NULL!\n", i);
-		vk_buffer_t* buffer = buffers[i];
-		buffer_infos[i] = (VkDescriptorBufferInfo){
-			.buffer = buffer->buffer,
-			.offset = 0,
-			.range = buffer->size
-		};
-
-		descriptor_writes[i] = (VkWriteDescriptorSet){
-			.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-			.dstSet = desc->descriptor_set,
-			.dstBinding = binding_id, // Set to binding_id instead of i
-			.descriptorCount = 1, // Each write updates one descriptor
-			.descriptorType = binding->descriptorType,
-			.pBufferInfo = &buffer_infos[i],
-		};
-	}
-
-	vkUpdateDescriptorSets(ctx->device.device, binding->descriptorCount, descriptor_writes, 0, NULL);
+    vkUpdateDescriptorSets(ctx->device.device, count, descriptorWrites, 0, NULL);
 }

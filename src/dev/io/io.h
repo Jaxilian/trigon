@@ -30,5 +30,7 @@ void file_img_split_to_grid(cstr file_path, cstr name, cstr out_path);
 void path_new_root(cstr path);
 cstr path_get_root();
 cstr path_get_path(cstr path);
+
+//returns path provided + file name, this is a singleton so a new call will replace the old one!
 cstr path_get_file(cstr path, cstr name); 
 #endif // !T_IO_H

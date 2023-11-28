@@ -181,6 +181,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="examples\examples.c" />
+    <ClCompile Include="src\assets\shaders\shader.c" />
+    <ClCompile Include="src\assets\shaders\shader_property.c" />
     <ClCompile Include="src\dev\cpu\coro.c" />
     <ClCompile Include="src\dev\cpu\threads.c" />
     <ClCompile Include="src\dev\gpu\vk.c" />
@@ -206,9 +208,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="examples\examples.h" />
+    <ClInclude Include="src\assets\shaders\shader.h" />
     <ClInclude Include="src\dev\cpu\coro.h" />
     <ClInclude Include="src\dev\cpu\threads.h" />
     <ClInclude Include="src\dev\gpu\vk.h" />
+    <ClInclude Include="src\dev\gpu\vk_cmn.h" />
     <ClInclude Include="src\dev\gpu\vk_def.h" />
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\mem\core_ctx_def.h" />
@@ -216,6 +220,10 @@
     <ClInclude Include="src\dev\std\defines.h" />
     <ClInclude Include="src\dev\std\std.h" />
     <ClInclude Include="src\dev\win\win.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug-x64\assets\shaders\vcolor.frag" />
+    <None Include="bin\Debug-x64\assets\shaders\vcolor.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

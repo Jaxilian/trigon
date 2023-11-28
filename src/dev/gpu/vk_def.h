@@ -7,11 +7,9 @@
 #include "dev/std/std.h"
 #include "dev/cpu/threads.h"
 #include <cglm/cglm.h>
+#include "vk_cmn.h"
 
-#define MAX_DESCRIPTOR_SETS_IN_USE 4
-#define MAX_DESCRIPTOR_SETS 16
-#define MAX_DESCRIPTORS_PER_SET 5
-#define MAX_SHADERS 16
+
 #define MAX_FRAMES_IN_FLIGHT 2
 
 typedef struct {
@@ -155,7 +153,7 @@ typedef struct {
 	bool					initialized;
 	vk_shader_t*			shader;
 	vk_pipeline_config_t*	config;
-	VkPipelineLayout*		layout;
+	VkPipelineLayout		layout;
 	VkPipeline				instance;
 } vk_pipeline_t;
 
@@ -176,12 +174,23 @@ typedef struct {
 
 typedef struct {
 	bool							initialized;
-	VkDescriptorSetLayoutBinding	descriptors[MAX_DESCRIPTORS_PER_SET];
-	uint32_t						descriptor_count;
-	VkDescriptorSetLayout			set_layout;
-	VkDescriptorPool				descriptor_pool;
-	VkDescriptorSet					descriptor_set;
+	uint32_t						location;
+	uint32_t						count;
+	VkDescriptorSetLayoutBinding	binding;
+	shader_property_e				type;
 } vk_descriptor_t;
+
+
+typedef struct {
+	bool							initialized;
+	uint32_t						descriptor_count;
+	vk_descriptor_t					descriptors[MAX_DESC_PER_SET];
+	VkDescriptorPool				pool;
+	VkDescriptorSet					set;
+	VkDescriptorSetLayout			set_layout;
+} vk_descriptor_set_t;
+
+
 
 #endif // !T_VK_DEF_H
 
