@@ -105,4 +105,16 @@ void shader_use(shader_t* shader) {
 			dynamic_offsets       // dynamic offsets
 		);
 	}
+	else {
+		vkCmdBindDescriptorSets(
+			vk_command_buffer(),
+			VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipeline->layout,
+			0,                    // first set
+			shader->group_count,                    // set count (assuming one descriptor set)
+			desc_sets,            // descriptor sets
+			0,                    // dynamic offset count (no dynamic buffers)
+			NULL                  // dynamic offsets (no dynamic buffers)
+		);
+	}
 }

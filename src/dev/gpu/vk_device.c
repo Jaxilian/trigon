@@ -6,6 +6,7 @@ static bool support_open = false;
 
 #ifdef _DEBUG
 #include <string.h>
+static VkDebugUtilsMessengerEXT debug_messenger;
 
 static VkBool32 debug_callback(
     VkDebugUtilsMessageSeverityFlagBitsEXT      message_severity,
@@ -13,11 +14,63 @@ static VkBool32 debug_callback(
     const VkDebugUtilsMessengerCallbackDataEXT* callback_data,
     void* user_data
 ) {
+
     if (message_severity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
         validate(false, callback_data->pMessage);
     }
+    else {
+        debug_log("%s\n", callback_data->pMessage);
+    }
     return VK_FALSE;
 }
+
+static VkResult create_debug_utils(
+    VkInstance instance,
+    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+    const VkAllocationCallbacks* pAllocator,
+    VkDebugUtilsMessengerEXT* pDebugMessenger) {
+    PFN_vkCreateDebugUtilsMessengerEXT func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+        instance,
+        "vkCreateDebugUtilsMessengerEXT");
+    if (func != NULL) {
+        return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+    }
+    else {
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+}
+
+static void destroy_debug_utils(
+    VkInstance instance,
+    VkDebugUtilsMessengerEXT debugMessenger,
+    const VkAllocationCallbacks* pAllocator) {
+    PFN_vkDestroyDebugUtilsMessengerEXT func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+        instance,
+        "vkDestroyDebugUtilsMessengerEXT");
+    if (func != NULL) {
+        func(instance, debugMessenger, pAllocator);
+    }
+}
+
+static void create_debug_messenger(VkInstance instance) {
+    VkDebugUtilsMessengerCreateInfoEXT debug_info = {
+       .sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+       .messageSeverity =
+           VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+           VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+       .messageType =
+           VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+           VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+           VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+       .pfnUserCallback = debug_callback,
+       .pUserData = NULL
+    };
+
+    validate(create_debug_utils(instance, &debug_info, NULL, &debug_messenger) == VK_SUCCESS,
+        "failed to create debug messenger!\n");
+}
+
+
 #endif
 
 uint32_t vk_fetch_memory_type(uint32_t typeFilter, VkMemoryPropertyFlags properties) {
@@ -129,7 +182,7 @@ static void vk_instance_new() {
     };
 
 #ifdef _DEBUG
-    uint32_t    layc = 0;
+    uint32_t    layc = 1;
     cstr        lay[1] = {
         "VK_LAYER_KHRONOS_validation"
     };
@@ -177,6 +230,7 @@ static void vk_instance_new() {
     );
 
     win_close_extensions();
+    create_debug_messenger(ctx->device.instance);
 }
 
 static void vk_get_queue_families(VkPhysicalDevice device, bool* success, uint32_t* g_family, uint32_t* p_family) {
@@ -376,6 +430,11 @@ void vk_device_del() {
     vkDestroyCommandPool(ctx->device.device, ctx->device.command_pool, NULL);
     vkDestroyDevice(ctx->device.device, NULL);
     vkDestroySurfaceKHR(ctx->device.instance, ctx->win.surface, NULL);
+
+#ifdef _DEBUG
+    destroy_debug_utils(ctx->device.instance, debug_messenger, NULL);
+#endif
+
     vkDestroyInstance(ctx->device.instance, NULL);
     memset(&ctx->device, 0, sizeof(vk_device_t));
 }

@@ -35,6 +35,7 @@ typedef struct {
 
 void shader_resource_new(shader_resource_info_t* in, shader_resource_t* out);
 void shader_resource_del(shader_resource_t* in);
+void shader_resource_set(shader_resource_t* resource, void* data);
 
 void shader_resource_group_new(
 	shader_resource_group_info_t* info,

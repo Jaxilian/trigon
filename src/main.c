@@ -33,6 +33,7 @@ int common_main(int argc, char* argv[]) {
 		vk_frame_end();
 	}
 
+    vkDeviceWaitIdle(ctx->device.device);
     stop_examples();
 	vk_del();
 	win_del();

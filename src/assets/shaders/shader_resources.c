@@ -67,11 +67,13 @@ void shader_resource_group_bind_buffers(shader_resource_group_t* in) {
 		descritpro_writes[i] = (VkWriteDescriptorSet){
 			.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
 			.dstSet = target->set,
-			.dstBinding = in->resources->binding,
+			.dstBinding = in->resources[i].binding,
 			.descriptorCount = in->resources[i].count,
 			.descriptorType = vk_descriptor_convert_type(in->resources[i].type),
 			.pBufferInfo = &buffer_infos[i],
 		};
+
+		in->resources[i].data = buffer;
 	}
 
 	vkUpdateDescriptorSets(ctx->device.device, in->resource_count, descritpro_writes, 0, NULL);
@@ -120,3 +122,6 @@ void shader_resource_group_del(shader_resource_group_t* out) {
 	memset(out, 0, sizeof(shader_resource_group_t));
 }
 
+void shader_resource_set(shader_resource_t* resource, void* data) {
+	vk_buffer_set(resource->data, data);
+}
