@@ -29,11 +29,13 @@ void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type
 void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* out);
 void vk_descriptor_set_del(vk_descriptor_set_t* in);
 
-void vk_buffer_new(size_t stride, uint32_t count, vk_buffer_t* out);
-void vk_buffer_resize(vk_buffer_t* buffer, uint32_t new_count);
-void vk_buffer_set(vk_buffer_t* buffer, void* data);
-void vk_buffer_del(vk_buffer_t* buffer);
-void vk_buffer_clear(vk_buffer_t* arr, uint32_t count);
+void  vk_buffer_new(size_t stride, uint32_t count, vk_buffer_t* out, VkBufferUsageFlags flags);
+void  vk_buffer_resize(vk_buffer_t* buffer, uint32_t new_count);
+void  vk_buffer_set(vk_buffer_t* buffer, void* data);
+void* vk_buffer_set_advanced(vk_buffer_t* buffer);
+void  vk_buffer_set_advanced_submit(vk_buffer_t* buffer, void* mapped_mem);
+void  vk_buffer_del(vk_buffer_t* buffer);
+void  vk_buffer_clear(vk_buffer_t* arr, uint32_t count);
 
 VkCommandBuffer vk_command_buffer();
 

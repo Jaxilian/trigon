@@ -1,12 +1,12 @@
 #include "vk.h"
 #include <memory.h>
 
-void vk_buffer_new(size_t stride, uint32_t count, vk_buffer_t* out) {
+void vk_buffer_new(size_t stride, uint32_t count, vk_buffer_t* out, VkBufferUsageFlags flags) {
 
     VkBufferCreateInfo buffer_info = {
        .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
        .size = stride * count,
-       .usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, // TODO: Support multiple types!
+       .usage = flags, 
        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
     };
 
@@ -69,6 +69,44 @@ void vk_buffer_set(vk_buffer_t* buffer, void* data) {
     else {
         validate(false, "failed to set data to vulkan buffer!\n");
     }
+}
+
+void* vk_buffer_set_advanced(vk_buffer_t* buffer) {
+    void* data_ptr;
+    validate(vkMapMemory(
+        ctx->device.device,
+        buffer->memory,
+        0,
+        buffer->size,
+        0,
+        &data_ptr ) == VK_SUCCESS,
+        "failed to map memory in vk_buffer_t\n"
+    );
+   
+    return data_ptr;
+}
+
+void vk_buffer_set_advanced_submit(vk_buffer_t* buffer, void* mapped_mem) {
+    size_t alignedSize = buffer->size & ~(ctx->device.gpu_properties.limits.nonCoherentAtomSize - 1);
+    alignedSize = (alignedSize > buffer->size) ? buffer->size : alignedSize;
+
+    VkMappedMemoryRange memory_range = {
+        .sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+        .memory = buffer->memory,
+        .offset = 0,
+        .size = alignedSize,
+    };
+
+    validate(
+        vkFlushMappedMemoryRanges(
+            ctx->device.device,
+            1,
+            &memory_range
+        ) == VK_SUCCESS,
+        "failed to flush mapped memory ranged in vk_buffer_t!\n"
+    );
+
+    vkUnmapMemory(ctx->device.device, buffer->memory);
 }
 
 void vk_buffer_del(vk_buffer_t* buffer) {

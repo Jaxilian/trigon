@@ -181,6 +181,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="examples\examples.c" />
+    <ClCompile Include="src\assets\meshes\mesh.c" />
+    <ClCompile Include="src\assets\meshes\primitives.c" />
     <ClCompile Include="src\assets\shaders\shader.c" />
     <ClCompile Include="src\assets\shaders\shader_resources.c" />
     <ClCompile Include="src\dev\cpu\coro.c" />
@@ -208,6 +210,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="examples\examples.h" />
+    <ClInclude Include="src\assets\meshes\mesh.h" />
     <ClInclude Include="src\assets\shaders\shader.h" />
     <ClInclude Include="src\dev\cpu\coro.h" />
     <ClInclude Include="src\dev\cpu\threads.h" />

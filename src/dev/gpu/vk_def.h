@@ -5,8 +5,6 @@
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 #include "dev/std/std.h"
-#include "dev/cpu/threads.h"
-#include <cglm/cglm.h>
 #include "vk_cmn.h"
 
 
@@ -106,12 +104,7 @@ typedef struct {
 
 
 /*------------------ VERTEX ATTRIBUTES----------------------*/
-typedef struct {
-	vec3 position;
-	vec3 normal;
-	vec3 color;
-	vec2 uv;
-} vertex_t;
+
 
 #define default_vertex_binding_count 1
 #define default_vertex_attribute_count 4
@@ -167,6 +160,7 @@ typedef struct {
 	bool				initialized;
 	VkBuffer			buffer;
 	VkDeviceMemory		memory;
+	VkDeviceSize		memory_size;
 	size_t				size;	// size of the whole buffer
 	size_t				stride; // size of each element
 	uint32_t			count;	// count ot the elements

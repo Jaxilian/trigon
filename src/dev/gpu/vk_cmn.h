@@ -1,5 +1,6 @@
 #ifndef VK_CMN_H
 #define VK_CMN_H
+#include <cglm/cglm.h>
 
 #define MAX_DESC_SETS_IN_USE 4
 #define MAX_DESC_PER_SET 8
@@ -13,5 +14,12 @@ typedef enum {
 	SHADER_DYNAMIC_BUFFER,
 	SHADER_SAMPLER_BUFFER
 } shader_property_e;
+
+typedef struct {
+	vec3 position;
+	vec3 normal;
+	vec3 color;
+	vec2 uv;
+} vertex_t;
 
 #endif // !VK_CMN_H

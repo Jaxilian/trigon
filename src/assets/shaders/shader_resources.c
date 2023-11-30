@@ -56,8 +56,8 @@ void shader_resource_group_bind_buffers(shader_resource_group_t* in) {
 	for (uint32_t i = 0; i < in->resource_count; i++) {
 		vk_buffer_t* buffer = get_next_buffer();
 		validate(buffer != NULL, "vk_buffer_t was already initialized while trying to set data to the resource group!\n");
-		vk_buffer_new(in->resources[i].data_stride,in->resources[i].count, buffer);
-
+		vk_buffer_new(in->resources[i].data_stride,in->resources[i].count, buffer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+		
 		buffer_infos[i] = (VkDescriptorBufferInfo){
 			.buffer = buffer->buffer,
 			.offset = 0,

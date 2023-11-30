@@ -26,6 +26,8 @@
     <ClCompile Include="src\dev\gpu\vk_shaders.c" />
     <ClCompile Include="src\assets\shaders\shader.c" />
     <ClCompile Include="src\assets\shaders\shader_resources.c" />
+    <ClCompile Include="src\assets\meshes\primitives.c" />
+    <ClCompile Include="src\assets\meshes\mesh.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
@@ -41,6 +43,7 @@
     <ClInclude Include="src\dev\gpu\vk_def.h" />
     <ClInclude Include="src\assets\shaders\shader.h" />
     <ClInclude Include="src\dev\gpu\vk_cmn.h" />
+    <ClInclude Include="src\assets\meshes\mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug-x64\assets\shaders\vcolor.frag" />

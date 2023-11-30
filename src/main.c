@@ -24,15 +24,16 @@ int common_main(int argc, char* argv[]) {
 	win_new();
 	vk_new();
 
-	run_examples();
+	start_examples();
 
 	while (ctx->win.running) {
 		win_poll_events();
 		vk_frame_begin();
-
+        run_examples();
 		vk_frame_end();
 	}
 
+    stop_examples();
 	vk_del();
 	win_del();
 	core_ctx_del();
