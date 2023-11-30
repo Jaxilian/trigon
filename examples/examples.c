@@ -89,4 +89,6 @@ void run_examples() {
 
 void stop_examples() {
 	mesh_clear();
+	shader_resource_group_del(&group);
+	shader_del(&shader);
 }

@@ -63,6 +63,7 @@ void shader_new(shader_info_t* info, shader_t* out) {
 
 void shader_del(shader_t* shader) {
 	vk_pipeline_del(shader->pipeline);
+
 	memset(shader, 0, sizeof(shader_t));
 }
 
