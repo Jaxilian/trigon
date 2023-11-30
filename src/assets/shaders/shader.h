@@ -7,35 +7,58 @@ typedef struct {
 	uint32_t			binding;
 	shader_property_e	type;
 	uint32_t			count;
-} shader_property_value_t;
+	size_t				data_count;
+	size_t				data_stride;
+} shader_resource_info_t;
 
 typedef struct {
-	uint32_t				properties_count;
-	shader_property_value_t	properties[MAX_DESC_PER_SET];
-} shader_property_t;
+	uint32_t			binding;
+	shader_property_e	type;
+	uint32_t			count;
+	uint32_t			desc_id;
+	void*				data;
+	size_t				data_count;
+	size_t				data_stride;
+} shader_resource_t;
 
 typedef struct {
-	bool x; //TODO: continue
-} shader_property_info_t;
-
-void shader_property_new();
-void shader_property_del();
-
-
+	uint32_t			resource_count;
+	shader_resource_t	resources[MAX_DESC_PER_SET];
+} shader_resource_group_info_t;
 
 typedef struct {
-	cstr					shader_name;
-	uint32_t				property_sets_count;
-	shader_property_t		property_sets[MAX_DESCRIPTOR_SETS_IN_USE];
+	uint32_t			desc_set_id;
+	uint32_t			resource_count;
+	shader_resource_t	resources[MAX_DESC_PER_SET];
+	bool				has_dynamic_buffer;
+} shader_resource_group_t;
+
+void shader_resource_new(shader_resource_info_t* in, shader_resource_t* out);
+void shader_resource_del(shader_resource_t* in);
+
+void shader_resource_group_new(
+	shader_resource_group_info_t* info,
+	shader_resource_group_t* out
+);
+
+void shader_resource_group_del(shader_resource_group_t* out);
+
+typedef struct {
+	cstr					 shader_name;
+	uint32_t				 group_count;
+	shader_resource_group_t* groups[MAX_DESC_SETS_IN_USE];
 } shader_info_t;
 
 typedef struct {
-	cstr					name;
-	shader_property_t		property_sets[MAX_DESCRIPTOR_SETS_IN_USE];
+	cstr						name;
+	uint32_t					pipeline;
+	uint32_t					group_count;
+	shader_resource_group_t*	groups[MAX_DESC_SETS_IN_USE];
 } shader_t;
 
-void shader_new(shader_info_t* info);
-void shader_del();
+void shader_new(shader_info_t* info, shader_t* out);
+void shader_use(shader_t* shader);
+void shader_del(shader_t* shader);
 
 
 #endif

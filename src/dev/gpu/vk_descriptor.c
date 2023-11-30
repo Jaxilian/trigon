@@ -1,6 +1,6 @@
 #include "vk.h"
 
-static VkDescriptorType convert_type(shader_property_e type) {
+VkDescriptorType vk_descriptor_convert_type(shader_property_e type) {
     switch (type) {
     case SHADER_STATIC_BUFFER:
         return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -52,6 +52,7 @@ void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type
     out->count = count;
     out->location = location;
     out->type = type;
+    out->initialized = true;
 }
 
 static vk_desc_create_pool(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* in) {
@@ -59,7 +60,7 @@ static vk_desc_create_pool(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32
 
     for (uint32_t i = 0; i < count; i++) {
         pool_sizes[i] = (VkDescriptorPoolSize){
-              .type = convert_type(descriptors[i].type),
+              .type = vk_descriptor_convert_type(descriptors[i].type),
               .descriptorCount = descriptors[i].count,
         };
     }
@@ -110,6 +111,7 @@ void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32
             &out->set
         ) == VK_SUCCESS,
         "failed to allocate descriptor sets!\n");
+    out->initialized = true;
 }
 
 void vk_descriptor_set_del(vk_descriptor_set_t* in) {
@@ -147,7 +149,7 @@ void vk_descriptor_set_update_ubo(vk_descriptor_set_t* in, uint32_t descriptor_i
             .dstSet = in->set,
             .dstBinding = descriptor->location,
             .descriptorCount = 1,
-            .descriptorType = convert_type(descriptor->type),
+            .descriptorType = vk_descriptor_convert_type(descriptor->type),
             .pBufferInfo = &bufferInfos[i],
         };
     }

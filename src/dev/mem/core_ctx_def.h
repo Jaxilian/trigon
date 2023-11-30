@@ -16,7 +16,9 @@ typedef struct {
 	vk_shader_t			shaders[MAX_SHADERS];
 	vk_pipeline_t		pipelines[MAX_SHADERS];
 	VkPipelineLayout	pipeline_layouts[MAX_SHADERS];
+	vk_descriptor_t		descriptors[MAX_UNIQUE_DESC];
 	vk_descriptor_set_t descriptor_sets[MAX_SHADER_SETS];
+	vk_buffer_t			descriptor_buffers[MAX_SHADER_BUFFERS];
 } core_ctx_t;
 
 

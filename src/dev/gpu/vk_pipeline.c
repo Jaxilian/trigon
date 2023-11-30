@@ -162,10 +162,10 @@ void vk_pipeline_rebuild() {
     }
 }
 
-void generate_pipeline_layout(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, VkPipelineLayout* out) {
-    VkDescriptorSetLayout layouts[MAX_DESCRIPTOR_SETS_IN_USE] = { 0 };
+void generate_pipeline_layout(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, VkPipelineLayout* out) {
+    VkDescriptorSetLayout layouts[MAX_DESC_SETS_IN_USE] = { 0 };
     for (uint32_t i = 0; i < sets_count; ++i) {
-        layouts[i] = sets[i].set_layout;
+        layouts[i] = sets[i]->set_layout;
     }
 
     VkPipelineLayoutCreateInfo pipeline_layout_info = {
@@ -183,9 +183,10 @@ void generate_pipeline_layout(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_US
         "failed to create pipeline layout!\n");
 }
 
-uint32_t vk_pipeline_new(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config) {
+uint32_t vk_pipeline_new(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config) {
     uint32_t id = get_next_pipeline();
-    vk_pipeline_t* pipeline = get_pipeline(id);
+    validate(!ctx->pipelines[id].initialized, "pipeline at location %d was already initialized!\n", id);
+    vk_pipeline_t* pipeline = &ctx->pipelines[id];
 
     generate_pipeline_layout(sets, sets_count, &pipeline->layout);
 

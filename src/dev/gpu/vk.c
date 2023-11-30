@@ -8,6 +8,7 @@ void vk_new() {
 void vk_del() {
 	vkDeviceWaitIdle(ctx->device.device);
 	//vk_pipeline_layout_clear();
+	vk_buffer_clear(ctx->descriptor_buffers, MAX_SHADER_BUFFERS);
 	vk_shader_clear();
 	vk_pipeline_clear();
 	vk_swapchain_del();

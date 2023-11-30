@@ -167,9 +167,9 @@ typedef struct {
 	bool				initialized;
 	VkBuffer			buffer;
 	VkDeviceMemory		memory;
-	size_t				size;
-	size_t				alignment;
-	uint32_t			count;
+	size_t				size;	// size of the whole buffer
+	size_t				stride; // size of each element
+	uint32_t			count;	// count ot the elements
 } vk_buffer_t;
 
 typedef struct {

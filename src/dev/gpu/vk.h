@@ -14,7 +14,7 @@ void vk_swapchain_del();
 void vk_new();
 void vk_del();
 
-uint32_t	vk_pipeline_new(vk_descriptor_set_t sets[MAX_DESCRIPTOR_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config);
+uint32_t	vk_pipeline_new(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config);
 void		vk_pipeline_del(uint32_t id);
 void		vk_pipeline_clear();
 void		vk_pipeline_bind(vk_pipeline_t* pipeline);
@@ -29,10 +29,11 @@ void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type
 void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* out);
 void vk_descriptor_set_del(vk_descriptor_set_t* in);
 
-void vk_buffer_new(size_t size, uint32_t count, vk_buffer_t* out);
+void vk_buffer_new(size_t stride, uint32_t count, vk_buffer_t* out);
 void vk_buffer_resize(vk_buffer_t* buffer, uint32_t new_count);
 void vk_buffer_set(vk_buffer_t* buffer, void* data);
 void vk_buffer_del(vk_buffer_t* buffer);
+void vk_buffer_clear(vk_buffer_t* arr, uint32_t count);
 
 VkCommandBuffer vk_command_buffer();
 
@@ -53,7 +54,7 @@ void vk_create_image_with_info(
 	VkImage* image,
 	VkDeviceMemory* imageMemory);
 
-
+VkDescriptorType vk_descriptor_convert_type(shader_property_e type);
 
 
 #endif

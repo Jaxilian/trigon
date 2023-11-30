@@ -182,7 +182,7 @@
   <ItemGroup>
     <ClCompile Include="examples\examples.c" />
     <ClCompile Include="src\assets\shaders\shader.c" />
-    <ClCompile Include="src\assets\shaders\shader_property.c" />
+    <ClCompile Include="src\assets\shaders\shader_resources.c" />
     <ClCompile Include="src\dev\cpu\coro.c" />
     <ClCompile Include="src\dev\cpu\threads.c" />
     <ClCompile Include="src\dev\gpu\vk.c" />

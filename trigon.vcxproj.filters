@@ -25,7 +25,7 @@
     <ClCompile Include="src\dev\gpu\vk_state.c" />
     <ClCompile Include="src\dev\gpu\vk_shaders.c" />
     <ClCompile Include="src\assets\shaders\shader.c" />
-    <ClCompile Include="src\assets\shaders\shader_property.c" />
+    <ClCompile Include="src\assets\shaders\shader_resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
