@@ -197,6 +197,7 @@
     <ClCompile Include="src\dev\gpu\vk_shaders.c" />
     <ClCompile Include="src\dev\gpu\vk_state.c" />
     <ClCompile Include="src\dev\gpu\vk_swapchain.c" />
+    <ClCompile Include="src\dev\input\keyboard.c" />
     <ClCompile Include="src\dev\io\file.c" />
     <ClCompile Include="src\dev\io\file_image.c" />
     <ClCompile Include="src\dev\io\paths.c" />
@@ -205,7 +206,9 @@
     <ClCompile Include="src\dev\mem\cpool.c" />
     <ClCompile Include="src\dev\std\debug.c" />
     <ClCompile Include="src\dev\std\strings.c" />
+    <ClCompile Include="src\dev\time\time.c" />
     <ClCompile Include="src\dev\win\win.c" />
+    <ClCompile Include="src\entities\camera.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -217,12 +220,15 @@
     <ClInclude Include="src\dev\gpu\vk.h" />
     <ClInclude Include="src\dev\gpu\vk_cmn.h" />
     <ClInclude Include="src\dev\gpu\vk_def.h" />
+    <ClInclude Include="src\dev\input\input.h" />
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\mem\core_ctx_def.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
     <ClInclude Include="src\dev\std\defines.h" />
     <ClInclude Include="src\dev\std\std.h" />
+    <ClInclude Include="src\dev\time\time.h" />
     <ClInclude Include="src\dev\win\win.h" />
+    <ClInclude Include="src\entities\entity.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug-x64\assets\shaders\vcolor.frag" />

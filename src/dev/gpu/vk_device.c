@@ -169,9 +169,10 @@ void vk_close_swap_support(swap_support_t* support) {
 
 static void vk_instance_new() {
     uint32_t    extc = 0;
-    cstr*       ext  = win_open_extensions(&extc);
-  
+    cstr* ext = win_open_extensions(&extc);
 
+
+    
     VkApplicationInfo app_info = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pApplicationName   = ctx->app_data.name,
@@ -230,7 +231,9 @@ static void vk_instance_new() {
     );
 
     win_close_extensions();
+#ifdef _DEBUG
     create_debug_messenger(ctx->device.instance);
+#endif
 }
 
 static void vk_get_queue_families(VkPhysicalDevice device, bool* success, uint32_t* g_family, uint32_t* p_family) {
@@ -418,7 +421,6 @@ void vk_device_new() {
     create_command_buffers();
     vkGetPhysicalDeviceProperties(ctx->device.gpu, &ctx->device.gpu_properties);
 }
-
 
 void vk_device_del() {
     vkFreeCommandBuffers(

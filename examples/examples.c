@@ -6,30 +6,36 @@
 #include "assets/meshes/mesh.h"
 #include <cglm/cglm.h>
 #include <cglm/mat4.h>
+#include "entities/entity.h"
+#include "dev/input/input.h"
+#include "dev/time/time.h"
 
 static shader_resource_group_t group = { 0 };
 static shader_t shader;
 static uint32_t mesh;
-static mat4 model[4] = { 0 };
+static mat4		model[4] = { 0 };
+static camera_t camera = { 0 };
 
-typedef struct {
-	mat4 camera_view;
-	mat4 camera_projection;
-	vec3 light_direction;
-} global_test_data_t;
-global_test_data_t camera;
+
 
 void start_examples() {
+	camera_info_t camera_info;
+	camera_info.far = 1000.0f;
+	camera_info.near = 0.10f;
+	camera_info.fov = 45.0f;
+	camera_new(&camera, &camera_info);
+
 	shader_resource_t camera_resource = { 0 };
 	shader_resource_t matrix_resource = { 0 };
 
-	shader_resource_info_t camera_info = { 0 };
-	camera_info.binding = 0;
-	camera_info.count = 1;
-	camera_info.type = SHADER_STATIC_BUFFER;
-	camera_info.data_stride = sizeof(global_test_data_t);
-	camera_info.data_count = 1;
-	shader_resource_new(&camera_info, &camera_resource);
+
+	shader_resource_info_t camera_res = { 0 };
+	camera_res.binding = 0;
+	camera_res.count = 1;
+	camera_res.type = SHADER_STATIC_BUFFER;
+	camera_res.data_stride = sizeof(camera_data_t);
+	camera_res.data_count = 1;
+	shader_resource_new(&camera_res, &camera_resource);
 
 	shader_resource_info_t matrix_info = { 0 };
 	matrix_info.binding = 1;
@@ -71,13 +77,72 @@ void start_examples() {
 	glm_mat4_identity(model[3]);
 	glm_translate(model[3], (vec3) { -5, 0, 0 });
 
-	glm_perspective(45.0f, 800.0f/600.0f, 0.1f, 100.0f, camera.camera_projection);
-	glm_lookat((vec3) { 10, 10, 10 }, (vec3) { 0,0,0 }, (vec3) { 0, 1, 0 }, camera.camera_view);
+	glm_lookat((vec3) { 10, 2, 10 }, (vec3) { 0, 0, 0 }, (vec3) { 0, 1, 0 }, camera.data.transform);
+}
 
+void controller_update() {
+	float dt = (float)time_dt();
+
+	if (input_mouse_clicked(1)) {
+		input_cursor_lock(true);
+
+
+		float px = input_mouse_prev_x();
+		float py = input_mouse_prev_y();
+
+		float cx = input_mouse_x();
+		float cy = input_mouse_y();
+
+		float sensitivity = 70.0f;
+		float x = cx - px;
+		float y = py - cy;
+
+		camera_rotate_fps(&camera, (vec2) { y* sensitivity* dt, x* sensitivity* dt });
+	}
+	else {
+		input_cursor_lock(false);
+	}
+
+	float movement_sens = 2;
+	if (input_get_key(KEYCODE_LEFT_SHIFT)) {
+		movement_sens = 8;
+	}
+
+	if (input_get_key(KEYCODE_W)) {
+		vec3 pos_to_add;
+		glm_vec3_scale(camera.forward, movement_sens * dt, pos_to_add);
+		glm_vec3_add(camera.position, pos_to_add, camera.position);
+		camera_set_position(&camera, camera.position);
+		//printf("x: %f, y:%f, z:%f\n", camera->position[0], camera->position[1], camera->position[2]);
+	}
+	if (input_get_key(KEYCODE_S)) {
+		vec3 pos_to_add;
+		glm_vec3_scale(camera.forward, -movement_sens * dt, pos_to_add);
+		glm_vec3_add(camera.position, pos_to_add, camera.position);
+		camera_set_position(&camera, camera.position);
+		//printf("x: %f, y:%f, z:%f\n", camera->position[0], camera->position[1], camera->position[2]);
+	}
+
+	if (input_get_key(KEYCODE_D)) {
+		vec3 pos_to_add;
+		glm_vec3_scale(camera.right, movement_sens * dt, pos_to_add);
+		glm_vec3_add(camera.position, pos_to_add, camera.position);
+		camera_set_position(&camera, camera.position);
+		//printf("x: %f, y:%f, z:%f\n", camera->position[0], camera->position[1], camera->position[2]);
+	}
+	if (input_get_key(KEYCODE_A)) {
+		vec3 pos_to_add;
+		glm_vec3_scale(camera.right, -movement_sens * dt, pos_to_add);
+		glm_vec3_add(camera.position, pos_to_add, camera.position);
+		camera_set_position(&camera, camera.position);
+		//printf("x: %f, y:%f, z:%f\n", camera->position[0], camera->position[1], camera->position[2]);
+	}
 }
 
 void run_examples() {
-	shader_resource_set(&shader.groups[0]->resources[0], &camera);
+	controller_update();
+
+	shader_resource_set(&shader.groups[0]->resources[0], &camera.data);
 	shader_resource_set(&shader.groups[0]->resources[1], &model);
 	shader_use(&shader);
 

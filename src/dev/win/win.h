@@ -11,6 +11,8 @@ void win_poll_events();
 cstr* win_open_extensions(uint32_t* count);
 void  win_close_extensions();
 
+uint32_t	win_window_resize_connect(signal_t cb);
+void		win_window_resize_disconnect(uint32_t id);
 
 
 #endif // !WIN_H

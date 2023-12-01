@@ -13,6 +13,8 @@
 #include "dev/io/io.h"
 #include "dev/win/win.h"
 #include "dev/gpu/vk.h"
+#include "dev/time/time.h"
+#include "dev/input/input.h"
 #include <memory.h>
 
 
@@ -27,6 +29,8 @@ int common_main(int argc, char* argv[]) {
 	start_examples();
 
 	while (ctx->win.running) {
+        tick_update();
+        input_sync();
 		win_poll_events();
 		vk_frame_begin();
         run_examples();

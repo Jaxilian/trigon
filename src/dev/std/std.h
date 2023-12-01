@@ -2,6 +2,8 @@
 #define T_STD_H
 #include "defines.h"
 
+typedef void (*signal_t)();
+
 typedef enum {
 	LOG_COL_GREEN,
 	LOG_COL_RED,

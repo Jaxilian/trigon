@@ -28,6 +28,9 @@
     <ClCompile Include="src\assets\shaders\shader_resources.c" />
     <ClCompile Include="src\assets\meshes\primitives.c" />
     <ClCompile Include="src\assets\meshes\mesh.c" />
+    <ClCompile Include="src\entities\camera.c" />
+    <ClCompile Include="src\dev\input\keyboard.c" />
+    <ClCompile Include="src\dev\time\time.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
@@ -44,6 +47,9 @@
     <ClInclude Include="src\assets\shaders\shader.h" />
     <ClInclude Include="src\dev\gpu\vk_cmn.h" />
     <ClInclude Include="src\assets\meshes\mesh.h" />
+    <ClInclude Include="src\entities\entity.h" />
+    <ClInclude Include="src\dev\input\input.h" />
+    <ClInclude Include="src\dev\time\time.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug-x64\assets\shaders\vcolor.frag" />

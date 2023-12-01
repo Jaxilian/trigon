@@ -3,6 +3,9 @@
 #include "dev/mem/mem.h"
 #include <string.h>
 
+#define WIN_MAX_SIGNALS 10
+static signal_t signals[10] = { NULL };
+
 #ifdef _DEBUG
 static void glfw_error_callback(int code, cstr msg) {
 	validate(false, msg);
@@ -13,6 +16,11 @@ static void glfw_resized_event(GLFWwindow* window, int width, int height) {
 	ctx->win.width		= width;
 	ctx->win.height		= height;
 	ctx->win.resized	= true;
+
+	for (uint32_t i = 0; i < WIN_MAX_SIGNALS; i++) {
+		if (signals[i] == NULL) continue;
+		signals[i]();
+	}
 }
 
 static cstr*	extensions = NULL;
@@ -99,4 +107,18 @@ void  win_close_extensions() {
 #ifdef _DEBUG
 	mem_free(extensions);
 #endif
+}
+
+uint32_t win_window_resize_connect(signal_t cb) {
+	for (uint32_t i = 0; i < WIN_MAX_SIGNALS; i++) {
+		if (signals[i] != NULL) continue;
+		signals[i] = cb;
+		return i;
+	}
+	validate(false, "max signals in win.c reached! max = #d\n", WIN_MAX_SIGNALS);
+	return 0;
+}
+
+void win_window_resize_disconnect(uint32_t id) {
+	signals[id] = NULL;
 }

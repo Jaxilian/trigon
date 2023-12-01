@@ -19,6 +19,11 @@ typedef struct {
 	vk_descriptor_t		descriptors[MAX_UNIQUE_DESC];
 	vk_descriptor_set_t descriptor_sets[MAX_SHADER_SETS];
 	vk_buffer_t			descriptor_buffers[MAX_SHADER_BUFFERS];
+
+	double				tick_pre;
+	double				tick_now;
+	double				tick_dt;
+
 } core_ctx_t;
 
 
