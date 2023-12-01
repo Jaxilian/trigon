@@ -7,6 +7,7 @@ void win_del();
 bool win_valid();
 bool win_supported();
 void win_poll_events();
+void win_set_name(cstr name);
 
 cstr* win_open_extensions(uint32_t* count);
 void  win_close_extensions();

@@ -122,3 +122,10 @@ uint32_t win_window_resize_connect(signal_t cb) {
 void win_window_resize_disconnect(uint32_t id) {
 	signals[id] = NULL;
 }
+
+void win_set_name(cstr name) {
+	if (ctx->tick_now - ctx->win.last_name_update > 1) {
+		glfwSetWindowTitle(ctx->win.handle, name);
+		ctx->win.last_name_update = ctx->tick_now;
+	}
+}

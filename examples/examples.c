@@ -9,6 +9,7 @@
 #include "entities/entity.h"
 #include "dev/input/input.h"
 #include "dev/time/time.h"
+#include "dev/win/win.h"
 
 static shader_resource_group_t group = { 0 };
 static shader_t shader;
@@ -150,6 +151,11 @@ void run_examples() {
 	mesh_bind(mesh);
 	mesh_draw(mesh, 4);
 
+	double dt = time_dt();
+	uint32_t fps = (uint32_t)(60.0 / dt);
+	char name_buffer[25] = { 0 };
+	sprintf(name_buffer, "fps: %d", fps);
+	win_set_name(name_buffer);
 
 }
 
