@@ -9,6 +9,9 @@ typedef struct {
 	uint32_t			count;
 	size_t				data_count;
 	size_t				data_stride;
+	uint32_t			data_width;
+	uint32_t			data_height;
+	uint32_t			data_channels;
 } shader_resource_info_t;
 
 typedef struct {
@@ -19,6 +22,9 @@ typedef struct {
 	void*				data;
 	size_t				data_count;
 	size_t				data_stride;
+	uint32_t			data_width;
+	uint32_t			data_height;
+	uint32_t			data_channels;
 } shader_resource_t;
 
 typedef struct {

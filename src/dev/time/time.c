@@ -8,6 +8,7 @@ void tick_update() {
 	ctx->tick_dt = ctx->tick_now - ctx->tick_pre;
 }
 
+inline
 double time_dt() {
 	return ctx->tick_dt;
 }

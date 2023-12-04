@@ -54,7 +54,7 @@ void shader_new(shader_info_t* info, shader_t* out) {
 		vk_descriptor_set_t* target = &ctx->descriptor_sets[info->groups[i]->desc_set_id];
 		validate(target->initialized, "trying to fetch descriptor sets in shader_new() but %d was NULL\n", i);
 		out->groups[i] = info->groups[i];
-		sets[0] = target;
+		sets[i] = target;
 	}
 
 	out->pipeline = vk_pipeline_new(sets, info->group_count, shader, NULL);

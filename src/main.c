@@ -4,6 +4,12 @@
 #include <string.h>
 #endif
 
+extern void app_load();
+extern void app_start();
+extern void app_update();
+extern void app_draw();
+extern void app_quit();
+
 #include "dev/std/std.h"
 #include "dev/cpu/threads.h"
 #include "dev/mem/mem.h"
@@ -15,10 +21,12 @@
 #include "dev/gpu/vk.h"
 #include "dev/time/time.h"
 #include "dev/input/input.h"
+#include "assets/meshes/mesh.h"
 #include <memory.h>
 
 
 int common_main(int argc, char* argv[]) {
+    app_load();
 	core_ctx_new();
 
 	path_new_root(argv[0]);
@@ -28,16 +36,24 @@ int common_main(int argc, char* argv[]) {
 
 	start_examples();
 
+    app_start();
+
 	while (ctx->win.running) {
         tick_update();
         input_sync();
 		win_poll_events();
+
+        app_update();
+
 		vk_frame_begin();
         run_examples();
+        app_draw();
 		vk_frame_end();
 	}
 
     vkDeviceWaitIdle(ctx->device.device);
+    app_quit();
+    mesh_clear();
     stop_examples();
 	vk_del();
 	win_del();
