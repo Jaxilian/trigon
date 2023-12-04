@@ -6,6 +6,7 @@
 typedef struct {
 	uint32_t			binding;
 	shader_property_e	type;
+	shader_stage_e		stage;
 	uint32_t			count;
 	size_t				data_count;
 	size_t				data_stride;
@@ -17,6 +18,7 @@ typedef struct {
 typedef struct {
 	uint32_t			binding;
 	shader_property_e	type;
+	shader_stage_e		stage;
 	uint32_t			count;
 	uint32_t			desc_id;
 	void*				data;

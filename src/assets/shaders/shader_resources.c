@@ -31,7 +31,8 @@ void shader_resource_new(shader_resource_info_t* in, shader_resource_t* out) {
 	out->type = in->type;
 	out->data_count = in->data_count;
 	out->data_stride = in->data_stride;
-	vk_descriptor_new(in->binding, in->count, in->type, desc);
+	out->stage = in->stage;
+	vk_descriptor_new(in->binding, in->count, in->type, in->stage, desc);
 }
 
 void shader_resource_del(shader_resource_t* in) {

@@ -20,33 +20,46 @@ static void convert_bindings(uint32_t count, vk_descriptor_t descriptors[MAX_DES
     }
 }
 
-void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, vk_descriptor_t* out) {
+void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, shader_stage_e stage, vk_descriptor_t* out) {
     VkDescriptorType local_type = { 0 };
-    VkShaderStageFlags stage = { 0 };
+    VkShaderStageFlags _stage = { 0 };
 
+ 
     switch (type) {
     case SHADER_STATIC_BUFFER:
         local_type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        stage = VK_SHADER_STAGE_VERTEX_BIT;
+        _stage = VK_SHADER_STAGE_VERTEX_BIT;
         break;
     case SHADER_DYNAMIC_BUFFER:
         local_type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        stage = VK_SHADER_STAGE_VERTEX_BIT;
+        _stage = VK_SHADER_STAGE_VERTEX_BIT;
         break;
     case SHADER_SAMPLER_BUFFER:
         local_type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+        _stage = VK_SHADER_STAGE_FRAGMENT_BIT;
         break;
     default:
         validate(false, "unkown shader property type %s :&d", __FILE__, __LINE__);
         break;
     }
 
+    switch (stage) {
+    case SHADER_STAGE_VERTEX:
+        _stage = VK_SHADER_STAGE_VERTEX_BIT;
+        break;
+    case SHADER_STAGE_FRAGMENT:
+        _stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+        break;
+    default:
+        break;
+    }
+
+
     out->binding = (VkDescriptorSetLayoutBinding){
         .binding = location,
         .descriptorType = local_type,
         .descriptorCount = count,
-        .stageFlags = stage,
+        .stageFlags = _stage,
         .pImmutableSamplers = NULL
     };
     out->count = count;

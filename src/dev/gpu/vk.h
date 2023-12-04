@@ -25,7 +25,7 @@ void vk_shader_new(vk_shader_t* shader, cstr vertex_path, cstr fragment_path);
 void vk_shader_del(vk_shader_t* shader);
 void vk_shader_clear();
 
-void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, vk_descriptor_t* out);
+void vk_descriptor_new(uint32_t location, uint32_t count, shader_property_e type, shader_stage_e stage, vk_descriptor_t* out);
 void vk_descriptor_set_new(vk_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vk_descriptor_set_t* out);
 void vk_descriptor_set_del(vk_descriptor_set_t* in);
 
