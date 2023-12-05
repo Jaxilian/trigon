@@ -31,6 +31,8 @@
     <ClCompile Include="src\entities\camera.c" />
     <ClCompile Include="src\dev\input\keyboard.c" />
     <ClCompile Include="src\dev\time\time.c" />
+    <ClCompile Include="src\dev\mem\pool.c" />
+    <ClCompile Include="src\assets\textures\textures.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dev\std\defines.h" />
@@ -50,6 +52,8 @@
     <ClInclude Include="src\entities\entity.h" />
     <ClInclude Include="src\dev\input\input.h" />
     <ClInclude Include="src\dev\time\time.h" />
+    <ClInclude Include="src\dev\mem\pool.h" />
+    <ClInclude Include="src\assets\textures\textures.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug-x64\assets\shaders\vcolor.frag" />

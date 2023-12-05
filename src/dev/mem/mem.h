@@ -38,6 +38,7 @@ void  cmem_check();
 #define mem_check()
 #endif
 
+#define PTR_FROM_BUFFER(buffer, stride, index) (void*)((char*)buffer + index * stride);
 
 
 #endif // !T_MEM_H

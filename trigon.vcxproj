@@ -201,6 +201,7 @@
     <ClCompile Include="src\assets\meshes\primitives.c" />
     <ClCompile Include="src\assets\shaders\shader.c" />
     <ClCompile Include="src\assets\shaders\shader_resources.c" />
+    <ClCompile Include="src\assets\textures\textures.c" />
     <ClCompile Include="src\dev\cpu\coro.c" />
     <ClCompile Include="src\dev\cpu\threads.c" />
     <ClCompile Include="src\dev\gpu\vk.c" />
@@ -220,6 +221,7 @@
     <ClCompile Include="src\dev\mem\alloc.c" />
     <ClCompile Include="src\dev\mem\core_ctx.c" />
     <ClCompile Include="src\dev\mem\cpool.c" />
+    <ClCompile Include="src\dev\mem\pool.c" />
     <ClCompile Include="src\dev\std\debug.c" />
     <ClCompile Include="src\dev\std\strings.c" />
     <ClCompile Include="src\dev\time\time.c" />
@@ -231,6 +233,7 @@
     <ClInclude Include="examples\examples.h" />
     <ClInclude Include="src\assets\meshes\mesh.h" />
     <ClInclude Include="src\assets\shaders\shader.h" />
+    <ClInclude Include="src\assets\textures\textures.h" />
     <ClInclude Include="src\dev\cpu\coro.h" />
     <ClInclude Include="src\dev\cpu\threads.h" />
     <ClInclude Include="src\dev\gpu\vk.h" />
@@ -240,6 +243,7 @@
     <ClInclude Include="src\dev\io\io.h" />
     <ClInclude Include="src\dev\mem\core_ctx_def.h" />
     <ClInclude Include="src\dev\mem\mem.h" />
+    <ClInclude Include="src\dev\mem\pool.h" />
     <ClInclude Include="src\dev\std\defines.h" />
     <ClInclude Include="src\dev\std\std.h" />
     <ClInclude Include="src\dev\time\time.h" />
