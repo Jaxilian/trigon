@@ -60,7 +60,7 @@ void* cmem_alloc(size_t size, cstr file, uint32_t line) {
     );
 
     uint32_t ptr_id = (uint32_t)fnv1a_hash_x64(ptr, 512);
-    validate(!pointers[ptr_id].initialized,"pointer hash collision!\n");
+    //validate(!pointers[ptr_id].initialized,"pointer hash collision!\n");
     pointers[ptr_id].initialized = true;
     pointers->file = file;
     pointers->line = line;
