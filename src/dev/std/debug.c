@@ -95,3 +95,21 @@ void validate(bool expression, cstr format, ...) {
 #endif
 }
 
+void convert_bytes(size_t size, byte_type_e* out_type, double* out_size){
+    if (size > 1000000000) {
+        *out_type = BYTE_GB;
+        *out_size = (double)size / 1000000000.0f;
+    }
+    else if (size > 1000000) {
+        *out_type = BYTE_MB;
+        *out_size = (double)size / 1000000.0f;
+    }
+    else if (size > 1000) {
+        *out_type = BYTE_KB;
+        *out_size = (double)size / 1000.0f;
+    }
+    else {
+        *out_type = BYTE_BYTE;
+        *out_size = (double)size;
+    }
+}
