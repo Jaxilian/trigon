@@ -89,12 +89,12 @@ bool vk_submit_command_buffer() {
     return true;
 }
 
-
 VkCommandBuffer vk_command_buffer() {
     return ctx->device.command_buffers[ctx->vk_state.frame_index];
 }
 
 void vk_frame_begin() {
+    vkDeviceWaitIdle(ctx->device.device);
     validate(!ctx->vk_state.frame_in_progress, "frame was already started!\n");
     bool success = false;
 
@@ -154,4 +154,36 @@ void vk_frame_end() {
 
     ctx->vk_state.frame_in_progress = false;
     ctx->vk_state.frame_index = (ctx->vk_state.frame_index + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+VkCommandBuffer vk_single_cmd_begin() {
+    VkCommandBufferAllocateInfo info = {0};
+    info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    info.commandPool = ctx->device.command_pool;
+    info.commandBufferCount = 1;
+
+    VkCommandBuffer cmd_buff;
+    vkAllocateCommandBuffers(ctx->device.device, &info, &cmd_buff);
+
+    VkCommandBufferBeginInfo begin_info = {0};
+    begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    vkBeginCommandBuffer(cmd_buff, &begin_info);
+    return cmd_buff;
+}
+
+void vk_single_cmd_end(VkCommandBuffer cmd_buff) {
+    vkEndCommandBuffer(cmd_buff);
+
+    VkSubmitInfo submit_info = {0};
+    submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submit_info.commandBufferCount = 1;
+    submit_info.pCommandBuffers = &cmd_buff;
+
+    vkQueueSubmit(ctx->device.graphics_queue, 1, &submit_info, VK_NULL_HANDLE);
+    vkQueueWaitIdle(ctx->device.graphics_queue);
+
+    vkFreeCommandBuffers(ctx->device.device, ctx->device.command_pool, 1, &cmd_buff);
 }

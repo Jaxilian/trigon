@@ -105,8 +105,6 @@ typedef struct {
 
 
 /*------------------ VERTEX ATTRIBUTES----------------------*/
-
-
 #define default_vertex_binding_count 1
 #define default_vertex_attribute_count 4
 static const VkVertexInputBindingDescription default_vertex_binding[default_vertex_binding_count] = {
@@ -185,6 +183,12 @@ typedef struct {
 	VkDescriptorSetLayout			set_layout;
 } vk_descriptor_set_t;
 
+typedef struct {
+	bool				initialized;
+	VkImage				image;
+	VkDeviceMemory		memory;
+	VkImageView			view;
+} vk_image_t;
 
 
 #endif // !T_VK_DEF_H

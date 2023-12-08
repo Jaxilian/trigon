@@ -171,8 +171,6 @@ static void vk_instance_new() {
     uint32_t    extc = 0;
     cstr* ext = win_open_extensions(&extc);
 
-
-    
     VkApplicationInfo app_info = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pApplicationName   = ctx->app_data.name,

@@ -1,6 +1,7 @@
 #ifndef T_VK_H
 #define T_VK_H
 #include "dev/mem/core_ctx_def.h"
+#include "dev/io/io.h"
 
 void vk_device_new();
 void vk_device_del();
@@ -58,5 +59,7 @@ void vk_create_image_with_info(
 
 VkDescriptorType vk_descriptor_convert_type(shader_property_e type);
 
+VkCommandBuffer vk_single_cmd_begin();
+void vk_single_cmd_end(VkCommandBuffer cmd_buff);
 
 #endif
