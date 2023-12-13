@@ -57,21 +57,21 @@ typedef struct {
 typedef struct {
 	VkSwapchainKHR	old_swap;
 	VkSwapchainKHR	new_swap;
-	VkImage* images;
-	VkImageView* image_views;
+	VkImage*		images;
+	VkImageView*	image_views;
 	uint32_t		image_count;
 	VkFormat		image_format;
 	VkExtent2D		extent;
 	VkRenderPass	renderpass;
 	VkFormat        depth_format;
-	VkImage* depth_images;
+	VkImage*		depth_images;
 	VkDeviceMemory* depth_memories;
-	VkImageView* depth_views;
-	VkFramebuffer* framebuffers;
+	VkImageView*	depth_views;
+	VkFramebuffer*	framebuffers;
 	VkSemaphore     available_semaphores[MAX_FRAMES_IN_FLIGHT];
 	VkSemaphore     finished_semaphores[MAX_FRAMES_IN_FLIGHT];
 	VkFence         in_flight_fences[MAX_FRAMES_IN_FLIGHT];
-	VkFence* images_in_flight;
+	VkFence*		images_in_flight;
 	uint32_t		current_frame;
 } vk_swapchain_t;
 

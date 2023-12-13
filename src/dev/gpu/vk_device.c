@@ -169,7 +169,7 @@ void vk_close_swap_support(swap_support_t* support) {
 
 static void vk_instance_new() {
     uint32_t    extc = 0;
-    cstr* ext = win_open_extensions(&extc);
+    cstr* ext   = win_open_extensions(&extc);
 
     VkApplicationInfo app_info = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
