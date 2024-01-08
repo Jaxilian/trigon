@@ -109,6 +109,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,6 +139,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -163,6 +165,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -192,6 +195,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -202,6 +206,7 @@
     <ClCompile Include="src\vkl\vkl_format.c" />
     <ClCompile Include="src\vkl\vkl_image.c" />
     <ClCompile Include="src\vkl\vkl_instance.c" />
+    <ClCompile Include="src\vkl\vkl_memory.c" />
     <ClCompile Include="src\vkl\vkl_state.c" />
     <ClCompile Include="src\vkl\vkl_swapchain.c" />
     <ClCompile Include="src\vkl\vk_memory.c" />

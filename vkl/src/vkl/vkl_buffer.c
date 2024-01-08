@@ -31,7 +31,11 @@ void vkl_buffer_new(vkl_buffer_info_t* info, vkl_buffer_t* out) {
     VkMemoryAllocateInfo alloc_info = {
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = mem_req.size,
-        .memoryTypeIndex = vkFetchMemoryType(mem_req.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+        .memoryTypeIndex = vkl_get_memory_type(
+            info->device->physical_device,
+            mem_req.memoryTypeBits,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+        )
     };
 
     if (vkAllocateMemory(info->device->device, &alloc_info, NULL, &out->memory) != VK_SUCCESS) {
@@ -73,7 +77,7 @@ void vkl_buffer_set(vkl_buffer_t* buffer, void* data) {
 
     void* mapped_memory;
     if (vkMapMemory(buffer->dev_ptr->device, buffer->memory, 0, buffer->size, 0, &mapped_memory) != VK_SUCCESS) {
-        vkl_error(false, "Failed to map Vulkan buffer memory!\n", ERROR_WARNING);
+        vkl_error("Failed to map Vulkan buffer memory!\n", ERROR_WARNING);
     }
 
     memcpy(mapped_memory, data, buffer->size);
@@ -110,7 +114,6 @@ void vkl_buffer_submit_advanced(vkl_buffer_t* buffer, void* mappedMem) {
 
     vkUnmapMemory(buffer->dev_ptr->device, buffer->memory);
 }
-
 
 void vkl_buffer_del(vkl_buffer_t* buffer) {
     if (!buffer || !buffer->initialized) return;

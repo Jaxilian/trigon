@@ -54,6 +54,8 @@ VkResult		vkl_state_frame_end(vkl_state_t* state);
 void			vkl_state_new(vkl_state_info_t* info, vkl_state_t* state);
 void			vkl_state_del(vkl_state_t* state);
 
+uint32_t vkl_get_memory_type(VkPhysicalDevice device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
 /*
 void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);
 void vk_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out);

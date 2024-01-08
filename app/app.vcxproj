@@ -197,6 +197,12 @@
     <ProjectReference Include="..\trigon\trigon.vcxproj">
       <Project>{0e35942c-9154-48ed-b6a4-8efaa2d9cd7c}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vkl\vkl.vcxproj">
+      <Project>{6f034b4d-0962-4384-a6b4-6d71da29ce9c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\vstd\vstd.vcxproj">
+      <Project>{62fa7fc2-99f4-4c92-adf6-5c3e66c1aaf3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
