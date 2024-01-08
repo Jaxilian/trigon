@@ -81,7 +81,6 @@ void vk_pipeline_config_set_default(vk_pipeline_config_t* config) {
     config->vertex_binding_count = default_vertex_binding_count;
     config->vertex_attribute = (VkVertexInputAttributeDescription*)default_vertex_attributes;
     config->vertex_binding = (VkVertexInputBindingDescription*)default_vertex_binding;
-
     config->subpass = 0;
 }
 
