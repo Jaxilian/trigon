@@ -209,7 +209,6 @@
     <ClCompile Include="src\vkl\vkl_memory.c" />
     <ClCompile Include="src\vkl\vkl_state.c" />
     <ClCompile Include="src\vkl\vkl_swapchain.c" />
-    <ClCompile Include="src\vkl\vk_memory.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vkl\vkl.h" />

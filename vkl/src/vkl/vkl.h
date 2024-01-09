@@ -31,11 +31,6 @@ VkFormat vkl_format_supported(
 	VkFormatFeatureFlags features
 );
 
-uint32_t vkl_fetch_memory_type(
-	const vkl_device_t* device,
-	uint32_t typeFilter,
-	VkMemoryPropertyFlags properties
-);
 void vk_create_image_with_info(
 	const vkl_device_t* device,
 	const VkImageCreateInfo* info,

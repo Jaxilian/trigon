@@ -21,6 +21,7 @@ static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
 	if (x <= 0 || y <= 0) {
 		return;
 	}
+
 	create_swap((uint32_t)x, (uint32_t)y);
 }
 

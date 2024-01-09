@@ -18,7 +18,7 @@ void vk_create_image_with_info(
     VkMemoryAllocateInfo alloc_info = { 
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = mem_req.size,
-        .memoryTypeIndex = vkl_fetch_memory_type(device, mem_req.memoryTypeBits, properties)
+        .memoryTypeIndex = vkl_get_memory_type(device->physical_device, mem_req.memoryTypeBits, properties)
     };
 
     success = vkAllocateMemory(device->device, &alloc_info, NULL, image_memory) == VK_SUCCESS;
