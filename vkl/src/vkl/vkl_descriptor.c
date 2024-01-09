@@ -1,4 +1,6 @@
 #include "vkl/vkl.h"
+#include <stdlib.h>
+#include <memory.h>
 /*
 
 VkDescriptorType vkl_descriptor_convert_type(vkl_shader_property_e type) {
@@ -10,7 +12,7 @@ VkDescriptorType vkl_descriptor_convert_type(vkl_shader_property_e type) {
     case SHADER_SAMPLER_BUFFER:
         return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     default:
-        validate(false, "unkown shader property type %s :&d", __FILE__, __LINE__);
+        vkl_error("unkown shader property type %s :&d", ERROR_WARNING);
         return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     }
 }
@@ -21,7 +23,7 @@ static void convert_bindings(uint32_t count, vkl_descriptor_t descriptors[MAX_DE
     }
 }
 
-void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out) {
+void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out) {
     VkDescriptorType local_type = { 0 };
     VkShaderStageFlags _stage = { 0 };
 
@@ -40,7 +42,7 @@ void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e 
         _stage = VK_SHADER_STAGE_FRAGMENT_BIT;
         break;
     default:
-        validate(false, "unkown shader property type %s :&d", __FILE__, __LINE__);
+        vkl_error("unkown shader property type %s :&d", ERROR_FATAL);
         break;
     }
 
@@ -69,12 +71,12 @@ void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e 
     out->initialized = true;
 }
 
-static vk_desc_create_pool(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* in) {
+static vkl_desc_create_pool(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* in) {
     VkDescriptorPoolSize pool_sizes[MAX_DESC_PER_SET] = { 0 };
 
     for (uint32_t i = 0; i < count; i++) {
         pool_sizes[i] = (VkDescriptorPoolSize){
-              .type = vk_descriptor_convert_type(descriptors[i].type),
+              .type = vkl_descriptor_convert_type(descriptors[i].type),
               .descriptorCount = descriptors[i].count,
         };
     }
@@ -96,7 +98,7 @@ static vk_desc_create_pool(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint3
     );
 }
 
-void vk_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out) {
+void vkl_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out) {
     out->descriptor_count = count;
     memcpy(out->descriptors, descriptors, sizeof(descriptors));
 
@@ -128,12 +130,12 @@ void vk_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint3
     out->initialized = true;
 }
 
-void vk_descriptor_set_del(vkl_descriptor_set_t* in) {
+void vkl_descriptor_set_del(vkl_descriptor_set_t* in) {
     vkDestroyDescriptorPool(ctx->device.device, in->pool, NULL);
     vkDestroyDescriptorSetLayout(ctx->device.device, in->set_layout, NULL);
 }
 
-void vk_descriptor_set_update_ubo(vkl_descriptor_set_t* in, uint32_t descriptor_id, vkl_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count) {
+void vkl_descriptor_set_update_ubo(vkl_descriptor_set_t* in, uint32_t descriptor_id, vkl_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count) {
     validate(
         descriptor_id <= in->descriptor_count &&
         count >= 0
