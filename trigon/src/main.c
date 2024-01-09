@@ -87,7 +87,15 @@ int main() {
 	};
 
 	vkl_state_new(&state_info, &state);
-	vkl_reset_command_pool(&device);
+
+	vkl_buffer_info_t buffer_info = {
+		.count = 1,
+		.device = &device,
+		.stride = 25,
+		.usage_flags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+	};
+	vkl_buffer_t buffer = { 0 };
+	vkl_buffer_new(&buffer_info, &buffer);
 
 	bool running = true;
 	while (running) {
@@ -103,6 +111,7 @@ int main() {
 		}
 	}
 
+	vkl_buffer_del(&buffer);
 	vkDeviceWaitIdle(device.device);
 	vkl_state_del(&state);
 	vkl_swapchain_del(&device, &swapchain);

@@ -56,6 +56,16 @@ void			vkl_state_del(vkl_state_t* state);
 
 uint32_t vkl_get_memory_type(VkPhysicalDevice device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
+
+void  vkl_buffer_new(vkl_buffer_info_t* info, vkl_buffer_t* out);
+void  vkl_buffer_resize(vkl_buffer_t* buffer, uint32_t new_count);
+void  vkl_buffer_set(vkl_buffer_t* buffer, void* data);
+void* vkl_buffer_set_advanced(vkl_buffer_t* buffer);
+void  vkl_buffer_submit_advanced(vkl_buffer_t* buffer, void* mappedMem);
+void  vkl_buffer_del(vkl_buffer_t* buffer);
+void  vkl_buffer_clear(vkl_buffer_t* arr, uint32_t count);
+
+
 /*
 void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);
 void vk_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out);
