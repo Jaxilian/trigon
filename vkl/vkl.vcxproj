@@ -208,6 +208,7 @@
     <ClCompile Include="src\vkl\vkl_instance.c" />
     <ClCompile Include="src\vkl\vkl_memory.c" />
     <ClCompile Include="src\vkl\vkl_pipeline.c" />
+    <ClCompile Include="src\vkl\vkl_shader.c" />
     <ClCompile Include="src\vkl\vkl_state.c" />
     <ClCompile Include="src\vkl\vkl_swapchain.c" />
   </ItemGroup>

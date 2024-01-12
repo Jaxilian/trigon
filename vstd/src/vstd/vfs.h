@@ -27,6 +27,8 @@ bool path_get_subfiles_filter(const path_os_t* path, path_os_t* files, int out_c
 bool path_exists(const path_os_t* path);
 bool path_dir_new(const path_os_t* dir_path);
 bool path_file_new(const path_os_t* f_path);
+void path_file_close();
+bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_length);
 
 bool path_set_sys_dir(const path_os_t* path);
 

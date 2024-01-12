@@ -11,6 +11,8 @@
 #include <dirent.h>
 #endif
 
+static char* file_cache = NULL;
+
 bool path_new(path_os_t* path, const char* path_str) {
     if (strlen(path_str) >= MAX_PATH) {
         fprintf(stderr, "provided path_str was larger than MAX_PATH");
@@ -446,5 +448,43 @@ bool path_set_sys_dir(const path_os_t* path) {
         perror("Failed to change directory");
     }
 #endif
+    return true;
+}
+
+void path_file_close() {
+    free(file_cache);
+    file_cache = NULL;
+}
+
+bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_length) {
+    if (file_cache) path_file_close();
+
+    FILE* file = fopen(path, "rb");
+    if (file == NULL) {
+        printf("failed to open file %s!\n", path->data);
+        return false;
+    }
+
+
+    size_t size;
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    file_cache = (char*)malloc(size);
+    if (file_cache == NULL) {
+        fclose(file);
+        return NULL;
+    }
+
+    fread(file_cache, 1, size, file);
+    fclose(file);
+
+    if (file_length) {
+        *file_length = size;
+    }
+
+    file_buffer = file_cache;
+   
     return true;
 }

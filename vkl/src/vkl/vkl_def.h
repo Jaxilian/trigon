@@ -101,6 +101,22 @@ typedef struct {
 	uint32_t		current_frame;
 } vkl_swapchain_t;
 
+/* ------------------- VKL_SHADER ------------------- */
+
+typedef struct {
+	char			vertex_path[260];
+	char			frag_path[260];
+	vkl_device_t*	device;
+} vkl_shader_info_t;
+
+typedef struct {
+	bool			initialized;
+	vkl_device_t*	device;
+	VkShaderModule	vertex_module;
+	VkShaderModule	fragment_module;
+} vkl_shader_t;
+
+
 /* ------------------- VKL_STATE ------------------- */
 
 typedef struct {
