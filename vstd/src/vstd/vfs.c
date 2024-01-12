@@ -459,7 +459,7 @@ void path_file_close() {
 bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_length) {
     if (file_cache) path_file_close();
 
-    FILE* file = fopen(path, "rb");
+    FILE* file = fopen(path->data, "rb");
     if (file == NULL) {
         printf("failed to open file %s!\n", path->data);
         return false;
@@ -474,7 +474,7 @@ bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_lengt
     file_cache = (char*)malloc(size);
     if (file_cache == NULL) {
         fclose(file);
-        return NULL;
+        return false;
     }
 
     fread(file_cache, 1, size, file);
