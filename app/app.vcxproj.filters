@@ -3,4 +3,9 @@
   <ItemGroup>
     <ClCompile Include="src\app.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\test.vert" />
+    <None Include="assets\shaders\test.frag" />
+    <None Include="assets\shaders\compile.bat" />
+  </ItemGroup>
 </Project>

@@ -204,6 +204,11 @@
       <Project>{62fa7fc2-99f4-4c92-adf6-5c3e66c1aaf3}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\compile.bat" />
+    <None Include="assets\shaders\test.frag" />
+    <None Include="assets\shaders\test.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

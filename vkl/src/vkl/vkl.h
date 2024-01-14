@@ -31,13 +31,15 @@ VkFormat vkl_format_supported(
 	VkFormatFeatureFlags features
 );
 
-void vk_create_image_with_info(
+
+void vkl_create_image_with_info(
 	const vkl_device_t* device,
 	const VkImageCreateInfo* info,
 	VkMemoryPropertyFlags properties,
 	VkImage* image,
 	VkDeviceMemory* image_memory
 );
+
 
 VkResult		vkl_state_next_frame(vkl_state_t* state);
 VkCommandBuffer vkl_state_command_buffer(vkl_state_t* state);
@@ -60,8 +62,8 @@ void  vkl_buffer_submit_advanced(vkl_buffer_t* buffer, void* mappedMem);
 void  vkl_buffer_del(vkl_buffer_t* buffer);
 void  vkl_buffer_clear(vkl_buffer_t* arr, uint32_t count);
 
-void vk_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_path, const char* fragment_path);
-void vk_shader_del(vkl_device_t* dev, vkl_shader_t* shader);
+void vkl_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_path, const char* fragment_path);
+void vkl_shader_del(vkl_device_t* dev, vkl_shader_t* shader);
 
 
 /*

@@ -1,6 +1,6 @@
 #include "vkl.h"
 
-void vk_create_image_with_info(
+void vkl_create_image_with_info(
     const vkl_device_t* device,
     const VkImageCreateInfo* info,
     VkMemoryPropertyFlags properties,

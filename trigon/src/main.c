@@ -1,7 +1,7 @@
 #include <vkl/vkl.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
-
+#include "gui/gui.h"
 static GLFWwindow* window = NULL;
 static vkl_device_t		device = { 0 };
 static vkl_swapchain_t		swapchain = { 0 };
@@ -88,6 +88,8 @@ int main() {
 	};
 
 	vkl_state_new(&state_info, &state);
+
+	gui_draw_quad();
 
 	bool running = true;
 	while (running) {

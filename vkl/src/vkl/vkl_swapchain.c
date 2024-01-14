@@ -306,7 +306,7 @@ inline static void vkl_create_depth_resource(const vkl_swapchain_info_t* info, v
             .flags = 0  
         };
 
-        vk_create_image_with_info(
+        vkl_create_image_with_info(
             info->device_ptr,
             &image_info,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,

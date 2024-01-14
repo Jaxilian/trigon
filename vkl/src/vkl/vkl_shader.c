@@ -37,15 +37,17 @@ static void shader_module_new(vkl_device_t* dev, const char* path, VkShaderModul
 	free(data);
 }
 
-void vk_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_path, const char* fragment_path) {
+void vkl_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_path, const char* fragment_path) {
 	shader_module_new(dev, vertex_path, &shader->vertex_module);
 	shader_module_new(dev, fragment_path, &shader->fragment_module);
 	shader->initialized = true;
 }
 
-void vk_shader_del(vkl_device_t* dev, vkl_shader_t* shader) {
+void vkl_shader_del(vkl_device_t* dev, vkl_shader_t* shader) {
 	if (!shader->initialized) return;
 	vkDestroyShaderModule(dev->device, shader->vertex_module, NULL);
 	vkDestroyShaderModule(dev->device, shader->fragment_module, NULL);
 	memset(shader, 0, sizeof(vkl_shader_t));
 }
+
+
