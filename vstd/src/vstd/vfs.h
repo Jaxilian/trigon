@@ -24,6 +24,9 @@ bool path_get_subfiles(const path_os_t* path, path_os_t* files, int out_count);
 bool path_get_subfiles_filter_count(const path_os_t* path, int* out_count, const char* extension);
 bool path_get_subfiles_filter(const path_os_t* path, path_os_t* files, int out_count, const char* extension);
 
+bool path_change_dir(const path_os_t* current, const char* child_name, path_os_t* new_dir);
+bool path_find_file(const path_os_t* current, const char* file_name, path_os_t* file_path);
+
 bool path_exists(const path_os_t* path);
 bool path_dir_new(const path_os_t* dir_path);
 bool path_file_new(const path_os_t* f_path);

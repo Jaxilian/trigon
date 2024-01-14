@@ -88,7 +88,7 @@ int main() {
 	};
 
 	vkl_state_new(&state_info, &state);
-
+	gui_new(&device);
 	gui_draw_quad();
 
 	bool running = true;

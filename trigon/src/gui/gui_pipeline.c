@@ -2,30 +2,82 @@
 #include <vkl/vkl.h>
 #include <vstd/vfs.h>
 #include <stdio.h>
+#include <cglm/cglm.h>
+#include <string.h>
+
+#define gui_vertex_binding_count 1
+#define gui_vertex_attrb_count 4
+
+typedef struct {
+    vec3 position;
+    vec2 uv;
+} gui_vertex_t;
+
+static const VkVertexInputBindingDescription gui_vertex_binding[gui_vertex_binding_count] = {
+    {
+    .binding = 0,
+    .stride = sizeof(gui_vertex_t),
+    .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+    }
+};
+static const VkVertexInputAttributeDescription gui_vertex_attributes[gui_vertex_attrb_count] = {
+    {
+        .binding = 0,
+        .location = 0,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(gui_vertex_t, position)
+    },
+    {
+        .binding = 0,
+        .location = 1,
+        .format = VK_FORMAT_R32G32_SFLOAT,
+        .offset = offsetof(gui_vertex_t, uv)
+    }
+};
+
 static void gui_pipeline_new(vkl_device_t* dev) {
 
-    VkShaderModule vert_mod = { 0 };
+    path_os_t path      = { 0 };
+    path_os_t vert_path = { 0 };
+    path_os_t frag_path = { 0 };
+
+    path_get_current(&path);
+    path_change_dir(&path, "data", &path);
+    path_find_file(&path, "test_vert.spv", &vert_path);
+    path_find_file(&path, "test_frag.spv", &frag_path);
+    
+
+    vkl_shader_t shader = { 0 };
+    vkl_shader_new(dev, &shader, vert_path.data, frag_path.data);
+
+    VkPipelineShaderStageCreateInfo vshader_stage_info =  {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .stage = VK_SHADER_STAGE_VERTEX_BIT,
+        .module = shader.vertex_module,
+        .pName = "main"
+    };
+
+    VkPipelineShaderStageCreateInfo fshader_stage_info = {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
+        .module = shader.fragment_module,
+        .pName = "main"
+    };
+
+    VkPipelineShaderStageCreateInfo stages[] = {
+        vshader_stage_info,
+        fshader_stage_info
+    };
+    VkPipelineVertexInputStateCreateInfo vertex_info = {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+        .vertexAttributeDescriptionCount    = gui_vertex_attrb_count,
+        .vertexBindingDescriptionCount      = gui_vertex_binding_count,
+        .pVertexAttributeDescriptions       = (VkVertexInputAttributeDescription*)gui_vertex_binding,
+        .pVertexBindingDescriptions         = (VkVertexInputBindingDescription*)gui_vertex_attributes
+    };
+
     /*
-    vkl_shader_new(dev, &vert_mod, )
 
-    VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
-    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
-
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
-    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertShaderStageInfo.module = vertShaderModule;
-    vertShaderStageInfo.pName = "main";
-
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
-    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragShaderStageInfo.module = fragShaderModule;
-    fragShaderStageInfo.pName = "main";
-
-    VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
-
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = 0;
     vertexInputInfo.vertexAttributeDescriptionCount = 0;
@@ -108,15 +160,16 @@ static void gui_pipeline_new(vkl_device_t* dev) {
         throw std::runtime_error("failed to create graphics pipeline!");
     }
 
-    vkDestroyShaderModule(device, fragShaderModule, nullptr);
-    vkDestroyShaderModule(device, vertShaderModule, nullptr);
     */
-    
+
+    vkl_shader_del(dev, &shader);
+}
+
+bool gui_new(vkl_device_t* dev) {
+    gui_pipeline_new(dev);
+    return true;
 }
 
 bool gui_draw_quad() {
-    path_os_t path = { 0 };
-    path_get_current(&path);
-    printf("%s\n", path.data);
     return true;
 }

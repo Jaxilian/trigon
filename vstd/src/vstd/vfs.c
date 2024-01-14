@@ -488,3 +488,52 @@ bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_lengt
    
     return true;
 }
+
+bool path_change_dir(const path_os_t* current, const char* child_name, path_os_t* new_dir) {
+    int child_count = 0;
+    path_get_subdir_count(current, &child_count);
+
+    path_os_t* children = malloc(sizeof(path_os_t) * child_count);
+    if (!children) {
+        printf("failed to allocate memory for children of path %s\n", current->data);
+        printf("child count: [%d]", child_count);
+        return false;
+    }
+    path_get_subdirs(current, children, child_count);
+
+    for (int i = 0; i < child_count; i++) {
+        const char* sub_name = path_get_last_dir(&children[i]);
+        if (strcmp(sub_name, child_name) == 0) {
+            strcpy(new_dir->data, children[i].data);
+            return true;
+        }
+    }
+
+    printf("couldn't find sub child \"%s\" in %s\n", child_name, current->data);
+    return false;
+}
+
+bool path_find_file(const path_os_t* current, const char* file_name, path_os_t* file_path) {
+    int child_count = 0;
+    path_get_subfiles_count(current, &child_count);
+
+    path_os_t* children = malloc(sizeof(path_os_t) * child_count);
+    if (!children) {
+        printf("failed to allocate memory for children of path %s\n", current->data);
+        printf("child count: [%d]", child_count);
+        return false;
+    }
+
+    path_get_subfiles(current, children, child_count);
+
+    for (int i = 0; i < child_count; i++) {
+        const char* sub_name = path_get_last_dir(&children[i]);
+        if (strcmp(sub_name, file_name) == 0) {
+            strcpy(file_path->data, children[i].data);
+            return true;
+        }
+    }
+
+    printf("couldn't find sub file \"%s\" in %s\n", file_name, current->data);
+    return false;
+}
