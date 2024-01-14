@@ -109,6 +109,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>C:\projects\trigon\app\assets\shaders\compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -137,6 +140,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>C:\projects\trigon\app\assets\shaders\compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -161,6 +167,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>C:\projects\trigon\app\assets\shaders\compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -189,6 +198,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>C:\projects\trigon\app\assets\shaders\compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\app.c" />
