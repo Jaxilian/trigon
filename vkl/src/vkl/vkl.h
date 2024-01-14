@@ -60,6 +60,9 @@ void  vkl_buffer_submit_advanced(vkl_buffer_t* buffer, void* mappedMem);
 void  vkl_buffer_del(vkl_buffer_t* buffer);
 void  vkl_buffer_clear(vkl_buffer_t* arr, uint32_t count);
 
+void vk_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_path, const char* fragment_path);
+void vk_shader_del(vkl_device_t* dev, vkl_shader_t* shader);
+
 
 /*
 void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);

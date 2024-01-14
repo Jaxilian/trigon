@@ -199,6 +199,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\gui\gui_pipeline.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
