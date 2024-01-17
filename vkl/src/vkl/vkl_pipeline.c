@@ -1,6 +1,80 @@
 #include "vkl/vkl.h"
+#include "common.h"
 
-/*
+/* ------------ SETTINGS ------------------*/
+
+#define default_dynamic_state_enable_count 2
+static const VkDynamicState default_dynamic_states_enables[] = {
+    VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR
+};
+
+#define vertex3_binding_count 1
+#define vertex3_attribute_count 4
+
+#define vertex2_binding_count 1
+#define vertex2_attribute_count 2
+
+static const VkVertexInputBindingDescription vertex3_binding[vertex3_binding_count] = {
+    {
+    .binding = 0,
+    .stride = sizeof(vertex3_t),
+    .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+    }
+};
+
+static const VkVertexInputAttributeDescription vertex3_attributes[vertex3_attribute_count] = {
+    {
+        .binding = 0,
+        .location = 0,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(vertex3_t, position)
+    },
+    {
+        .binding = 0,
+        .location = 1,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(vertex3_t, normal)
+    },
+    {
+        .binding = 0,
+        .location = 2,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(vertex3_t, color)
+    },
+    {
+        .binding = 0,
+        .location = 3,
+        .format = VK_FORMAT_R32G32_SFLOAT,
+        .offset = offsetof(vertex3_t, uv)
+    }
+};
+
+static const VkVertexInputBindingDescription vertex2_binding[vertex2_binding_count] = {
+    {
+    .binding = 0,
+    .stride = sizeof(vertex2_t),
+    .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+    }
+};
+
+static const VkVertexInputAttributeDescription vertex2_attributes[vertex2_attribute_count] = {
+    {
+        .binding = 0,
+        .location = 0,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(vertex2_t, position)
+    },
+    {
+        .binding = 0,
+        .location = 1,
+        .format = VK_FORMAT_R32G32_SFLOAT,
+        .offset = offsetof(vertex2_t, uv)
+    }
+};
+
+
+/* ---------- LOGIC --------------*/
+
 void vk_pipeline_config_set_default(vkl_pipeline_config_t* config) {
     // Input Assembly
     config->input_assembly = (VkPipelineInputAssemblyStateCreateInfo){
@@ -74,17 +148,28 @@ void vk_pipeline_config_set_default(vkl_pipeline_config_t* config) {
     // Dynamic State
     config->dynamic_state = (VkPipelineDynamicStateCreateInfo){
         .sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
-        .pDynamicStates = default_dynamic_states_enables,
-        .dynamicStateCount = default_dynamic_state_enable_count
+        .pDynamicStates     = default_dynamic_states_enables,
+        .dynamicStateCount  = default_dynamic_state_enable_count
     };
 
-    config->vertex_attribute_count = default_vertex_attribute_count;
-    config->vertex_binding_count = default_vertex_binding_count;
-    config->vertex_attribute = (VkVertexInputAttributeDescription*)default_vertex_attributes;
-    config->vertex_binding = (VkVertexInputBindingDescription*)default_vertex_binding;
-    config->subpass = 0;
+    if (config->use_for_3D) {
+        config->vertex_attribute_count = vertex3_attribute_count;
+        config->vertex_binding_count = vertex3_binding_count;
+        config->vertex_attribute = (VkVertexInputAttributeDescription*)vertex3_attributes;
+        config->vertex_binding = (VkVertexInputBindingDescription*)vertex3_binding;
+        config->subpass = 0;
+    }
+    else {
+        config->vertex_attribute_count = vertex2_attribute_count;
+        config->vertex_binding_count = vertex2_binding_count;
+        config->vertex_attribute = (VkVertexInputAttributeDescription*)vertex2_attributes;
+        config->vertex_binding = (VkVertexInputBindingDescription*)vertex2_binding;
+        config->subpass = 0;
+    }
+   
 }
 
+/*
 uint32_t get_next_pipeline() {
     for (uint32_t i = 0; i < MAX_SHADERS; ++i) {
         if (ctx->pipelines[i].initialized) continue;

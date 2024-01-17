@@ -132,6 +132,8 @@ typedef struct {
 	bool				frame_in_progress;
 } vkl_state_t;
 
+/* ---------------------- SHADERS ----------------------*/
+
 typedef enum {
 	SHADER_STAGE_DEFAULT,
 	SHADER_STAGE_FRAGMENT,
@@ -161,6 +163,36 @@ typedef struct {
 	VkDescriptorSet					set;
 	VkDescriptorSetLayout			set_layout;
 } vkl_descriptor_set_t;
+
+
+/* ------------------- PIPELINE ----------------------*/
+
+typedef struct {
+	VkPipelineViewportStateCreateInfo		viewport;
+	VkPipelineInputAssemblyStateCreateInfo	input_assembly;
+	VkPipelineRasterizationStateCreateInfo	rasterization;
+	VkPipelineMultisampleStateCreateInfo	multisample;
+	VkPipelineColorBlendAttachmentState		color_blend_attachment;
+	VkPipelineColorBlendStateCreateInfo		color_blend_state;
+	VkPipelineDepthStencilStateCreateInfo	depth_stencil;
+	VkPipelineDynamicStateCreateInfo		dynamic_state;
+	VkVertexInputBindingDescription*		vertex_binding;
+	VkVertexInputAttributeDescription*		vertex_attribute;
+	uint32_t								subpass;
+	uint32_t								vertex_binding_count;
+	uint32_t								vertex_attribute_count;
+	bool									use_for_3D;
+} vkl_pipeline_config_t;
+
+typedef struct {
+	bool					initialized;
+	vkl_shader_t*			shader;
+	vkl_pipeline_config_t*	config;
+	VkPipelineLayout		layout;
+	VkPipeline				instance;
+} vkl_pipeline_t;
+
+/* ------------------- BUFFER -----------------------*/
 
 typedef struct {
 	vkl_device_t*		device;

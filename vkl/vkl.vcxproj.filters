@@ -17,5 +17,6 @@
   <ItemGroup>
     <ClInclude Include="src\vkl\vkl.h" />
     <ClInclude Include="src\vkl\vkl_def.h" />
+    <ClInclude Include="src\vkl\common.h" />
   </ItemGroup>
 </Project>

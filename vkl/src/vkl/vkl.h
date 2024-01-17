@@ -66,11 +66,11 @@ void vkl_shader_new(vkl_device_t* dev, vkl_shader_t* shader, const char* vertex_
 void vkl_shader_del(vkl_device_t* dev, vkl_shader_t* shader);
 
 
-/*
-void vk_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);
-void vk_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out);
-void vk_descriptor_set_del(vkl_descriptor_set_t* in);
-*/
+VkDescriptorType vkl_descriptor_convert_type(vkl_shader_property_e type);
+void vkl_descriptor_set_update_ubo(vkl_device_t* device, vkl_descriptor_set_t* in, uint32_t descriptor_id, vkl_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count);
+void vkl_descriptor_set_del(vkl_device_t* device, vkl_descriptor_set_t* in);
+void vkl_descriptor_set_new(vkl_device_t* device, vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out);
+void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);
 
 #ifdef __cplusplus
 }

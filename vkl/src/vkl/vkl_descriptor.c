@@ -1,7 +1,6 @@
 #include "vkl/vkl.h"
 #include <stdlib.h>
 #include <memory.h>
-/*
 
 VkDescriptorType vkl_descriptor_convert_type(vkl_shader_property_e type) {
     switch (type) {
@@ -26,7 +25,6 @@ static void convert_bindings(uint32_t count, vkl_descriptor_t descriptors[MAX_DE
 void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out) {
     VkDescriptorType local_type = { 0 };
     VkShaderStageFlags _stage = { 0 };
-
 
     switch (type) {
     case SHADER_STATIC_BUFFER:
@@ -57,7 +55,6 @@ void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e
         break;
     }
 
-
     out->binding = (VkDescriptorSetLayoutBinding){
         .binding = location,
         .descriptorType = local_type,
@@ -71,7 +68,7 @@ void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e
     out->initialized = true;
 }
 
-static vkl_desc_create_pool(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* in) {
+static vkl_desc_create_pool(vkl_device_t* device, vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* in) {
     VkDescriptorPoolSize pool_sizes[MAX_DESC_PER_SET] = { 0 };
 
     for (uint32_t i = 0; i < count; i++) {
@@ -88,17 +85,16 @@ static vkl_desc_create_pool(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint
         .maxSets = 1,
     };
 
-    validate(
-        vkCreateDescriptorPool(
-            ctx->device.device,
-            &pool_info,
-            NULL,
-            &in->pool) == VK_SUCCESS,
-        "failed to create descriptor set pool!\n"
-    );
+    if (vkCreateDescriptorPool(
+        device->device,
+        &pool_info,
+        NULL,
+        &in->pool) != VK_SUCCESS) {
+        vkl_error("failed to create descriptor set pool!\n", ERROR_FATAL);
+    }
 }
 
-void vkl_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out) {
+void vkl_descriptor_set_new(vkl_device_t* device, vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out) {
     out->descriptor_count = count;
     memcpy(out->descriptors, descriptors, sizeof(descriptors));
 
@@ -110,9 +106,9 @@ void vkl_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint
       .bindingCount = count,
       .pBindings = bindings,
     };
-    vkCreateDescriptorSetLayout(ctx->device.device, &layout_info, NULL, &out->set_layout);
+    vkCreateDescriptorSetLayout(device->device, &layout_info, NULL, &out->set_layout);
 
-    vk_desc_create_pool(descriptors, count, out);
+    vkl_desc_create_pool(device, descriptors, count, out);
 
     VkDescriptorSetAllocateInfo alloc_info = {
         .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
@@ -120,34 +116,32 @@ void vkl_descriptor_set_new(vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint
         .descriptorSetCount = 1,
         .pSetLayouts = &out->set_layout,
     };
-    validate(
-        vkAllocateDescriptorSets(
-            ctx->device.device,
-            &alloc_info,
-            &out->set
-        ) == VK_SUCCESS,
-        "failed to allocate descriptor sets!\n");
+
+    if (vkAllocateDescriptorSets(
+        device->device,
+        &alloc_info,
+        &out->set) != VK_SUCCESS) {
+        vkl_error("failed to allocate descriptor sets!\n", ERROR_FATAL);
+    }
+
     out->initialized = true;
 }
 
-void vkl_descriptor_set_del(vkl_descriptor_set_t* in) {
-    vkDestroyDescriptorPool(ctx->device.device, in->pool, NULL);
-    vkDestroyDescriptorSetLayout(ctx->device.device, in->set_layout, NULL);
+void vkl_descriptor_set_del(vkl_device_t* device, vkl_descriptor_set_t* in) {
+    vkDestroyDescriptorPool(device->device, in->pool, NULL);
+    vkDestroyDescriptorSetLayout(device->device, in->set_layout, NULL);
 }
 
-void vkl_descriptor_set_update_ubo(vkl_descriptor_set_t* in, uint32_t descriptor_id, vkl_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count) {
-    validate(
-        descriptor_id <= in->descriptor_count &&
-        count >= 0
-        , "index out of bounds!"
-    );
-
+void vkl_descriptor_set_update_ubo(vkl_device_t* device, vkl_descriptor_set_t* in, uint32_t descriptor_id, vkl_buffer_t* buffers[MAX_DESC_PER_SET], uint32_t count) {
+    if (descriptor_id > in->descriptor_count && count < 0) {
+        vkl_error("index out of bounds!", ERROR_FATAL);
+    }
+    
     vkl_descriptor_t* descriptor = &in->descriptors[descriptor_id];
-    validate(
-        count <= descriptor->count &&
-        count >= 0
-        , "index out of bounds!"
-    );
+
+    if (count > in->descriptor_count && count < 0) {
+        vkl_error("index out of bounds!", ERROR_FATAL);
+    }
 
     VkDescriptorBufferInfo bufferInfos[MAX_DESC_PER_SET];
     VkWriteDescriptorSet descriptorWrites[MAX_DESC_PER_SET];
@@ -165,11 +159,11 @@ void vkl_descriptor_set_update_ubo(vkl_descriptor_set_t* in, uint32_t descriptor
             .dstSet = in->set,
             .dstBinding = descriptor->location,
             .descriptorCount = 1,
-            .descriptorType = vk_descriptor_convert_type(descriptor->type),
+            .descriptorType = vkl_descriptor_convert_type(descriptor->type),
             .pBufferInfo = &bufferInfos[i],
         };
     }
 
-    vkUpdateDescriptorSets(ctx->device.device, count, descriptorWrites, 0, NULL);
+    vkUpdateDescriptorSets(device->device, count, descriptorWrites, 0, NULL);
 }
-*/
+

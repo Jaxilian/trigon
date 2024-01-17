@@ -213,6 +213,7 @@
     <ClCompile Include="src\vkl\vkl_swapchain.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\vkl\common.h" />
     <ClInclude Include="src\vkl\vkl.h" />
     <ClInclude Include="src\vkl\vkl_def.h" />
   </ItemGroup>
