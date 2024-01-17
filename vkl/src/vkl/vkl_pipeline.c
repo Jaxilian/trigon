@@ -75,7 +75,7 @@ static const VkVertexInputAttributeDescription vertex2_attributes[vertex2_attrib
 
 /* ---------- LOGIC --------------*/
 
-void vk_pipeline_config_set_default(vkl_pipeline_config_t* config) {
+void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config) {
     // Input Assembly
     config->input_assembly = (VkPipelineInputAssemblyStateCreateInfo){
         .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
@@ -169,38 +169,20 @@ void vk_pipeline_config_set_default(vkl_pipeline_config_t* config) {
    
 }
 
-/*
-uint32_t get_next_pipeline() {
-    for (uint32_t i = 0; i < MAX_SHADERS; ++i) {
-        if (ctx->pipelines[i].initialized) continue;
-        return i;
-    }
-    validate(false, "max pipeline count (%d) reached", MAX_SHADERS);
-    exit(1);
-}
-
-vk_pipeline_t* get_pipeline(uint32_t id) {
-    if (!ctx->pipelines[id].initialized) {
-        return NULL;
-    }
-    return &ctx->pipelines[id];
-}
-
-void vk_pipeline_rebuild() {
-    vk_pipeline_config_t default_config = { 0 };
-    vk_pipeline_config_set_default(&default_config);
+void vkl_pipeline_rebuild(vkl_pipeline_t* pipeline, vkl_device_t* device, vkl_swapchain_t* swapchain) {
+    vkl_pipeline_config_t default_config = { 0 };
+    vkl_pipeline_config_set_default(&default_config);
 
     for (uint32_t i = 0; i < MAX_SHADERS; i++) {
-        vk_pipeline_t* pipeline = get_pipeline(i);
         if (!pipeline) continue;
 
         VkPipelineLayout layout = pipeline->layout;
-        vk_shader_t* shader = pipeline->shader;
-        vk_pipeline_config_t* config = pipeline->config;
+        vkl_shader_t* shader = pipeline->shader;
+        vkl_pipeline_config_t* config = pipeline->config;
 
         if (config == NULL)  config = &default_config;
 
-        vkDestroyPipeline(ctx->device.device, pipeline->instance, NULL);
+        vkDestroyPipeline(device->device, pipeline->instance, NULL);
 
         VkPipelineShaderStageCreateInfo shaderStages[2] = {
             {.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, .stage = VK_SHADER_STAGE_VERTEX_BIT, .module = shader->vertex_module, .pName = "main"},
@@ -228,26 +210,27 @@ void vk_pipeline_rebuild() {
             .pDepthStencilState = &config->depth_stencil,
             .pDynamicState = &config->dynamic_state,
             .layout = layout,
-            .renderPass = ctx->swapchain.renderpass,
+            .renderPass = swapchain->renderpass,
             .subpass = config->subpass,
             .basePipelineIndex = -1,
             .basePipelineHandle = VK_NULL_HANDLE
         };
-
-        bool success = false;
-        success = vkCreateGraphicsPipelines(
-            ctx->device.device,
+        
+        if (vkCreateGraphicsPipelines(
+            device->device,
             VK_NULL_HANDLE,
             1,
             &pipelineInfo,
             NULL,
-            &pipeline->instance) == VK_SUCCESS;
-        validate(success, "failed to create pipeline\n");
+            &pipeline->instance) != VK_SUCCESS) {
+            vkl_error("failed to create pipeline\n", ERROR_FATAL);
+        }
+
         pipeline->initialized = true;
     }
 }
 
-void generate_pipeline_layout(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, VkPipelineLayout* out) {
+static void generate_pipeline_layout(vkl_device_t* device, vkl_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, VkPipelineLayout* out) {
     VkDescriptorSetLayout layouts[MAX_DESC_SETS_IN_USE] = { 0 };
     for (uint32_t i = 0; i < sets_count; ++i) {
         layouts[i] = sets[i]->set_layout;
@@ -259,34 +242,31 @@ void generate_pipeline_layout(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], u
         .pSetLayouts = layouts
     };
 
-    validate(
-        vkCreatePipelineLayout(
-            ctx->device.device,
+    if (vkCreatePipelineLayout(
+            device->device,
             &pipeline_layout_info,
             NULL,
-            out) == VK_SUCCESS,
-        "failed to create pipeline layout!\n");
+            out) != VK_SUCCESS) {
+        vkl_error("failed to create pipeline layout!\n", ERROR_FATAL);
+    }
 }
 
-uint32_t vk_pipeline_new(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32_t sets_count, vk_shader_t* shader, vk_pipeline_config_t* config) {
-    uint32_t id = get_next_pipeline();
-    validate(!ctx->pipelines[id].initialized, "pipeline at location %d was already initialized!\n", id);
-    vk_pipeline_t* pipeline = &ctx->pipelines[id];
+void vkl_pipeline_new(vkl_pipeline_t* pipeline, vkl_pipeline_refs_t* references, vkl_pipeline_config_t* config) {
 
-    generate_pipeline_layout(sets, sets_count, &pipeline->layout);
+    generate_pipeline_layout(references->device, references->sets, references->sets_count, &pipeline->layout);
 
     pipeline->config = config;
-    pipeline->shader = shader;
+    pipeline->shader = references->shader;
 
-    vk_pipeline_config_t default_config = { 0 };
+    vkl_pipeline_config_t default_config = { 0 };
     if (config == NULL) {
-        vk_pipeline_config_set_default(&default_config);
+        vkl_pipeline_config_set_default(&default_config);
         config = &default_config;
     }
 
     VkPipelineShaderStageCreateInfo shaderStages[2] = {
-        {.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, .stage = VK_SHADER_STAGE_VERTEX_BIT, .module = shader->vertex_module, .pName = "main"},
-        {.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, .stage = VK_SHADER_STAGE_FRAGMENT_BIT, .module = shader->fragment_module, .pName = "main"}
+        {.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, .stage = VK_SHADER_STAGE_VERTEX_BIT, .module = references->shader->vertex_module, .pName = "main"},
+        {.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, .stage = VK_SHADER_STAGE_FRAGMENT_BIT, .module = references->shader->fragment_module, .pName = "main"}
     };
 
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = {
@@ -310,46 +290,33 @@ uint32_t vk_pipeline_new(vk_descriptor_set_t* sets[MAX_DESC_SETS_IN_USE], uint32
         .pDepthStencilState = &config->depth_stencil,
         .pDynamicState = &config->dynamic_state,
         .layout = pipeline->layout,
-        .renderPass = ctx->swapchain.renderpass,
+        .renderPass = references->swapchain->renderpass,
         .subpass = config->subpass,
         .basePipelineIndex = -1,
         .basePipelineHandle = VK_NULL_HANDLE
     };
 
-    bool success = vkCreateGraphicsPipelines(
-        ctx->device.device,
+    if (vkCreateGraphicsPipelines(
+        references->device->device,
         VK_NULL_HANDLE,
         1,
         &pipelineInfo,
         NULL,
-        &pipeline->instance) == VK_SUCCESS;
-    validate(success, "failed to create pipeline\n");
-    pipeline->initialized = true;
+        &pipeline->instance) == VK_SUCCESS) {
+        vkl_error("failed to create pipeline\n", ERROR_FATAL);
+    }
 
-    return id;
+    pipeline->initialized = true;
 }
 
-void vk_pipeline_del(uint32_t id) {
-    vk_pipeline_t* pipeline = get_pipeline(id);
-    if (!pipeline) return;
-
-    vkDeviceWaitIdle(ctx->device.device);
-    vkDestroyPipelineLayout(ctx->device.device, pipeline->layout, NULL);
-    vkDestroyPipeline(ctx->device.device, pipeline->instance, NULL);
+void vkl_pipeline_del(vkl_device_t* device, vkl_pipeline_t* pipeline) {
+    vkDeviceWaitIdle(device->device);
+    vkDestroyPipelineLayout(device->device, pipeline->layout, NULL);
+    vkDestroyPipeline(device->device, pipeline->instance, NULL);
     pipeline->initialized = false;
 }
 
-void vk_pipeline_clear() {
-    for (uint32_t i = 0; i < MAX_SHADERS; i++) {
-        vk_pipeline_del(i);
-    }
+void vkl_pipeline_bind(vkl_state_t* state, vkl_pipeline_t* pipeline) {
+    vkCmdBindPipeline(vkl_state_command_buffer(state), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->instance);
 }
 
-vk_pipeline_t* vk_pipeline_get(uint32_t id) {
-    return get_pipeline(id);
-}
-
-void vk_pipeline_bind(vk_pipeline_t* pipeline) {
-    vkCmdBindPipeline(vk_command_buffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->instance);
-}
-*/

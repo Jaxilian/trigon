@@ -11,6 +11,13 @@ extern "C" {
 #define MAX_FRAMES_IN_FLIGHT 2
 #define MAX_DESC_PER_SET 8
 
+#define MAX_DESC_SETS_IN_USE 4
+#define MAX_DESC_PER_SET 8
+#define MAX_UNIQUE_DESC 8
+#define MAX_SHADERS 16
+#define MAX_SHADER_SETS 16
+#define MAX_SHADER_BUFFERS MAX_DESC_PER_SET * MAX_DESC_SETS_IN_USE
+
 typedef void(*vkl_create_surface_callback)(void* vkl_device_ptr);
 
 typedef enum {
@@ -183,6 +190,14 @@ typedef struct {
 	uint32_t								vertex_attribute_count;
 	bool									use_for_3D;
 } vkl_pipeline_config_t;
+
+typedef struct {
+	vkl_descriptor_set_t*	sets[MAX_DESC_SETS_IN_USE];
+	uint32_t				sets_count;
+	vkl_shader_t*			shader;
+	vkl_device_t*			device;
+	vkl_swapchain_t*		swapchain;
+} vkl_pipeline_refs_t;
 
 typedef struct {
 	bool					initialized;
