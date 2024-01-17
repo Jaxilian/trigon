@@ -1,3 +1,8 @@
+#ifdef APIENTRY
+#define APIENTRY_DEFINED
+#undef APIENTRY
+#endif
+
 #include <vkl/vkl.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
@@ -26,8 +31,7 @@ static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
 }
 
 
-int main() {
-
+static void trigon_start() {
 	glfwInit();
 
 	uint32_t glfw_extc = 0;
@@ -109,6 +113,26 @@ int main() {
 	vkl_state_del(&state);
 	vkl_swapchain_del(&device, &swapchain);
 	vkl_device_del(&device);
+}
 
+#ifdef APIENTRY
+#define APIENTRY_DEFINED
+#undef APIENTRY
+#endif
+
+
+
+#ifdef _DEBUG
+int main() {
+	trigon_start();
 	return 0;
 }
+#else
+	#ifdef _WIN32
+		#include <Windows.h>
+		int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+			trigon_start();
+			return 0; 
+		}
+	#endif
+#endif
