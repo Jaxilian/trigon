@@ -199,12 +199,15 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\core.c" />
     <ClCompile Include="src\gui\gui_pipeline.c" />
-    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\trigon.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\test.h" />
+    <ClInclude Include="src\trigon.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\vkl\vkl.vcxproj">

@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\main.c" />
     <ClCompile Include="src\gui\gui_pipeline.c" />
+    <ClCompile Include="src\trigon.c" />
+    <ClCompile Include="src\core\core.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\test.h" />
     <ClInclude Include="src\gui\gui.h" />
+    <ClInclude Include="src\trigon.h" />
+    <ClInclude Include="src\core\core.h" />
   </ItemGroup>
 </Project>

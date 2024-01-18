@@ -1,18 +1,15 @@
-#ifdef APIENTRY
-#define APIENTRY_DEFINED
-#undef APIENTRY
-#endif
-
+#include "core.h"
 #include <vkl/vkl.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
-#include "gui/gui.h"
-static GLFWwindow* window = NULL;
-static vkl_device_t		device = { 0 };
-static vkl_swapchain_t		swapchain = { 0 };
-static vkl_state_t			state = { 0 };
+
+static GLFWwindow*		window		= NULL;
+static vkl_device_t		device		= { 0 };
+static vkl_swapchain_t	swapchain	= { 0 };
+static vkl_state_t		state		= { 0 };
 
 static void create_swap(uint32_t width, uint32_t height) {
+
 	vkl_swapchain_info_t swap_info = {
 		.device_ptr = &device,
 		.prefered_present_mode = VK_PRESENT_MODE_MAILBOX_KHR,
@@ -22,7 +19,9 @@ static void create_swap(uint32_t width, uint32_t height) {
 	vkl_swapchain_new(&swap_info, &swapchain);
 }
 
+
 static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
+
 	if (x <= 0 || y <= 0) {
 		return;
 	}
@@ -30,13 +29,13 @@ static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
 	create_swap((uint32_t)x, (uint32_t)y);
 }
 
-
-static void trigon_start() {
+static void create_vulkan_instance() {
 	glfwInit();
 
 	uint32_t glfw_extc = 0;
 	const char** glfw_ext = glfwGetRequiredInstanceExtensions(&glfw_extc);
 
+#ifdef _DEBUG
 	uint32_t extc = glfw_extc + 1;
 	const char** extensions = malloc(sizeof(char*) * extc);
 	if (extensions == NULL) {
@@ -53,11 +52,10 @@ static void trigon_start() {
 	const char* validation_layers[1] = {
 		"VK_LAYER_KHRONOS_validation"
 	};
-
-	uint32_t    device_extension_count = 1;
-	const char* device_extenions[1] = {
-		VK_KHR_SWAPCHAIN_EXTENSION_NAME
-	};
+#else
+	const char** extensions = glfw_ext;
+	uint32_t extc = glfw_extc;
+#endif
 
 	vkl_instance_info_t info = {
 		.app_name = "vge2",
@@ -66,35 +64,36 @@ static void trigon_start() {
 		.eng_name = "test",
 		.instance_ext = extensions,
 		.instance_ext_count = extc,
-		.opt_validation_layers = validation_layers,
-		.opt_validation_layer_count = validation_count,
+		.opt_validation_layers = NULL,
+		.opt_validation_layer_count = 0,
 		.vk_version = VK_VERSION_1_3
 	};
 
 	vkl_instance_new(&info, &device);
+}
 
+static void create_window() {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	window = glfwCreateWindow(800, 600, "Test", NULL, NULL);
 	glfwCreateWindowSurface(device.instance, window, NULL, &device.surface);
 	glfwSetFramebufferSizeCallback(window, glfw_framebuffer_resize_cb);
+}
+
+static void create_vulkan_device() {
+
+	uint32_t    device_extension_count = 1;
+	const char* device_extenions[1] = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	};
 
 	vkl_device_info_t dev_info = {
 		.device_extensions = device_extenions,
 		.device_extension_count = device_extension_count,
 	};
 	vkl_device_new(&dev_info, &device);
+}
 
-	create_swap(800, 600);
-
-	vkl_state_info_t state_info = {
-		.bound_device = &device,
-		.bound_swapchain = &swapchain
-	};
-
-	vkl_state_new(&state_info, &state);
-	gui_new(&device);
-	gui_draw_quad();
-
+static void core_run() {
 	bool running = true;
 	while (running) {
 		glfwPollEvents();
@@ -108,31 +107,28 @@ static void trigon_start() {
 			running = false;
 		}
 	}
+}
+
+trigon_core_start() {
+	create_vulkan_instance();
+	create_window();
+	create_vulkan_device();
+
+	create_swap(800, 600);
+
+	vkl_state_info_t state_info = {
+		.bound_device = &device,
+		.bound_swapchain = &swapchain
+	};
+
+	vkl_state_new(&state_info, &state);
+	core_run();
 
 	vkDeviceWaitIdle(device.device);
 	vkl_state_del(&state);
 	vkl_swapchain_del(&device, &swapchain);
 	vkl_device_del(&device);
+	glfwDestroyWindow(window);
+	glfwTerminate();
 }
 
-#ifdef APIENTRY
-#define APIENTRY_DEFINED
-#undef APIENTRY
-#endif
-
-
-
-#ifdef _DEBUG
-int main() {
-	trigon_start();
-	return 0;
-}
-#else
-	#ifdef _WIN32
-		#include <Windows.h>
-		int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-			trigon_start();
-			return 0; 
-		}
-	#endif
-#endif

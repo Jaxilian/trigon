@@ -5,6 +5,9 @@
 #include <cglm/cglm.h>
 #include <string.h>
 
+static vkl_pipeline_t pipeline = { 0 };
+
+
 static void gui_pipeline_new(vkl_device_t* dev) {
 
     path_os_t path      = { 0 };
@@ -19,6 +22,9 @@ static void gui_pipeline_new(vkl_device_t* dev) {
     vkl_shader_t shader = { 0 };
     vkl_shader_new(dev, &shader, vert_path.data, frag_path.data);
     printf("Compiled shader in %s:%d\n", __FILE__, __LINE__);
+
+
+    //vkl_pipeline_new(&pipeline)
 
     vkl_shader_del(dev, &shader);
 }
