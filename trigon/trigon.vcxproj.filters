@@ -4,11 +4,12 @@
     <ClCompile Include="src\gui\gui_pipeline.c" />
     <ClCompile Include="src\trigon.c" />
     <ClCompile Include="src\core\core.c" />
+    <ClCompile Include="src\core\signal.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\test.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\trigon.h" />
     <ClInclude Include="src\core\core.h" />
+    <ClInclude Include="src\core\signal.h" />
   </ItemGroup>
 </Project>

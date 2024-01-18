@@ -5,11 +5,15 @@
     <ClCompile Include="src\vstd\cstr.c" />
     <ClCompile Include="src\vstd\vfs.c" />
     <ClCompile Include="src\vstd\vmem.c" />
+    <ClCompile Include="src\vstd\cpool.c" />
+    <ClCompile Include="src\vstd\debug.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vstd\cfg.h" />
     <ClInclude Include="src\vstd\cstr.h" />
     <ClInclude Include="src\vstd\vfs.h" />
     <ClInclude Include="src\vstd\vmem.h" />
+    <ClInclude Include="src\vstd\cpool.h" />
+    <ClInclude Include="src\vstd\debug.h" />
   </ItemGroup>
 </Project>

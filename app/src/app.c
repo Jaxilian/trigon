@@ -1,5 +1,5 @@
-#include "test.h"
+#include "trigon.h"
 
-void launch() {
+void trigon_setup_events() {
 	
 }

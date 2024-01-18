@@ -109,7 +109,7 @@ static void core_run() {
 	}
 }
 
-trigon_core_start() {
+void trigon_core_start() {
 	create_vulkan_instance();
 	create_window();
 	create_vulkan_device();
@@ -132,3 +132,14 @@ trigon_core_start() {
 	glfwTerminate();
 }
 
+void* trigon_core_swapchain() {
+	return &swapchain;
+}
+
+void* trigon_core_vkl_device() {
+	return &device;
+}
+
+void* trigon_core_vkl_state() {
+	return &state;
+}

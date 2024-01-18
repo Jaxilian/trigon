@@ -6,6 +6,7 @@
 
 #ifdef _DEBUG
 int main() {
+	trigon_setup_events();
 	trigon_core_start();
 	return 0;
 }
