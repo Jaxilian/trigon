@@ -10,7 +10,6 @@ static vkl_pipeline_t pipeline = { 0 };
 
 
 static void gui_pipeline_new() {
-
     path_os_t path      = { 0 };
     path_os_t vert_path = { 0 };
     path_os_t frag_path = { 0 };
@@ -62,3 +61,4 @@ void gui_del() {
 bool gui_draw_quad() {
     return true;
 }
+

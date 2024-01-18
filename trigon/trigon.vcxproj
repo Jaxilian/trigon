@@ -203,12 +203,15 @@
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\gui\gui_pipeline.c" />
     <ClCompile Include="src\trigon.c" />
+    <ClCompile Include="src\types\mesh.c" />
+    <ClCompile Include="src\types\primitives.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\trigon.h" />
+    <ClInclude Include="src\types\mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\vkl\vkl.vcxproj">

@@ -1,12 +1,16 @@
 #include "trigon.h"
 #include "core/core.h"
-
+#include "gui/gui.h"
 
 
 
 #ifdef _DEBUG
 int main() {
 	trigon_setup_events();
+	trigon_core_init();
+
+	gui_new();
+
 	trigon_core_start();
 	return 0;
 }

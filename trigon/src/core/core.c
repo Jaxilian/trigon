@@ -2,6 +2,7 @@
 #include <vkl/vkl.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
+#include "signal.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -27,6 +28,7 @@ static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
 	}
 
 	create_swap((uint32_t)x, (uint32_t)y);
+	signal_fire(ON_WINDOW_RESIZED_SIGNAL);
 }
 
 static void create_vulkan_instance() {
@@ -98,8 +100,10 @@ static void core_run() {
 	while (running) {
 		glfwPollEvents();
 		VkResult result = VK_FALSE;
+		signal_fire(ON_UPDATE_SIGNAL);
 		result = vkl_state_frame_begin(&state);
 		if (result == VK_SUCCESS) {
+			signal_fire(ON_DRAW_SIGNAL);
 			result = vkl_state_frame_end(&state);
 		}
 
@@ -109,7 +113,7 @@ static void core_run() {
 	}
 }
 
-void trigon_core_start() {
+void trigon_core_init() {
 	create_vulkan_instance();
 	create_window();
 	create_vulkan_device();
@@ -122,9 +126,17 @@ void trigon_core_start() {
 	};
 
 	vkl_state_new(&state_info, &state);
+	signal_fire(ON_START_SIGNAL);
+	
+
+	
+}
+
+void  trigon_core_start() {
 	core_run();
 
 	vkDeviceWaitIdle(device.device);
+	signal_fire(ON_QUIT_SIGNAL);
 	vkl_state_del(&state);
 	vkl_swapchain_del(&device, &swapchain);
 	vkl_device_del(&device);

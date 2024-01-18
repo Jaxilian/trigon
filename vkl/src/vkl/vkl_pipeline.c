@@ -302,7 +302,7 @@ void vkl_pipeline_new(vkl_pipeline_t* pipeline, vkl_pipeline_refs_t* references,
         1,
         &pipelineInfo,
         NULL,
-        &pipeline->instance) == VK_SUCCESS) {
+        &pipeline->instance) != VK_SUCCESS) {
         vkl_error("failed to create pipeline\n", ERROR_FATAL);
     }
 
