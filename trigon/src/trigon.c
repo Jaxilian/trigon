@@ -1,7 +1,8 @@
 #include "trigon.h"
 #include "core/core.h"
 #include "gui/gui.h"
-
+#include "shaders/shader_global.h"
+#include <cglm/cglm.h>
 static void on_draw() {
 	gui_draw();
 }
@@ -11,11 +12,21 @@ int main() {
 	signal_init();
 	trigon_setup_events();
 	trigon_core_init();
+
+	ivec2 extent = { 0 };
+	trigon_core_win_extent(extent);
+
+	shader_global_data_t gdata = { 0 };
+	shader_global_data_get(&gdata);
+	glm_vec2_copy((vec2) { (float)extent[0], (float)extent[1] }, gdata.win_extent);
+	
+	shader_global_data_set(&gdata);
 	gui_new();
 
-	mat4 test = { 0 };
-	glm_mat4_identity(test);
-	glm_mat4_scale(test, 1.0f);
+	mat4 test = GLM_MAT4_IDENTITY_INIT;
+	glm_scale(test, (vec3) { 1.0f, 1.0f, 1.0f });
+	glm_translate(test, (vec3) { -1.0f,0.0f,0.0f });
+	
 
 	gui_add(test);
 

@@ -202,6 +202,7 @@
     <ClCompile Include="src\core\core.c" />
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\gui\gui.c" />
+    <ClCompile Include="src\shaders\shader_global.c" />
     <ClCompile Include="src\trigon.c" />
     <ClCompile Include="src\types\mesh.c" />
     <ClCompile Include="src\types\primitives.c" />
@@ -210,7 +211,7 @@
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\gui\gui.h" />
-    <ClInclude Include="src\shaders\shdr_std_desc.h" />
+    <ClInclude Include="src\shaders\shader_global.h" />
     <ClInclude Include="src\trigon.h" />
     <ClInclude Include="src\types\mesh.h" />
   </ItemGroup>

@@ -7,6 +7,7 @@
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\types\mesh.c" />
     <ClCompile Include="src\types\primitives.c" />
+    <ClCompile Include="src\shaders\shader_global.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gui\gui.h" />
@@ -14,6 +15,6 @@
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\types\mesh.h" />
-    <ClInclude Include="src\shaders\shdr_std_desc.h" />
+    <ClInclude Include="src\shaders\shader_global.h" />
   </ItemGroup>
 </Project>

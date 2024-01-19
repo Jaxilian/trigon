@@ -6,6 +6,7 @@
 #include <cglm/cglm.h>
 #include <string.h>
 #include "types/mesh.h"
+#include "shaders/shader_global.h"
 
 static vkl_pipeline_t pipeline = { 0 };
 static uint32_t quad_mesh = 0;
@@ -44,12 +45,17 @@ static void gui_pipeline_new() {
         &sets
     );
 
+    vkl_descriptor_set_t* global_set = (vkl_descriptor_set_t*)shader_global_data_ptr();
+
     vkl_pipeline_refs_t references = {
         .device = trigon_core_vkl_device(),
         .swapchain = trigon_core_swapchain(),
         .shader = &shader,
-        .sets = &sets,
-        .sets_count = 1
+        .sets = {
+            global_set,
+            &sets
+        },
+        .sets_count = 2
     };
 
     VkVertexInputBindingDescription gui_vertex_binding[gui_vertex_binding_count] = {
@@ -98,10 +104,6 @@ static void gui_pipeline_new() {
     vkl_pipeline_new(&pipeline, &references, &config);
     vkl_shader_del(trigon_core_vkl_device(), &shader);
 
-    for (int i = 0; i < 1000; i++) {
-        glm_mat4_identity(quad_matrices.matrix[i]);
-    }
-
     vkl_buffer_info_t matrix_info = {
         .count = 1,
         .device = trigon_core_vkl_device(),
@@ -122,7 +124,7 @@ static void gui_pipeline_new() {
     );
 }
 
-#define vp 0.01f
+#define vp 1.00f
 static void gui_mesh_new() {
     gui_vertex_t gui_vertices[] = {
        {{-vp, -vp}, {0.0f, 0.0f}}, // Bottom left
@@ -177,17 +179,14 @@ void gui_draw() {
         &pipeline
     );
 
-    vkl_descriptor_set_bind(trigon_core_vkl_state(), &pipeline, &sets);
+    vkl_descriptor_set_bind(trigon_core_vkl_state(), &pipeline, shader_global_data_ptr(),0);
+    vkl_descriptor_set_bind(trigon_core_vkl_state(), &pipeline, &sets,1);
     mesh_bind(quad_mesh);
     
     mesh_draw(quad_mesh, quads_in_use);
 }
 
 void gui_add(mat4 matrix) {
-    ivec2 extent = { 0 };
-    trigon_core_win_extent(extent);
-
-    matrix[0][0] = matrix[0][0] / ((float)extent[0] / (float)extent[1]);
     glm_mat4_copy(matrix, quad_matrices.matrix[quads_in_use]);
     quads_in_use++;
     vkl_buffer_set(&matrix_buffer, &quad_matrices);

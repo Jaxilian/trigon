@@ -167,6 +167,6 @@ void vkl_descriptor_set_update_ubo(vkl_device_t* device, vkl_descriptor_set_t* i
     vkUpdateDescriptorSets(device->device, count, descriptor_writes, 0, NULL);
 }
 
-void vkl_descriptor_set_bind(vkl_state_t* state, vkl_pipeline_t* pipeline, vkl_descriptor_set_t* set) {
-    vkCmdBindDescriptorSets(vkl_state_command_buffer(state), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->layout, 0, 1, &set->set, 0, NULL);
+void vkl_descriptor_set_bind(vkl_state_t* state, vkl_pipeline_t* pipeline, vkl_descriptor_set_t* set, uint32_t set_index) {
+    vkCmdBindDescriptorSets(vkl_state_command_buffer(state), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->layout, set_index, 1, &set->set, 0, NULL);
 }

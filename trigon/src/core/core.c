@@ -2,6 +2,7 @@
 #include <vkl/vkl.h>
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
+#include "shaders/shader_global.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -18,6 +19,10 @@ static void create_swap(uint32_t width, uint32_t height) {
 	};
 
 	vkl_swapchain_new(&swap_info, &swapchain);
+	shader_global_data_t data = { 0 };
+	shader_global_data_get(&data);
+	glm_vec2_copy((vec2) { (float)width, (float)height }, data.win_extent);
+	shader_global_data_set(&data);
 }
 
 static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {

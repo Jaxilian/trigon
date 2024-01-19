@@ -71,7 +71,7 @@ void vkl_descriptor_set_update_ubo(vkl_device_t* device, vkl_descriptor_set_t* i
 void vkl_descriptor_set_del(vkl_device_t* device, vkl_descriptor_set_t* in);
 void vkl_descriptor_set_new(vkl_device_t* device, vkl_descriptor_t descriptors[MAX_DESC_PER_SET], uint32_t count, vkl_descriptor_set_t* out);
 void vkl_descriptor_new(uint32_t location, uint32_t count, vkl_shader_property_e type, vkl_shader_stage_e stage, vkl_descriptor_t* out);
-void vkl_descriptor_set_bind(vkl_state_t* state, vkl_pipeline_t* pipeline, vkl_descriptor_set_t* set);
+void vkl_descriptor_set_bind(vkl_state_t* state, vkl_pipeline_t* pipeline, vkl_descriptor_set_t* set, uint32_t set_index);
 
 void vkl_pipeline_bind(vkl_state_t* state, vkl_pipeline_t* pipeline);
 void vkl_pipeline_del(vkl_device_t* device, vkl_pipeline_t* pipeline);
