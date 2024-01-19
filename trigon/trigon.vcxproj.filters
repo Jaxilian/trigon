@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\gui\gui_pipeline.c" />
+    <ClCompile Include="src\gui\gui.c" />
     <ClCompile Include="src\trigon.c" />
     <ClCompile Include="src\core\core.c" />
     <ClCompile Include="src\core\signal.c" />
@@ -14,5 +14,6 @@
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\types\mesh.h" />
+    <ClInclude Include="src\shaders\shdr_std_desc.h" />
   </ItemGroup>
 </Project>

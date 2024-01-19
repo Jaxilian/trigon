@@ -2,7 +2,6 @@
 #include "vstd/cpool.h"
 
 typedef struct {
-	bool	  bound;
 	signal_cb cb;
 	uint32_t  type;
 } signal_t;
@@ -14,7 +13,6 @@ uint32_t signal_connect(SIGNAL_TYPE _type, signal_cb _cb) {
 	signal_t data = {
 		.cb = _cb,
 		.type = _type,
-		.bound = true
 	};
 
 	uint32_t id = cpool_add(&signal_pools[(uint32_t)_type], &data);
@@ -30,7 +28,7 @@ void signal_fire(SIGNAL_TYPE type) {
 
 	for (uint32_t i = 0; i < pool->max_count; i++) {
 		signal_t* signal = (signal_t*)cpool_get(pool, i);
-		if (!signal->bound) continue;
+		if (signal->cb == NULL) continue;
 		signal->cb();
 	}
 }

@@ -1,6 +1,6 @@
 #include "mesh.h"
 #include <inttypes.h>
-
+/*
 static vertex_t cube_vertices[] = {
     {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
     {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
@@ -55,3 +55,4 @@ void primitive_get(enum PRIMITIVE type, mesh_info_t* out_data) {
         return;
     }
 }
+*/

@@ -72,17 +72,7 @@ void vkl_buffer_resize(vkl_buffer_t* buffer, uint32_t new_count) {
     vkl_buffer_new(&info, buffer);
 }
 
-void vkl_buffer_set(vkl_buffer_t* buffer, void* data) {
-    if (!buffer || !buffer->initialized || !data) return;
 
-    void* mapped_memory;
-    if (vkMapMemory(buffer->dev_ptr->device, buffer->memory, 0, buffer->size, 0, &mapped_memory) != VK_SUCCESS) {
-        vkl_error("Failed to map Vulkan buffer memory!\n", ERROR_WARNING);
-    }
-
-    memcpy(mapped_memory, data, buffer->size);
-    vkUnmapMemory(buffer->dev_ptr->device, buffer->memory);
-}
 
 void* vkl_buffer_set_advanced(vkl_buffer_t* buffer) {
     if (!buffer || !buffer->initialized) return NULL;
@@ -112,6 +102,18 @@ void vkl_buffer_submit_advanced(vkl_buffer_t* buffer, void* mappedMem) {
         vkl_error("Failed to flush mapped memory range in Vulkan buffer!\n", ERROR_WARNING);
     }
 
+    vkUnmapMemory(buffer->dev_ptr->device, buffer->memory);
+}
+
+void vkl_buffer_set(vkl_buffer_t* buffer, void* data) {
+    if (!buffer || !buffer->initialized || !data) return;
+
+    void* mapped_memory;
+    if (vkMapMemory(buffer->dev_ptr->device, buffer->memory, 0, buffer->size, 0, &mapped_memory) != VK_SUCCESS) {
+        vkl_error("Failed to map Vulkan buffer memory!\n", ERROR_WARNING);
+    }
+
+    memcpy(mapped_memory, data, buffer->size);
     vkUnmapMemory(buffer->dev_ptr->device, buffer->memory);
 }
 

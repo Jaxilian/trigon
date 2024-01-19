@@ -143,27 +143,30 @@ void vkl_descriptor_set_update_ubo(vkl_device_t* device, vkl_descriptor_set_t* i
         vkl_error("index out of bounds!", ERROR_FATAL);
     }
 
-    VkDescriptorBufferInfo bufferInfos[MAX_DESC_PER_SET];
-    VkWriteDescriptorSet descriptorWrites[MAX_DESC_PER_SET];
+    VkDescriptorBufferInfo buffer_infos[MAX_DESC_PER_SET];
+    VkWriteDescriptorSet descriptor_writes[MAX_DESC_PER_SET];
 
     for (uint32_t i = 0; i < count; i++) {
         vkl_buffer_t* buffer = buffers[i];
-        bufferInfos[i] = (VkDescriptorBufferInfo){
+        buffer_infos[i] = (VkDescriptorBufferInfo){
             .buffer = buffer->buffer,
             .offset = 0,
             .range = buffer->size
         };
 
-        descriptorWrites[i] = (VkWriteDescriptorSet){
+        descriptor_writes[i] = (VkWriteDescriptorSet){
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
             .dstSet = in->set,
             .dstBinding = descriptor->location,
             .descriptorCount = 1,
             .descriptorType = vkl_descriptor_convert_type(descriptor->type),
-            .pBufferInfo = &bufferInfos[i],
+            .pBufferInfo = &buffer_infos[i],
         };
     }
 
-    vkUpdateDescriptorSets(device->device, count, descriptorWrites, 0, NULL);
+    vkUpdateDescriptorSets(device->device, count, descriptor_writes, 0, NULL);
 }
 
+void vkl_descriptor_set_bind(vkl_state_t* state, vkl_pipeline_t* pipeline, vkl_descriptor_set_t* set) {
+    vkCmdBindDescriptorSets(vkl_state_command_buffer(state), VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->layout, 0, 1, &set->set, 0, NULL);
+}
