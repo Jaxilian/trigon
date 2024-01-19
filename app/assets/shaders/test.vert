@@ -8,10 +8,12 @@ layout(set = 0, binding = 0) uniform global_buffer {
 } global;
 
 layout(set = 1, binding = 0) uniform matrix_buffer {
-    mat4 matrices[1000];
+    mat4 matrices[128];
+    vec3 colors[128];
 } transform;
 
 layout(location = 0) out vec2 fragUV;
+layout(location = 1) out vec3 out_color;
 
 void main() {
     mat4 transMatrix = transform.matrices[gl_InstanceIndex];
@@ -29,4 +31,5 @@ void main() {
 
     gl_Position = transformedPos;
     fragUV = inUV;
+    out_color = transform.colors[gl_InstanceIndex];
 }

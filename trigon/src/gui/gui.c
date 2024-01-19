@@ -16,9 +16,11 @@ static vkl_buffer_t matrix_buffer = { 0 };
 #define gui_vertex_binding_count 1
 #define gui_vertex_attrb_count 2
 
-typedef struct{
-    mat4 matrix[1000];
+typedef struct {
+    mat4 matrix[128];
+    vec3 colors[128];
 } gui_data_t;
+
 static uint32_t quads_in_use = 0;
 static gui_data_t quad_matrices = { 0 };
 
@@ -31,6 +33,8 @@ static void gui_pipeline_new() {
     path_change_dir(&path, "data", &path);
     path_find_file(&path, "test_vert.spv", &vert_path);
     path_find_file(&path, "test_frag.spv", &frag_path);
+
+    printf("size of gui %zu\n", sizeof(gui_data_t));
 
     vkl_shader_t shader = { 0 };
     vkl_shader_new(trigon_core_vkl_device(), &shader, vert_path.data, frag_path.data);
@@ -186,9 +190,13 @@ void gui_draw() {
     mesh_draw(quad_mesh, quads_in_use);
 }
 
-void gui_add(mat4 matrix) {
-    glm_mat4_copy(matrix, quad_matrices.matrix[quads_in_use]);
+void gui_add(gui_quad_t* data) {
+    glm_mat4_copy(data->matrix, quad_matrices.matrix[quads_in_use]);
+    glm_vec3_copy(data->colors, quad_matrices.colors[quads_in_use]);
     quads_in_use++;
+}
+
+void gui_submit() {
     vkl_buffer_set(&matrix_buffer, &quad_matrices);
 }
 
