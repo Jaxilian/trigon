@@ -63,8 +63,8 @@ static void create_vulkan_instance() {
 #else
 	const char** extensions = glfw_ext;
 	uint32_t extc = glfw_extc;
-	validation_count = 0;
-	validation_layers = NULL;
+	uint32_t validation_count = 0;
+	const char**  validation_layers = NULL;
 #endif
 
 	vkl_instance_info_t info = {

@@ -34,7 +34,7 @@ static void gui_pipeline_new() {
     path_find_file(&path, "test_vert.spv", &vert_path);
     path_find_file(&path, "test_frag.spv", &frag_path);
 
-    printf("size of gui %zu\n", sizeof(gui_data_t));
+    //printf("size of gui %zu\n", sizeof(gui_data_t));
 
     vkl_shader_t shader = { 0 };
     vkl_shader_new(trigon_core_vkl_device(), &shader, vert_path.data, frag_path.data);
