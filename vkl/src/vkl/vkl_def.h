@@ -228,6 +228,24 @@ typedef struct {
 	uint32_t			count;
 } vkl_buffer_t;
 
+/* ------------------- VKL_IMAGE -----------------------*/
+
+typedef struct {
+	vkl_device_t*	device;
+	VkImageType		type;
+	VkExtent3D		extent;
+	VkFormat		format;
+	unsigned int	mip_levels;
+	bool			use_sampler;
+} vkl_image_info_t;
+
+typedef struct {
+	bool			initialized;
+	VkImage			image;
+	VkDeviceMemory	memory;
+	VkSampler		sampler;
+	VkImageView		view;
+} vkl_image_t;
 
 #ifdef __cplusplus
 }

@@ -3,6 +3,8 @@
 #include "gui/gui.h"
 #include "shaders/shader_global.h"
 #include <cglm/cglm.h>
+#include "vkl/vkl_fonts.h"
+#include <vstd/vfs.h>
 
 static void on_draw() {
 	gui_draw();
@@ -37,6 +39,12 @@ static void trigon_start() {
 	gui_add(&gui_data);
 
 	gui_submit();
+
+	path_os_t path = { 0 };
+	path_get_current(&path);
+	path_change_dir(&path, "fonts", &path);
+	path_find_file(&path, "Vera.ttf", &path);
+	vkl_font_t font = vkl_fonts_new(path.data);
 
 	trigon_core_start(on_draw);
 

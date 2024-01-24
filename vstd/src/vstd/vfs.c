@@ -537,3 +537,4 @@ bool path_find_file(const path_os_t* current, const char* file_name, path_os_t* 
     printf("couldn't find sub file \"%s\" in %s\n", file_name, current->data);
     return false;
 }
+

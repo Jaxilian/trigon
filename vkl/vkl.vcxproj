@@ -109,7 +109,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,7 +139,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -165,7 +165,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,7 +195,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -203,6 +203,7 @@
     <ClCompile Include="src\vkl\vkl_descriptor.c" />
     <ClCompile Include="src\vkl\vkl_device.c" />
     <ClCompile Include="src\vkl\vkl_error.c" />
+    <ClCompile Include="src\vkl\vkl_fonts.c" />
     <ClCompile Include="src\vkl\vkl_format.c" />
     <ClCompile Include="src\vkl\vkl_image.c" />
     <ClCompile Include="src\vkl\vkl_instance.c" />
@@ -216,6 +217,7 @@
     <ClInclude Include="src\vkl\common.h" />
     <ClInclude Include="src\vkl\vkl.h" />
     <ClInclude Include="src\vkl\vkl_def.h" />
+    <ClInclude Include="src\vkl\vkl_fonts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

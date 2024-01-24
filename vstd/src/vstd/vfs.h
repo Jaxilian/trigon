@@ -33,8 +33,11 @@ bool path_file_new(const path_os_t* f_path);
 void path_file_close();
 bool path_file_open(const path_os_t* path, char* file_buffer, size_t* file_length);
 
-bool path_set_sys_dir(const path_os_t* path);
+//changes app path to dir, think sys cmd command "cd .."
+bool path_set_sys_dir(const path_os_t* path); 
 
 const char* path_get_last_dir(const path_os_t* dir);
 const char* path_get_ext(const path_os_t* path);
+
+
 #endif
