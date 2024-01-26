@@ -3,26 +3,32 @@
 #include <memory.h>
 
 void vkl_buffer_new(vkl_buffer_info_t* info, vkl_buffer_t* out) {
-    if (!out) return;
+    if (!out || out->initialized) {
+        vkl_error("out was already initialized or NULL!\n", ERROR_FATAL);
+        return;
+    }
 
     out->stride = info->stride;
     out->count = info->count;
     out->size = info->stride * info->count;
-    out->initialized = false;
     out->usage_flags = info->usage_flags;
     out->dev_ptr = info->device;
 
-    if (out->size == 0) return;
+    if (out->size == 0) {
+        vkl_error("buffer size was 0!\n", ERROR_FATAL);
+    }
 
     VkBufferCreateInfo buffer_info = {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
         .size = out->size,
         .usage = info->usage_flags,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+        .sharingMode = info->sharing_mode,
     };
 
-    if (vkCreateBuffer(info->device->device, &buffer_info, NULL, &out->buffer) != VK_SUCCESS) {
-        vkl_error("Failed to create Vulkan buffer!\n", ERROR_WARNING);
+    VkResult result = vkCreateBuffer(info->device->device, &buffer_info, NULL, &out->buffer);
+    if (result != VK_SUCCESS) {
+        vkl_error("failed to create buffer!\n", ERROR_FATAL);
+        return;
     }
 
     VkMemoryRequirements mem_req;
@@ -38,14 +44,16 @@ void vkl_buffer_new(vkl_buffer_info_t* info, vkl_buffer_t* out) {
         )
     };
 
-    if (vkAllocateMemory(info->device->device, &alloc_info, NULL, &out->memory) != VK_SUCCESS) {
+    result = vkAllocateMemory(info->device->device, &alloc_info, NULL, &out->memory);
+    if (result != VK_SUCCESS) {
         vkDestroyBuffer(info->device->device, out->buffer, NULL);
-        out->buffer = VK_NULL_HANDLE;
-        vkl_error("Failed to allocate memory for Vulkan buffer!\n", ERROR_WARNING);
+        vkl_error("failed to allocate memory for buffer!\n", ERROR_FATAL);
+        return;
     }
 
     vkBindBufferMemory(info->device->device, out->buffer, out->memory, 0);
     out->initialized = true;
+    return;
 }
 
 void vkl_buffer_resize(vkl_buffer_t* buffer, uint32_t new_count) {

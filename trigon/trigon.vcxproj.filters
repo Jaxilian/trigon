@@ -8,6 +8,9 @@
     <ClCompile Include="src\types\mesh.c" />
     <ClCompile Include="src\types\primitives.c" />
     <ClCompile Include="src\shaders\shader_global.c" />
+    <ClCompile Include="src\trigon\ecs\entity.c" />
+    <ClCompile Include="src\trigon\ecs\scene.c" />
+    <ClCompile Include="src\gui\gui2.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gui\gui.h" />
@@ -16,5 +19,9 @@
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\types\mesh.h" />
     <ClInclude Include="src\shaders\shader_global.h" />
+    <ClInclude Include="src\trigon\ecs\entitiy.h" />
+    <ClInclude Include="src\trigon\ecs\scene.h" />
+    <ClInclude Include="src\gui\gui2.h" />
+    <ClInclude Include="..\vendor\include\nuklear.h" />
   </ItemGroup>
 </Project>

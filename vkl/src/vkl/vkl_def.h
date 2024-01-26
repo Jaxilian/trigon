@@ -214,6 +214,7 @@ typedef struct {
 	size_t				stride;
 	uint32_t			count;
 	VkBufferUsageFlags	usage_flags;
+	VkSharingMode		sharing_mode;
 } vkl_buffer_info_t;
 
 typedef struct {
@@ -231,12 +232,13 @@ typedef struct {
 /* ------------------- VKL_IMAGE -----------------------*/
 
 typedef struct {
-	vkl_device_t*	device;
-	VkImageType		type;
-	VkExtent3D		extent;
-	VkFormat		format;
-	unsigned int	mip_levels;
-	bool			use_sampler;
+	vkl_device_t*		device;
+	VkImageType			type;
+	VkExtent3D			extent;
+	VkFormat			format;
+	unsigned int		mip_levels;
+	bool				use_sampler;
+	VkImageUsageFlags	usage;
 } vkl_image_info_t;
 
 typedef struct {
@@ -245,6 +247,7 @@ typedef struct {
 	VkDeviceMemory	memory;
 	VkSampler		sampler;
 	VkImageView		view;
+	VkExtent3D		extent;
 } vkl_image_t;
 
 #ifdef __cplusplus

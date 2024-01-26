@@ -8,6 +8,7 @@
 #include "types/mesh.h"
 #include "shaders/shader_global.h"
 
+
 static vkl_pipeline_t pipeline = { 0 };
 static uint32_t quad_mesh = 0;
 static vkl_descriptor_set_t sets = { 0 };

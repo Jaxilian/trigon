@@ -43,6 +43,7 @@ void vkl_image_new(vkl_image_info_t* info, vkl_image_t* out) {
     if (info->mip_levels <= 0) {
         vkl_error("mip_levels was 0! set it to at least 1!\n", ERROR_FATAL);
     }
+    out->extent = info->extent;
 
     VkImageCreateInfo imginf = {
         .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
@@ -59,7 +60,7 @@ void vkl_image_new(vkl_image_info_t* info, vkl_image_t* out) {
         .format = info->format,
         .tiling = VK_IMAGE_TILING_OPTIMAL,
         .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-        .usage = VK_IMAGE_USAGE_SAMPLED_BIT,
+        .usage = info->usage,
         .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
         .samples = VK_SAMPLE_COUNT_1_BIT
     };
@@ -129,12 +130,113 @@ void vkl_image_new(vkl_image_info_t* info, vkl_image_t* out) {
 
 }
 
-void vkl_image_set(vkl_image_t* image, vkl_buffer_t* buffer) {
-/*
-    void* data = vkl_buffer_set_advanced(buffer);
-    vkl_state_single_cmd();
-    vkl_buffer_submit_advanced(buffer, data);
-*/
+void vkl_image_transition_layout(
+    VkDevice device,
+    VkCommandBuffer cmdBuffer,
+    VkImage image,
+    VkImageLayout oldLayout,
+    VkImageLayout newLayout,
+    VkPipelineStageFlags srcStage,
+    VkPipelineStageFlags dstStage) {
+
+    VkImageMemoryBarrier barrier = {
+       .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+       .oldLayout = oldLayout,
+       .newLayout = newLayout,
+       .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+       .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+       .image = image,
+       .subresourceRange = {
+           .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+           .baseMipLevel = 0,
+           .levelCount = 1,
+           .baseArrayLayer = 0,
+           .layerCount = 1
+       },
+       .srcAccessMask = 0, // Will be set below
+       .dstAccessMask = 0  // Will be set below
+    };
+
+    if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+        barrier.srcAccessMask = 0;
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    }
+    else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+        barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    }
+    else {
+        // Handle other layout transitions
+    }
+
+    vkCmdPipelineBarrier(
+        cmdBuffer,
+        srcStage, dstStage,
+        0,
+        0, NULL, // No memory barriers
+        0, NULL, // No buffer barriers
+        1, &barrier // One image barrier
+    );
+}
+
+void vkl_image_set(vkl_state_t* state, vkl_image_t* image, const void* data) {
+
+    uint32_t data_channels_rgba = 4;
+    vkl_buffer_t buffer = { 0 };
+    vkl_buffer_info_t info = {
+        .device = state->device,
+        .count = 1,
+        .stride = image->extent.width * image->extent.height * data_channels_rgba,
+        .usage_flags = VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+    };
+
+    vkl_buffer_new(&info, &buffer);
+
+    void* mapped_data = vkl_buffer_set_advanced(&buffer);
+    if (mapped_data) {
+        memcpy(mapped_data, data, buffer.size);
+    }
+    else {
+        vkl_error("failed to copy image data in vkl_image!\n", ERROR_FATAL);
+        return;
+    }
+
+    VkCommandBuffer cmd_buffer = vkl_state_single_cmd(state);
+
+    vkl_image_transition_layout(
+        state->device->device, cmd_buffer, image->image,
+        VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
+
+    VkBufferImageCopy region = {
+       .bufferOffset = 0,
+       .bufferRowLength = 0,
+       .bufferImageHeight = 0,
+       .imageSubresource = {
+           .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+           .mipLevel = 0,
+           .baseArrayLayer = 0,
+           .layerCount = 1
+       },
+       .imageOffset = {0, 0, 0},
+       .imageExtent = {
+           .width = image->extent.width,
+           .height = image->extent.height,
+           .depth = 1
+       }
+    };
+
+    vkCmdCopyBufferToImage(cmd_buffer, buffer.buffer, image->image,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+    vkl_image_transition_layout(
+        state->device->device, cmd_buffer, image->image,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+        VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+    vkl_buffer_submit_advanced(&buffer, mapped_data);
+    vkl_buffer_del(&buffer);
+
 }
 
 void vkl_image_del(vkl_device_t* device, vkl_image_t* in) {

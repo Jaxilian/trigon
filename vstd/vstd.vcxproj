@@ -195,6 +195,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\vstd\assert.c" />
     <ClCompile Include="src\vstd\cfg.c" />
     <ClCompile Include="src\vstd\cpool.c" />
     <ClCompile Include="src\vstd\cstr.c" />
@@ -203,6 +204,7 @@
     <ClCompile Include="src\vstd\vmem.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\vstd\asset.h" />
     <ClInclude Include="src\vstd\cfg.h" />
     <ClInclude Include="src\vstd\cpool.h" />
     <ClInclude Include="src\vstd\cstr.h" />

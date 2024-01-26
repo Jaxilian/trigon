@@ -80,8 +80,17 @@ void vkl_pipeline_rebuild(vkl_pipeline_t* pipeline, vkl_device_t* device, vkl_sw
 void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config);
 
 void vkl_image_new(vkl_image_info_t* info, vkl_image_t* out);
+void vkl_image_set(vkl_state_t* state, vkl_image_t* image, const void* data);
 void vkl_image_del(vkl_device_t* device, vkl_image_t* out);
 
+void vkl_image_transition_layout(
+	VkDevice device,
+	VkCommandBuffer cmdBuffer,
+	VkImage image,
+	VkImageLayout oldLayout,
+	VkImageLayout newLayout,
+	VkPipelineStageFlags srcStage,
+	VkPipelineStageFlags dstStage);
 #ifdef __cplusplus
 }
 #endif
