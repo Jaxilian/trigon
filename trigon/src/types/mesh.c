@@ -95,6 +95,8 @@ void mesh_draw(uint32_t id, uint32_t instance_count) {
 }
 
 void mesh_del(uint32_t id) {
+    if (mesh_pool.data == NULL) return;
+
     mesh_t* mesh = cpool_get(&mesh_pool, id);
     if (!mesh->initialized) return;
 

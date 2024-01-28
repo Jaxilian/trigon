@@ -1,5 +1,6 @@
 #ifndef TRIGON_ENTITY_H
 #define TRIGON_ENTITY_H
+
 #include <inttypes.h>
 #include <stdbool.h>
 
