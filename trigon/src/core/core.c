@@ -177,6 +177,13 @@ void  trigon_core_start(signal_cb draw_cb, signal_cb ui_draw_cb) {
 
 void trigon_core_del() {
 	vkDeviceWaitIdle(device.device);
+
+	{
+		gui_vk_info_t info = { 0 };
+		info.vulkan_device = device.device;
+		gui_destroy(&info);
+	}
+
 	signal_fire(ON_QUIT_SIGNAL);
 	vkl_state_del(&state);
 	vkl_swapchain_del(&device, &swapchain);

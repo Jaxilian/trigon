@@ -1,0 +1,7 @@
+#ifndef TRIGON_MESH_MANAGER_H
+#define TRIGON_MESH_MANAGER_H
+
+
+
+
+#endif // !TRIGON_MESH_MANAGER_H

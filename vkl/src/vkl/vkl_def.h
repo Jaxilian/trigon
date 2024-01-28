@@ -211,6 +211,8 @@ typedef struct {
 
 /* ------------------- BUFFER -----------------------*/
 
+#define VKL_BUFFER_SHARING_DEFAULT VK_SHARING_MODE_EXCLUSIVE
+
 typedef struct {
 	vkl_device_t*		device;
 	size_t				stride;

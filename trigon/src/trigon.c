@@ -1,14 +1,11 @@
 #include "trigon.h"
 #include "core/core.h"
-#include "gui/gui.h"
-#include "shaders/shader_global.h"
-#include <cglm/cglm.h>
-#include "vkl/vkl_fonts.h"
-#include <vstd/vfs.h>
 #include "trigui/gui.h"
+#include "managers/managers.h"
+#include <vkl/vkl.h>
 
 static void on_draw() {
-	//gui_draw();
+
 }
 
 static void on_ui_draw() {
@@ -25,11 +22,15 @@ static void trigon_start() {
 	signal_init();
 	trigon_setup_events();
 	trigon_core_init();
+
+	managers_new();
+
 	trigon_core_start(on_draw, on_ui_draw);
 
 	vkl_device_t* dev = (vkl_device_t*)trigon_core_vkl_device();
 	vkDeviceWaitIdle(dev->device);
-	gui_pipeline_del();
+	managers_del();
+
 	trigon_core_del();
 }
 

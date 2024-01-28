@@ -13,6 +13,8 @@
     <ClCompile Include="src\core\input.c" />
     <ClCompile Include="src\trigon\cam\free_camera.c" />
     <ClCompile Include="src\trigon\cam\camera.c" />
+    <ClCompile Include="src\managers\mesh_manager.c" />
+    <ClCompile Include="src\managers\managers.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gui\gui.h" />
@@ -25,5 +27,7 @@
     <ClInclude Include="src\trigon\ecs\scene.h" />
     <ClInclude Include="src\core\input.h" />
     <ClInclude Include="src\trigon\cam\camera.h" />
+    <ClInclude Include="src\managers\mesh_manager.h" />
+    <ClInclude Include="src\managers\managers.h" />
   </ItemGroup>
 </Project>
