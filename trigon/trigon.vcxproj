@@ -206,7 +206,8 @@
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\gui\gui.c" />
     <ClCompile Include="src\managers\managers.c" />
-    <ClCompile Include="src\managers\mesh_manager.c" />
+    <ClCompile Include="src\managers\meshman.c" />
+    <ClCompile Include="src\managers\shadman.c" />
     <ClCompile Include="src\shaders\shader_global.c" />
     <ClCompile Include="src\trigon.c" />
     <ClCompile Include="src\trigon\cam\camera.c" />
@@ -222,7 +223,8 @@
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\managers\managers.h" />
-    <ClInclude Include="src\managers\mesh_manager.h" />
+    <ClInclude Include="src\managers\meshman.h" />
+    <ClInclude Include="src\managers\shadman.h" />
     <ClInclude Include="src\shaders\shader_global.h" />
     <ClInclude Include="src\trigon.h" />
     <ClInclude Include="src\trigon\cam\camera.h" />

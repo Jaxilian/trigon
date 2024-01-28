@@ -5,6 +5,8 @@ layout(location = 1) in vec2 inUV;
 
 layout(set = 0, binding = 0) uniform global_buffer {
     vec2 window_extent; 
+    mat4 camera_transform;
+    mat4 camera_projection;
 } global;
 
 layout(set = 1, binding = 0) uniform matrix_buffer {

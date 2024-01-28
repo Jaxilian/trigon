@@ -3,30 +3,37 @@
 #include "trigui/gui.h"
 #include "managers/managers.h"
 #include <vkl/vkl.h>
+#include "trigon/cam/camera.h"
 
 static void on_draw() {
-
+	managers_on_draw();
 }
 
 static void on_ui_draw() {
 	bool active = true;
 	if (gui_window_new("test!", &active)) {
+		camera_t* camera = camera_get_current();
+		if (camera) {
+			gui_text("camera pos =  x: %f,  y:  %f,  z:% f", camera->position[0], camera->position[1], camera->position[2]);
+		}
 		gui_text("hello world!\n");
-
-		
 	}
 	gui_window_end();
+}
+
+static void on_update() {
+	free_cam_udt();
 }
 
 static void trigon_start() {
 	signal_init();
 	trigon_setup_events();
-	trigon_core_init(0);
+	trigon_core_init(CORE_FLAG_DROP_ITEM);
 
 
 	managers_new();
 
-	trigon_core_start(on_draw, on_ui_draw);
+	trigon_core_start(on_update, on_draw, on_ui_draw);
 
 	vkl_device_t* dev = (vkl_device_t*)trigon_core_vkl_device();
 	vkDeviceWaitIdle(dev->device);

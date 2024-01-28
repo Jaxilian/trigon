@@ -16,7 +16,7 @@ void shader_global_data_get(shader_global_data_t* out) {
     memcpy(out, &global_data, sizeof(shader_global_data_t));
 }
 void shader_global_data_set(shader_global_data_t* in) {
-
+    
     if (in == NULL) {
         printf("shader_global_data_set(out): out was NULL!\n");
         exit(1);

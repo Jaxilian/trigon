@@ -6,6 +6,9 @@
 #include "trigui/gui.h"
 #include "input.h"
 #include "trigon/cam/camera.h"
+#include "managers/managers.h"
+#include "managers/shadman.h"
+#include "managers/meshman.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -13,12 +16,31 @@ static vkl_swapchain_t	swapchain	= { 0 };
 static vkl_state_t		state		= { 0 };
 static ivec2			extent		= { 800,600 };
 static uint32_t			flags		= 0;
+static double			time_pre	= 0;
+static double			time_now	= 0;
+static double			time_delta	= 0;
+
+void tick_update() {
+	time_pre = time_now;
+	time_now = glfwGetTime();
+	time_delta = time_now - time_pre;
+}
+
+inline
+double time_dt() {
+	return time_delta;
+}
 
 static void drop_callback(GLFWwindow* window, int count, const char** paths){
 	if (!(flags & CORE_FLAG_DROP_ITEM)) return;
 
 	for (int i = 0; i < count; i++) {
 		printf("Dropping %s\n", paths[i]);
+		meshman_import(paths[i]);
+
+		uint32_t id = shader_simple_new_instance();
+		shader_simple_set_instance(id, GLM_MAT4_IDENTITY);
+		shader_simple_submit_instances();
 	}
 }
 
@@ -67,6 +89,7 @@ static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
 	extent[1] = y;
 
 	create_swap((uint32_t)x, (uint32_t)y);
+	managers_on_win_resize();
 	signal_fire(ON_WINDOW_RESIZED_SIGNAL);
 }
 
@@ -159,13 +182,17 @@ void trigon_core_init(uint32_t _flags) {
 	
 }
 
-void  trigon_core_start(signal_cb draw_cb, signal_cb ui_draw_cb) {
+void  trigon_core_start(signal_cb update_cb, signal_cb draw_cb, signal_cb ui_draw_cb) {
 	bool running = true;
 	while (running) {
 		glfwPollEvents();
+		tick_update();
 		input_sync();
 
 		VkResult result = VK_FALSE;
+
+		if (update_cb) update_cb();
+
 		signal_fire(ON_UPDATE_SIGNAL);
 		result = vkl_state_frame_begin(&state);
 		if (result == VK_SUCCESS) {

@@ -27,5 +27,6 @@ void camera_rotate_fps(camera_t* camera, vec2 eular);
 void camera_set_position(camera_t* camera, vec3 position);
 void camera_set_current(camera_t* camera);
 camera_t* camera_get_current();
+void free_cam_udt();
 
 #endif // !TRIGON_CAMERA_H

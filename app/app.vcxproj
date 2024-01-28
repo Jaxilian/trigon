@@ -225,6 +225,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\shaders\base.frag" />
+    <None Include="assets\shaders\base.vert" />
     <None Include="assets\shaders\compile.bat" />
     <None Include="assets\shaders\test.frag" />
     <None Include="assets\shaders\test.vert" />

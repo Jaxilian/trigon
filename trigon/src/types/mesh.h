@@ -13,11 +13,8 @@ typedef struct {
 
 uint32_t mesh_new(const mesh_info_t* data);
 void mesh_bind(uint32_t id);
-
 void mesh_draw(uint32_t id, uint32_t instance_count);
-
 void mesh_del(uint32_t id);
-
 void mesh_clear();
 
 #endif
