@@ -21,7 +21,8 @@ static void on_ui_draw() {
 static void trigon_start() {
 	signal_init();
 	trigon_setup_events();
-	trigon_core_init();
+	trigon_core_init(0);
+
 
 	managers_new();
 

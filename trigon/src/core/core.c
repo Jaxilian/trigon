@@ -12,6 +12,15 @@ static vkl_device_t		device		= { 0 };
 static vkl_swapchain_t	swapchain	= { 0 };
 static vkl_state_t		state		= { 0 };
 static ivec2			extent		= { 800,600 };
+static uint32_t			flags		= 0;
+
+static void drop_callback(GLFWwindow* window, int count, const char** paths){
+	if (!(flags & CORE_FLAG_DROP_ITEM)) return;
+
+	for (int i = 0; i < count; i++) {
+		printf("Dropping %s\n", paths[i]);
+	}
+}
 
 static void create_swap(uint32_t width, uint32_t height) {
 
@@ -111,6 +120,8 @@ static void create_window() {
 	window = glfwCreateWindow(extent[0], extent[1], "Test", NULL, NULL);
 	glfwCreateWindowSurface(device.instance, window, NULL, &device.surface);
 	glfwSetFramebufferSizeCallback(window, glfw_framebuffer_resize_cb);
+
+	glfwSetDropCallback(window, drop_callback);
 }
 
 static void create_vulkan_device() {
@@ -129,7 +140,8 @@ static void create_vulkan_device() {
 
 
 
-void trigon_core_init() {
+void trigon_core_init(uint32_t _flags) {
+	flags = _flags;
 	create_vulkan_instance();
 	create_window();
 	create_vulkan_device();
@@ -210,4 +222,17 @@ void trigon_core_win_extent(ivec2 _extent) {
 
 void* trigon_core_window() {
 	return window;
+}
+
+void trigon_core_toggle_flag(CORE_FLAG _flag, bool enabled) {
+	if (enabled) {
+		flags |= _flag;
+	}
+	else{
+		flags &= ~_flag;
+	}
+}
+
+bool trigon_core_has_flag(CORE_FLAG flag) {
+	return flags & flag;
 }
