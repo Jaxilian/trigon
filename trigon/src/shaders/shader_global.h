@@ -4,6 +4,8 @@
 #include <cglm/cglm.h>
 typedef struct {
 	vec2 win_extent;
+	mat4 camera[2];
+
 } shader_global_data_t;
 
 void shader_global_data_get(shader_global_data_t* out);

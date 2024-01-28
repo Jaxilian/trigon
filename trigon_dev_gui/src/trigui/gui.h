@@ -21,12 +21,17 @@ extern "C" {
 
 	void gui_destroy(gui_vk_info_t* info);
 	void gui_init_vk(gui_vk_info_t* info);
+	void gui_apply_style();
 
 	void gui_frame_begin();
 	void gui_frame_end(void* command_buffer);
 
 	bool gui_window_new(const char* name, bool* active);
 	void gui_window_end();
+
+	void gui_text(const char* content, ...);
+	bool gui_check_box(const char* label, bool* value);
+	bool gui_button(const char* label, float extent[2]);
 
 
 #ifdef __cplusplus

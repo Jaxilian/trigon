@@ -5,11 +5,11 @@
 #include "imgui_impl_vulkan.h"
 #include <stdio.h>         
 #include <stdlib.h>         
+#include <cstdarg>
 #define GLFW_INCLUDE_NONE
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
-
 /* --------------- SETUP VULKAN -------------------*/
 static VkPipelineCache pipeline_cache = VK_NULL_HANDLE;
 static VkDescriptorPool pool = VK_NULL_HANDLE;
@@ -71,6 +71,8 @@ static void load_vk_impl(gui_vk_info_t* info) {
         printf("failed to load vulkan for imgui!\n");
         exit(1);
     }
+
+  
 }
 
 
@@ -92,15 +94,15 @@ void gui_init_vk(gui_vk_info_t* info) {
     ImGui::StyleColorsDark();
 
     load_vk_impl(info);
+    gui_apply_style();
 }
 
-bool demo_open = true;
+//bool show_demo = false;
 void gui_frame_begin() {
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-    ImGui::ShowDemoWindow(&demo_open);
+    //ImGui::ShowDemoWindow(&show_demo);
 }
 
 void gui_frame_end(void* command_buffer) {
@@ -122,4 +124,19 @@ bool gui_window_new(const char* name, bool* active) {
 void gui_window_end() {
     ImGui::End();
   
+}
+
+void gui_text(const char* content, ...) {
+    va_list args;
+    va_start(args, content);
+    ImGui::TextV(content, args);
+    va_end(args);
+}
+
+bool gui_check_box(const char* label, bool* value) {
+    return ImGui::Checkbox(label, value);
+}
+
+bool gui_button(const char* label, float extent[2]) {
+    return ImGui::Button(label, ImVec2(extent[0], extent[1]));
 }

@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include "shaders/shader_global.h"
 #include "trigui/gui.h"
+#include "input.h"
+#include "trigon/cam/camera.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -23,6 +25,13 @@ static void create_swap(uint32_t width, uint32_t height) {
 	shader_global_data_t data = { 0 };
 	shader_global_data_get(&data);
 	glm_vec2_copy((vec2) { (float)width, (float)height }, data.win_extent);
+
+	camera_t* cam = camera_get_current();
+	if (cam) {
+		glm_mat4_copy(cam->matrices.transform, data.camera[0]);
+		glm_mat4_copy(cam->matrices.perspective, data.camera[1]);
+	}
+
 	shader_global_data_set(&data);
 
 	gui_vk_info_t info = {
@@ -124,6 +133,7 @@ void trigon_core_init() {
 	create_vulkan_instance();
 	create_window();
 	create_vulkan_device();
+	input_init(window);
 
 	create_swap(extent[0], extent[1]);
 
@@ -137,10 +147,12 @@ void trigon_core_init() {
 	
 }
 
-void  trigon_core_start(signal_cb draw_cb) {
+void  trigon_core_start(signal_cb draw_cb, signal_cb ui_draw_cb) {
 	bool running = true;
 	while (running) {
 		glfwPollEvents();
+		input_sync();
+
 		VkResult result = VK_FALSE;
 		signal_fire(ON_UPDATE_SIGNAL);
 		result = vkl_state_frame_begin(&state);
@@ -148,14 +160,9 @@ void  trigon_core_start(signal_cb draw_cb) {
 			signal_fire(ON_DRAW_SIGNAL);
 			draw_cb();
 
+
 			gui_frame_begin();
-
-			bool active = true;
-			if (gui_window_new("test!", &active)) {
-
-				gui_window_end();
-			}
-
+			if (ui_draw_cb) ui_draw_cb();
 			gui_frame_end(vkl_state_command_buffer(&state));
 			result = vkl_state_frame_end(&state);
 		}

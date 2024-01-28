@@ -11,6 +11,7 @@
     <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_impl_vulkan.cpp" />
     <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_tables.cpp" />
     <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_widgets.cpp" />
+    <ClCompile Include="src\trigui\gui_style.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trigui\gui.h" />

@@ -29,6 +29,7 @@
     <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_widgets.cpp" />
     <ClCompile Include="src\trigui\gui.cpp" />
     <ClCompile Include="src\test.cpp" />
+    <ClCompile Include="src\trigui\gui_style.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\vendor\cpp\imgui-docking\imconfig.h" />

@@ -10,6 +10,9 @@
     <ClCompile Include="src\shaders\shader_global.c" />
     <ClCompile Include="src\trigon\ecs\entity.c" />
     <ClCompile Include="src\trigon\ecs\scene.c" />
+    <ClCompile Include="src\core\input.c" />
+    <ClCompile Include="src\trigon\cam\free_camera.c" />
+    <ClCompile Include="src\trigon\cam\camera.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gui\gui.h" />
@@ -20,6 +23,7 @@
     <ClInclude Include="src\shaders\shader_global.h" />
     <ClInclude Include="src\trigon\ecs\entitiy.h" />
     <ClInclude Include="src\trigon\ecs\scene.h" />
-    <ClInclude Include="..\vendor\include\nuklear.h" />
+    <ClInclude Include="src\core\input.h" />
+    <ClInclude Include="src\trigon\cam\camera.h" />
   </ItemGroup>
 </Project>
