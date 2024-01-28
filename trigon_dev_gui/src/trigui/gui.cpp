@@ -51,7 +51,7 @@ static void load_vk_impl(gui_vk_info_t* info) {
         exit(1);
     }
 
-    ImGui_ImplGlfw_InitForVulkan((GLFWwindow*)info->vulkan_window, false);
+    ImGui_ImplGlfw_InitForVulkan((GLFWwindow*)info->vulkan_window, true);
 
     ImGui_ImplVulkan_InitInfo init_info = {};
     init_info.Instance = (VkInstance)info->vulkan_instance;
