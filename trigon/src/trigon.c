@@ -5,11 +5,9 @@
 #include <cglm/cglm.h>
 #include "vkl/vkl_fonts.h"
 #include <vstd/vfs.h>
-#include "gui/gui2.h"
 
 static void on_draw() {
-	gui_draw();
-	trigon_gui_draw();
+	//gui_draw();
 }
 
 static void trigon_start() {
@@ -26,6 +24,7 @@ static void trigon_start() {
 
 	shader_global_data_set(&gdata);
 	gui_new();
+
 
 	gui_quad_t gui_data = { 0 };
 	glm_mat4_identity(gui_data.matrix);
@@ -48,7 +47,6 @@ static void trigon_start() {
 	path_find_file(&path, "Vera.ttf", &path);
 	vkl_font_t font = vkl_fonts_new(path.data);
 
-	trigon_gui_init();
 	trigon_core_start(on_draw);
 
 	vkl_device_t* dev = (vkl_device_t*)trigon_core_vkl_device();

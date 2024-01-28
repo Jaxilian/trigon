@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4c5521f0-be0a-4e5d-9abe-9c9b33de0ff7}</ProjectGuid>
-    <RootNamespace>app</RootNamespace>
+    <ProjectGuid>{b226765b-c582-406b-9b2f-dd371887d010}</ProjectGuid>
+    <RootNamespace>appcpp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -92,27 +92,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)trigon\src\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)assets\shaders\compile.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -122,30 +109,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)trigon\src\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)assets\shaders\compile.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -153,27 +126,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)trigon\src\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)assets\shaders\compile.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -183,49 +143,24 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)trigon\src\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)assets\shaders\compile.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\app.c" />
+    <ClCompile Include="src\entry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\trigon\trigon.vcxproj">
       <Project>{0e35942c-9154-48ed-b6a4-8efaa2d9cd7c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vkl\vkl.vcxproj">
-      <Project>{6f034b4d-0962-4384-a6b4-6d71da29ce9c}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vstd\vstd.vcxproj">
-      <Project>{62fa7fc2-99f4-4c92-adf6-5c3e66c1aaf3}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\compile.bat" />
-    <None Include="assets\shaders\test.frag" />
-    <None Include="assets\shaders\test.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

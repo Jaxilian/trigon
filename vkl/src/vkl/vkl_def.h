@@ -75,6 +75,8 @@ typedef struct {
 	uint32_t					surface_width;
 	uint32_t					surface_height;
 	VkDebugUtilsMessengerEXT	debug_messenger;
+	uint32_t					queue_count;
+	uint32_t					queue_indices[2];
 } vkl_device_t;
 
 

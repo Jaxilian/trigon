@@ -3,6 +3,7 @@
 #include <cglm/cglm.h>
 #include <GLFW/glfw3.h>
 #include "shaders/shader_global.h"
+#include "trigui/gui.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -23,6 +24,20 @@ static void create_swap(uint32_t width, uint32_t height) {
 	shader_global_data_get(&data);
 	glm_vec2_copy((vec2) { (float)width, (float)height }, data.win_extent);
 	shader_global_data_set(&data);
+
+	gui_vk_info_t info = {
+		.vulkan_device = device.device,
+		.vulkan_graphics_family = device.graphics_family,
+		.vulkan_graphics_queue = device.graphics_queue,
+		.vulkan_min_image_count = 2,
+		.vulkan_image_count = swapchain.image_count,
+		.vulkan_instance = device.instance,
+		.vulkan_renderpass = swapchain.renderpass,
+		.vulkan_window = window,
+		.vulkan_physical_device = device.physical_device
+	};
+
+	gui_init_vk(&info);
 }
 
 static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
@@ -120,8 +135,6 @@ void trigon_core_init() {
 	vkl_state_new(&state_info, &state);
 	signal_fire(ON_START_SIGNAL);
 	
-
-	
 }
 
 void  trigon_core_start(signal_cb draw_cb) {
@@ -134,12 +147,24 @@ void  trigon_core_start(signal_cb draw_cb) {
 		if (result == VK_SUCCESS) {
 			signal_fire(ON_DRAW_SIGNAL);
 			draw_cb();
+
+			gui_frame_begin();
+
+			bool active = true;
+			if (gui_window_new("test!", &active)) {
+
+				gui_window_end();
+			}
+
+			gui_frame_end(vkl_state_command_buffer(&state));
 			result = vkl_state_frame_end(&state);
 		}
 
 		if (glfwWindowShouldClose(window)) {
 			running = false;
 		}
+
+	
 	}
 }
 
@@ -167,4 +192,8 @@ void* trigon_core_vkl_state() {
 
 void trigon_core_win_extent(ivec2 _extent) {
 	glm_ivec2_copy(extent, _extent);
+}
+
+void* trigon_core_window() {
+	return window;
 }

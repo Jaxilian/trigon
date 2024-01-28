@@ -394,6 +394,7 @@ inline static void vkl_create_sync_objects(const vkl_swapchain_info_t* info, vkl
         swapchain->images_in_flight = malloc(sizeof(VkFence) * swapchain->image_count);
         if (swapchain->images_in_flight == NULL) {
             vkl_error("failed to allocate images in flight!\n", ERROR_FATAL);
+            return;
         }
     }
 

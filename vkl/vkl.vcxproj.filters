@@ -20,5 +20,6 @@
     <ClInclude Include="src\vkl\vkl_def.h" />
     <ClInclude Include="src\vkl\common.h" />
     <ClInclude Include="src\vkl\vkl_fonts.h" />
+    <ClInclude Include="..\vendor\include\cimgui_impl.h" />
   </ItemGroup>
 </Project>

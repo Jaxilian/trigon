@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -109,7 +109,8 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;cglm.lib;</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;cglm.lib;cimgui.lib;</AdditionalDependencies>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,7 +122,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -139,7 +140,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;cglm.lib;</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;cglm.lib;cimgui.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,7 +150,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -165,7 +166,8 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;cglm.lib;</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;cglm.lib;cimgui.lib;</AdditionalDependencies>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -177,7 +179,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -195,14 +197,13 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;cglm.lib;</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;cglm.lib;cimgui.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\core.c" />
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\gui\gui.c" />
-    <ClCompile Include="src\gui\gui2.c" />
     <ClCompile Include="src\shaders\shader_global.c" />
     <ClCompile Include="src\trigon.c" />
     <ClCompile Include="src\trigon\ecs\entity.c" />
@@ -215,7 +216,6 @@
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\gui\gui.h" />
-    <ClInclude Include="src\gui\gui2.h" />
     <ClInclude Include="src\shaders\shader_global.h" />
     <ClInclude Include="src\trigon.h" />
     <ClInclude Include="src\trigon\ecs\entitiy.h" />
@@ -223,6 +223,9 @@
     <ClInclude Include="src\types\mesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\trigon_dev_gui\trigon_dev_gui.vcxproj">
+      <Project>{2b002754-0852-4c5a-89f2-f245ffb44f8a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\vkl\vkl.vcxproj">
       <Project>{6f034b4d-0962-4384-a6b4-6d71da29ce9c}</Project>
     </ProjectReference>

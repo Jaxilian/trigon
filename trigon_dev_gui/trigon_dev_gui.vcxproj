@@ -18,11 +18,36 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_demo.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_draw.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_tables.cpp" />
+    <ClCompile Include="..\vendor\cpp\imgui-docking\imgui_widgets.cpp" />
+    <ClCompile Include="src\trigui\gui.cpp" />
+    <ClCompile Include="src\test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imconfig.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui_impl_glfw.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui_impl_vulkan.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imgui_internal.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imstb_rectpack.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imstb_textedit.h" />
+    <ClInclude Include="..\vendor\cpp\imgui-docking\imstb_truetype.h" />
+    <ClInclude Include="src\trigui\gui.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6f034b4d-0962-4384-a6b4-6d71da29ce9c}</ProjectGuid>
-    <RootNamespace>vkl</RootNamespace>
+    <ProjectGuid>{2b002754-0852-4c5a-89f2-f245ffb44f8a}</ProjectGuid>
+    <RootNamespace>trigondevgui</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,46 +95,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <EnableModules>false</EnableModules>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\projects\trigon\vendor\include;C:\projects\trigon\trigon_dev_gui\src;C:\projects\trigon\vendor\cpp\imgui-docking;$(VULKAN_SDK)\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\projects\trigon\vendor\lib;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,54 +122,46 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <EnableModules>false</EnableModules>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\projects\trigon\vendor\include;C:\projects\trigon\trigon_dev_gui\src;C:\projects\trigon\vendor\cpp\imgui-docking;$(VULKAN_SDK)\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\projects\trigon\vendor\lib;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <EnableModules>false</EnableModules>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\projects\trigon\vendor\include;C:\projects\trigon\trigon_dev_gui\src;C:\projects\trigon\vendor\cpp\imgui-docking;$(VULKAN_SDK)\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\projects\trigon\vendor\lib;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -174,52 +170,27 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <EnableModules>false</EnableModules>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <TreatSpecificWarningsAsErrors>
-      </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\projects\trigon\vendor\include;C:\projects\trigon\trigon_dev_gui\src;C:\projects\trigon\vendor\cpp\imgui-docking;$(VULKAN_SDK)\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)vendor\lib\;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;vulkan-1.lib;</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\projects\trigon\vendor\lib;$(VULKAN_SDK)\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\vkl\vkl_buffer.c" />
-    <ClCompile Include="src\vkl\vkl_descriptor.c" />
-    <ClCompile Include="src\vkl\vkl_device.c" />
-    <ClCompile Include="src\vkl\vkl_error.c" />
-    <ClCompile Include="src\vkl\vkl_fonts.c" />
-    <ClCompile Include="src\vkl\vkl_format.c" />
-    <ClCompile Include="src\vkl\vkl_image.c" />
-    <ClCompile Include="src\vkl\vkl_instance.c" />
-    <ClCompile Include="src\vkl\vkl_memory.c" />
-    <ClCompile Include="src\vkl\vkl_pipeline.c" />
-    <ClCompile Include="src\vkl\vkl_shader.c" />
-    <ClCompile Include="src\vkl\vkl_state.c" />
-    <ClCompile Include="src\vkl\vkl_swapchain.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\vendor\include\cimgui_impl.h" />
-    <ClInclude Include="src\vkl\common.h" />
-    <ClInclude Include="src\vkl\vkl.h" />
-    <ClInclude Include="src\vkl\vkl_def.h" />
-    <ClInclude Include="src\vkl\vkl_fonts.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -2,10 +2,22 @@
 #include <stdlib.h>
 #include <memory.h>
 
+void vkl_buffer_del(vkl_buffer_t* buffer) {
+    if (!buffer || !buffer->initialized) return;
+
+    vkFreeMemory(buffer->dev_ptr->device, buffer->memory, NULL);
+    vkDestroyBuffer(buffer->dev_ptr->device, buffer->buffer, NULL);
+    memset(buffer, 0, sizeof(vkl_buffer_t));
+}
+
 void vkl_buffer_new(vkl_buffer_info_t* info, vkl_buffer_t* out) {
-    if (!out || out->initialized) {
-        vkl_error("out was already initialized or NULL!\n", ERROR_FATAL);
+    if (!out) {
+        vkl_error("vkl_buffer_new: out was already NULL!\n", ERROR_FATAL);
         return;
+    }
+
+    if (out->initialized) {
+        vkl_buffer_del(out);
     }
 
     out->stride = info->stride;
@@ -125,13 +137,7 @@ void vkl_buffer_set(vkl_buffer_t* buffer, void* data) {
     vkUnmapMemory(buffer->dev_ptr->device, buffer->memory);
 }
 
-void vkl_buffer_del(vkl_buffer_t* buffer) {
-    if (!buffer || !buffer->initialized) return;
 
-    vkFreeMemory(buffer->dev_ptr->device, buffer->memory, NULL);
-    vkDestroyBuffer(buffer->dev_ptr->device, buffer->buffer, NULL);
-    memset(buffer, 0, sizeof(vkl_buffer_t));
-}
 
 void vkl_buffer_clear(vkl_buffer_t* arr, uint32_t count) {
     if (!arr) return;

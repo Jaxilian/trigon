@@ -10,6 +10,6 @@ void*	trigon_core_swapchain();
 void*	trigon_core_vkl_device();
 void*	trigon_core_vkl_state();
 void	trigon_core_win_extent(ivec2 extent);
-
+void*	trigon_core_window();
 #endif // !TRIGON_CORE_H
 

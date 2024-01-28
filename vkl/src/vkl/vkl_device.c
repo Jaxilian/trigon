@@ -176,6 +176,7 @@ static void vkl_create_device(const vkl_device_info_t* info, vkl_device_t* devic
 
     uint32_t unique_queue_family[2] = { gf, pf };
     uint32_t num_unique_families = (gf == pf) ? 1 : 2;
+    device->queue_count = (gf == pf) ? 1 : 2;
 
     VkDeviceQueueCreateInfo queue_create_infos[2];
     float queue_priority = 1.0f;
@@ -187,6 +188,7 @@ static void vkl_create_device(const vkl_device_info_t* info, vkl_device_t* devic
         queue_create_info.queueCount = 1;
         queue_create_info.pQueuePriorities = &queue_priority;
         queue_create_infos[i] = queue_create_info;
+        device->queue_indices[i] = unique_queue_family[i];
     }
 
     VkPhysicalDeviceFeatures device_features = { 0 };
