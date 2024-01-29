@@ -2,6 +2,7 @@
 #include <vstd/vfs.h>
 #include <types/mesh.h>
 #include <vkl/common.h>
+
 #define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
 
@@ -37,60 +38,48 @@ static bool import_mesh(cgltf_mesh* mesh) {
         }
 
         size_t vertex_count = positions->count;
-        vertex3_t* vertex_buffer = (vertex3_t*)malloc(sizeof(vertex3_t) * vertex_count);
+        size_t index_count = indices->count;
 
-        if (!vertex_buffer) {
-            printf("failed to allocate memory for mesh %s vertex buffer\n", mesh->name);
-            return false;
-        }
+        vertex3_t* vertices = (vertex3_t*)malloc(sizeof(vertex3_t) * vertex_count);
+        uint32_t*  index_buffer  = (uint32_t*)malloc(sizeof(uint32_t) * index_count);
 
         for (cgltf_size v = 0; v < vertex_count; ++v) {
-            cgltf_accessor_read_float(positions, v, vertex_buffer[v].position, 3);
+            float pos[3], nor[3], uv[2];
+            cgltf_accessor_read_float(positions, v, pos, 3);
 
             if (normals) {
-                cgltf_accessor_read_float(normals, v, vertex_buffer[v].normal, 3);
-            }
-            else {
-                glm_vec3_zero(vertex_buffer[v].normal);
+                cgltf_accessor_read_float(normals, v, nor, 3);
             }
 
             if (texcoords) {
-                cgltf_accessor_read_float(texcoords, v, vertex_buffer[v].uv, 2);
-            }
-            else {
-                glm_vec2_zero(vertex_buffer[v].uv);
+                cgltf_accessor_read_float(texcoords, v, uv, 2);
             }
 
-            // If the color attribute is not present in the glTF model,
-            // you can set a default color here. For example:
-            glm_vec3_one(vertex_buffer[v].color); // white color
-        }
+            glm_vec3_copy((vec3) { pos[0], pos[1], pos[2] }, vertices[v].position);
 
-        size_t index_count = indices->count;
-        uint32_t* index_buffer = (uint32_t*)malloc(sizeof(uint32_t) * index_count);
-
-        if (!index_buffer) {
-            printf("failed to allocate memory for mesh %s index buffer\n", mesh->name);
-            free(vertex_buffer);
-            return false;
+            if (normals) {
+                glm_vec3_copy((vec3) { nor[0], nor[1], nor[2] }, vertices[v].normal);
+            }
+            if (texcoords) {
+                glm_vec2_copy((vec2) {  uv[0],  uv[1]         }, vertices[v].uv);
+            }
+            glm_vec3_copy((vec3) { 1.0f, 1.0f,  1.0f }, vertices[v].color);
         }
 
         for (cgltf_size idx = 0; idx < index_count; ++idx) {
-            cgltf_accessor_read_uint(indices, idx, &index_buffer[idx], 1);
+            uint32_t index;
+            cgltf_accessor_read_uint(indices, idx, &index, 1);
+            index_buffer[idx] = index;
+            //printf("Index %zu: %u\n", idx, index);
         }
 
-        mesh_info_t mesh_info = {
-            .vertex_count = (uint32_t)vertex_count,
-            .index_count = (uint32_t)index_count,
-            .vertex_buffer = (void*)vertex_buffer,
-            .vertex_stride = sizeof(vertex3_t),
-            .indices = index_buffer
-        };
-
-        uint32_t mesh_id = mesh_new(&mesh_info);
-
-        free(vertex_buffer);
-        free(index_buffer);
+        mesh_info_t info = { 0 };
+        info.vertex_buffer = vertices;
+        info.vertex_stride = (size_t)sizeof(vertex3_t);
+        info.index_count = (uint32_t)index_count;
+        info.vertex_count = (uint32_t)vertex_count;
+        info.indices = index_buffer;
+        uint32_t mesh_id = mesh_new(&info);
 
         #ifdef _DEBUG
         printf("[ID: %d] imported mesh: %s\n", mesh_id, mesh->name);

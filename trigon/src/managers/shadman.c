@@ -73,6 +73,7 @@ void shader_simple_new() {
     };
 
 	vkl_pipeline_config_t config = { 0 };
+    config.use_for_3D = true;
 	vkl_pipeline_config_set_default(&config);
 	vkl_pipeline_new(&simple_shader.pipeline, &references, &config);
 	vkl_shader_del(trigon_core_vkl_device(), &shader);
