@@ -206,6 +206,7 @@
     <ClCompile Include="src\core\signal.c" />
     <ClCompile Include="src\gui\gui.c" />
     <ClCompile Include="src\managers\managers.c" />
+    <ClCompile Include="src\managers\meshes.c" />
     <ClCompile Include="src\managers\meshman.c" />
     <ClCompile Include="src\managers\shadman.c" />
     <ClCompile Include="src\shaders\shader_global.c" />
@@ -223,6 +224,7 @@
     <ClInclude Include="src\core\signal.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\managers\managers.h" />
+    <ClInclude Include="src\managers\meshes.h" />
     <ClInclude Include="src\managers\meshman.h" />
     <ClInclude Include="src\managers\shadman.h" />
     <ClInclude Include="src\shaders\shader_global.h" />

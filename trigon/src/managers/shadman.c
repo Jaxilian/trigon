@@ -75,9 +75,10 @@ void shader_simple_new() {
 	vkl_pipeline_config_t config = { 0 };
     config.use_for_3D = true;
 	vkl_pipeline_config_set_default(&config);
+    config.rasterization.frontFace = VK_FRONT_FACE_CLOCKWISE;
+
 	vkl_pipeline_new(&simple_shader.pipeline, &references, &config);
 	vkl_shader_del(trigon_core_vkl_device(), &shader);
-
     vkl_buffer_info_t matrix_info = {
        .count = 1,
        .device = trigon_core_vkl_device(),

@@ -58,12 +58,12 @@ static bool import_mesh(cgltf_mesh* mesh) {
             glm_vec3_copy((vec3) { pos[0], pos[1], pos[2] }, vertices[v].position);
 
             if (normals) {
-                glm_vec3_copy((vec3) { nor[0], nor[1], nor[2] }, vertices[v].normal);
+                glm_vec3_copy((vec3) { -nor[0], -nor[1], -nor[2] }, vertices[v].normal);
             }
             if (texcoords) {
                 glm_vec2_copy((vec2) {  uv[0],  uv[1]         }, vertices[v].uv);
             }
-            glm_vec3_copy((vec3) { 1.0f, 1.0f,  1.0f }, vertices[v].color);
+            glm_vec3_copy(vertices[v].normal, vertices[v].color);
         }
 
         for (cgltf_size idx = 0; idx < index_count; ++idx) {
