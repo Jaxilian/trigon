@@ -545,7 +545,8 @@ bool path_dir_from_explorer(path_os_t* out) {
     WCHAR szFile[260];       // buffer for file name
     HWND hwnd = NULL;       // owner window
     HANDLE hf;              // file handle
-
+    path_os_t backup = { 0 };
+    path_get_current(&backup);
     // Initialize OPENFILENAME
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
@@ -574,6 +575,8 @@ bool path_dir_from_explorer(path_os_t* out) {
         // Do something with the file here.
         // ...
         wchar_to_cstr(szFile, out->data);
+        path_set_sys_dir(&backup);
+        printf("resetting path to: %s\n", backup.data);
         CloseHandle(hf);
         return true;
     }

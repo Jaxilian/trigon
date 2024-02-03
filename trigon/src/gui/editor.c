@@ -3,7 +3,7 @@
 #include <vstd/vfs.h>
 #include <stdio.h>
 #include <tac/tac.h>
-bool win_new_asset_pack_enabled = true;
+bool win_new_asset_pack_enabled = false;
 
 void editor_new_asset_pack() {
 
