@@ -9,6 +9,7 @@
 #include "managers/managers.h"
 #include "managers/shadman.h"
 #include "managers/meshman.h"
+#include "tac/tac.h"
 
 static GLFWwindow*		window		= NULL;
 static vkl_device_t		device		= { 0 };
@@ -36,11 +37,12 @@ static void drop_callback(GLFWwindow* window, int count, const char** paths){
 
 	for (int i = 0; i < count; i++) {
 		printf("Dropping %s\n", paths[i]);
-		meshman_import(paths[i]);
+		
+		//meshman_import(paths[i]);
 
-		uint32_t id = shader_simple_new_instance();
-		shader_simple_set_instance(id, GLM_MAT4_IDENTITY);
-		shader_simple_submit_instances();
+		//uint32_t id = shader_simple_new_instance();
+		//shader_simple_set_instance(id, GLM_MAT4_IDENTITY);
+		//shader_simple_submit_instances();
 	}
 }
 

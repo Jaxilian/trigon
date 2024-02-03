@@ -1,3 +1,4 @@
+/*
 #include "meshman.h"
 #include <vstd/vfs.h>
 #include <types/mesh.h>
@@ -125,3 +126,5 @@ bool meshman_import(const char* path) {
 }
 
 
+
+*/

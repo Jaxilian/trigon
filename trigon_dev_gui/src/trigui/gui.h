@@ -38,6 +38,7 @@ extern "C" {
 	void gui_window_end();
 
 	void gui_text(const char* content, ...);
+	void gui_same_line(float x_offset, float spacing);
 	bool gui_check_box(const char* label, bool* value);
 	bool gui_button(const char* label, float extent[2]);
 

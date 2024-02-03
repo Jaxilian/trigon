@@ -8,9 +8,8 @@
 #define CGLTF_IMPLEMENTATION
 #include "cgltf.h"
 
-/*
 
-static bool import_mesh(cgltf_mesh* mesh) {
+static bool import_mesh(cgltf_mesh* mesh, tac_gltf_info_t* out, uint32_t out_idx) {
     for (cgltf_size j = 0; j < mesh->primitives_count; ++j) {
         cgltf_primitive* primitive = &mesh->primitives[j];
 
@@ -77,23 +76,76 @@ static bool import_mesh(cgltf_mesh* mesh) {
             //printf("Index %zu: %u\n", idx, index);
         }
 
-        mesh_info_t info = { 0 };
-        info.vertex_buffer = vertices;
-        info.vertex_stride = (size_t)sizeof(vertex3_t);
-        info.index_count = (uint32_t)index_count;
-        info.vertex_count = (uint32_t)vertex_count;
-        info.indices = index_buffer;
-        uint32_t mesh_id = mesh_new(&info);
+
+        out->mesh_buffer[out_idx] = (mesh_info_t){
+            .vertex_buffer = vertices,
+            .vertex_stride = (size_t)sizeof(vertex3_t),
+            .index_count = (uint32_t)index_count,
+            .vertex_count = (uint32_t)vertex_count,
+            .indices = index_buffer
+        };
+
+        strcpy(out->mesh_buffer[out_idx].name, mesh->name);
+
 
 #ifdef _DEBUG
-        printf("[ID: %d] imported mesh: %s\n", mesh_id, mesh->name);
+        //uint32_t mesh_id = mesh_new(&info);
+        //printf("[ID: %d] imported mesh: %s\n", mesh_id, mesh->name);
 #endif
     }
 
     return true;
 }
 
-void tac_import_file(const char* path) {
+bool tac_read_gltf(const char* path, tac_gltf_info_t* out) {
 
+    if (!out) {
+        printf("tac_read_gltf -> out was NULL!\n");
+        return false;
+    }
+
+    path_os_t p = { 0 };
+    path_new( &p, path );
+
+    const char* ext = path_get_ext(&p);
+
+    cgltf_options   options = { 0 };
+    cgltf_data*     data    = NULL;
+    cgltf_result    result  = cgltf_parse_file(&options, path, &data);
+
+    if (result != cgltf_result_success) {
+        printf("failed to import %s\n", path);
+        return false;
+    }
+
+    result = cgltf_load_buffers(&options, data, path);
+    if (result != cgltf_result_success) {
+        printf("failed to load gltf buffers\n");
+        cgltf_free(data);
+        return false;
+    }
+
+    if (out->mesh_buffer) {
+        free(out->mesh_buffer);
+        out->mesh_buffer = NULL;
+        out->mesh_count = 0;
+        out->size = 0;
+    }
+
+    out->mesh_count = (uint32_t)data->meshes_count;
+    out->size = sizeof(mesh_info_t) * data->meshes_count;
+    out->mesh_buffer = malloc(out->size);
+
+    for (cgltf_size i = 0; i < data->meshes_count; ++i) {
+        cgltf_mesh* mesh = &data->meshes[i];
+        if (!import_mesh(mesh, out, (uint32_t)i)) {
+            printf("failed to import mesh %s!\n", mesh->name);
+            cgltf_free(data);
+            return false;
+        }
+    }
+
+    cgltf_free(data);
+    return true;
 }
-*/
+

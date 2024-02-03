@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)vstd\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)vstd\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -147,7 +147,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)vstd\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -174,7 +174,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)vstd\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -201,6 +201,11 @@
   <ItemGroup>
     <ClInclude Include="src\tac\tac_def.h" />
     <ClInclude Include="src\tac\tac.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\vstd\vstd.vcxproj">
+      <Project>{62fa7fc2-99f4-4c92-adf6-5c3e66c1aaf3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

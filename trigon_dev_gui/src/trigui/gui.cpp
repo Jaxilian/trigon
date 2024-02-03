@@ -132,6 +132,9 @@ void gui_text(const char* content, ...) {
     ImGui::TextV(content, args);
     va_end(args);
 }
+void gui_same_line(float x_offset, float spacing) {
+    ImGui::SameLine(x_offset, spacing);
+}
 
 bool gui_check_box(const char* label, bool* value) {
     return ImGui::Checkbox(label, value);

@@ -3,18 +3,27 @@
 #include <vstd/vfs.h>
 #include <stdio.h>
 #include <tac/tac.h>
+
 bool win_new_asset_pack_enabled = false;
+path_os_t path_buffer = { 0 };
+tac_gltf_info_t gltf_buffer = { 0 };
 
 void editor_new_asset_pack() {
-
 	if (gui_window_new("Create Asset Pack", &win_new_asset_pack_enabled)) {
-		gui_text("Create new asset pack here!\n");
-		if (gui_button("Import...", (float[]) { 0.0f, 0.0f })) {
-			path_os_t data = { 0 };
-			if (path_dir_from_explorer(&data)) {
 
-				printf("%s\n", data.data);
+		if (gui_button("Import...", (float[]) { 0.0f, 0.0f })) {
+			if (path_dir_from_explorer(&path_buffer)) {
+
+				printf("%s\n", path_buffer.data);
+				tac_read_gltf(path_buffer.data, &gltf_buffer);
 			}
+		}
+
+		gui_same_line(0.0f, -1.0f);
+		gui_text(path_buffer.data);
+
+		for (uint32_t i = 0; i < gltf_buffer.mesh_count; i++) {
+			gui_text("[ID:%d]: %s\n", i, gltf_buffer.mesh_buffer[i].name);
 		}
 	}
 	gui_window_end();
