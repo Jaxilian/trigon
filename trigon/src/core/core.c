@@ -53,6 +53,21 @@ static void create_swap(uint32_t width, uint32_t height) {
 	};
 
 	vkl_swapchain_new(&swap_info, &swapchain);
+
+	gui_vk_info_t info = {
+	.vulkan_device = device.device,
+	.vulkan_graphics_family = device.graphics_family,
+	.vulkan_graphics_queue = device.graphics_queue,
+	.vulkan_min_image_count = 2,
+	.vulkan_image_count = swapchain.image_count,
+	.vulkan_instance = device.instance,
+	.vulkan_renderpass = swapchain.renderpass,
+	.vulkan_window = window,
+	.vulkan_physical_device = device.physical_device
+	};
+
+	gui_init_vk(&info);
+
 	shader_global_data_t data = { 0 };
 	shader_global_data_get(&data);
 	glm_vec2_copy((vec2) { (float)width, (float)height }, data.win_extent);
@@ -65,19 +80,7 @@ static void create_swap(uint32_t width, uint32_t height) {
 
 	shader_global_data_set(&data);
 
-	gui_vk_info_t info = {
-		.vulkan_device = device.device,
-		.vulkan_graphics_family = device.graphics_family,
-		.vulkan_graphics_queue = device.graphics_queue,
-		.vulkan_min_image_count = 2,
-		.vulkan_image_count = swapchain.image_count,
-		.vulkan_instance = device.instance,
-		.vulkan_renderpass = swapchain.renderpass,
-		.vulkan_window = window,
-		.vulkan_physical_device = device.physical_device
-	};
 
-	gui_init_vk(&info);
 }
 
 static void glfw_framebuffer_resize_cb(GLFWwindow* window, int x, int y) {
@@ -183,6 +186,7 @@ void trigon_core_init(uint32_t _flags) {
 }
 
 void  trigon_core_start(signal_cb update_cb, signal_cb draw_cb, signal_cb ui_draw_cb) {
+	
 	bool running = true;
 	while (running) {
 		glfwPollEvents();

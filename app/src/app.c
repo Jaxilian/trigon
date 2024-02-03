@@ -2,7 +2,10 @@
 #include "trigon/ecs/entitiy.h"
 #include "trigon/cam/camera.h"
 
+#include <string.h>
+
 static camera_t camera = { 0 };
+
 
 void trigon_setup_events() {
 
@@ -14,4 +17,5 @@ void trigon_setup_events() {
 	if (!entity_has_component(&player, CMP_TRANSFORM)) {
 
 	}
+
 }

@@ -123,7 +123,7 @@ bool gui_window_new(const char* name, bool* active) {
 
 void gui_window_end() {
     ImGui::End();
-  
+
 }
 
 void gui_text(const char* content, ...) {
@@ -139,4 +139,28 @@ bool gui_check_box(const char* label, bool* value) {
 
 bool gui_button(const char* label, float extent[2]) {
     return ImGui::Button(label, ImVec2(extent[0], extent[1]));
+}
+
+bool gui_main_menu_begin() {
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGuiID dockspace_id = ImGui::GetID("default_dock_space");
+    ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+    ImGui::DockSpaceOverViewport(viewport, dockspace_flags, nullptr);
+    return ImGui::BeginMainMenuBar();
+}
+
+void gui_main_menu_end() {
+    ImGui::EndMainMenuBar();
+}
+
+bool gui_menu_begin(const char* name, bool active) {
+    return ImGui::BeginMenu(name, active);
+}
+
+void gui_menu_end() {
+    ImGui::EndMenu();
+}
+
+bool gui_menu_item(const char* name, const char* shortcut, bool* is_selected, bool active) {
+    return ImGui::MenuItem(name, shortcut, is_selected, active);
 }

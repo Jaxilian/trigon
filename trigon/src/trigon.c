@@ -4,21 +4,14 @@
 #include "managers/managers.h"
 #include <vkl/vkl.h>
 #include "trigon/cam/camera.h"
+#include "gui/editor.h"
 
 static void on_draw() {
 	managers_on_draw();
 }
 
 static void on_ui_draw() {
-	bool active = true;
-	if (gui_window_new("test!", &active)) {
-		camera_t* camera = camera_get_current();
-		if (camera) {
-			gui_text("camera pos =  x: %f,  y:  %f,  z:% f", camera->position[0], camera->position[1], camera->position[2]);
-		}
-		gui_text("hello world!\n");
-	}
-	gui_window_end();
+	editor_draw();
 }
 
 static void on_update() {

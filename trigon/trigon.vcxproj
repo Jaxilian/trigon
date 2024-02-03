@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\;$(SolutionDir)tac\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -122,7 +122,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\;$(SolutionDir)tac\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -150,7 +150,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\;$(SolutionDir)tac\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -179,7 +179,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\;$(SolutionDir)vendor\include\;$(SolutionDir)vendor\src\;$(SolutionDir)vstd\src\;$(SolutionDir)vkl\src\;$(VULKAN_SDK)\Include\;$(SolutionDir)trigon_dev_gui\src\;$(SolutionDir)tac\src\</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -204,7 +204,7 @@
     <ClCompile Include="src\core\core.c" />
     <ClCompile Include="src\core\input.c" />
     <ClCompile Include="src\core\signal.c" />
-    <ClCompile Include="src\gui\gui.c" />
+    <ClCompile Include="src\gui\editor.c" />
     <ClCompile Include="src\managers\managers.c" />
     <ClCompile Include="src\managers\meshes.c" />
     <ClCompile Include="src\managers\meshman.c" />
@@ -222,7 +222,7 @@
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\input.h" />
     <ClInclude Include="src\core\signal.h" />
-    <ClInclude Include="src\gui\gui.h" />
+    <ClInclude Include="src\gui\editor.h" />
     <ClInclude Include="src\managers\managers.h" />
     <ClInclude Include="src\managers\meshes.h" />
     <ClInclude Include="src\managers\meshman.h" />
@@ -235,6 +235,9 @@
     <ClInclude Include="src\types\mesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\tac\tac.vcxproj">
+      <Project>{f68709e9-3965-40ac-911c-052b2f5dbcc4}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\trigon_dev_gui\trigon_dev_gui.vcxproj">
       <Project>{2b002754-0852-4c5a-89f2-f245ffb44f8a}</Project>
     </ProjectReference>

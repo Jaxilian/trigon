@@ -101,7 +101,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <TreatSpecificWarningsAsErrors>
       </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,7 +128,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <TreatSpecificWarningsAsErrors>
       </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,7 +155,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <TreatSpecificWarningsAsErrors>
       </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -182,7 +182,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <TreatSpecificWarningsAsErrors>
       </TreatSpecificWarningsAsErrors>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -200,6 +200,7 @@
     <ClCompile Include="src\vstd\cpool.c" />
     <ClCompile Include="src\vstd\cstr.c" />
     <ClCompile Include="src\vstd\debug.c" />
+    <ClCompile Include="src\vstd\hash.c" />
     <ClCompile Include="src\vstd\vfs.c" />
     <ClCompile Include="src\vstd\vmem.c" />
   </ItemGroup>
@@ -209,6 +210,7 @@
     <ClInclude Include="src\vstd\cpool.h" />
     <ClInclude Include="src\vstd\cstr.h" />
     <ClInclude Include="src\vstd\debug.h" />
+    <ClInclude Include="src\vstd\hash.h" />
     <ClInclude Include="src\vstd\vfs.h" />
     <ClInclude Include="src\vstd\vmem.h" />
   </ItemGroup>

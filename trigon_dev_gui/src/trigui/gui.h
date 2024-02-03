@@ -23,6 +23,14 @@ extern "C" {
 	void gui_init_vk(gui_vk_info_t* info);
 	void gui_apply_style();
 
+	bool gui_main_menu_begin();
+	void gui_main_menu_end();
+
+	bool gui_menu_begin(const char* name, bool active);
+	void gui_menu_end();
+
+	bool gui_menu_item(const char* name, const char* shortcut, bool* is_selected, bool active);
+
 	void gui_frame_begin();
 	void gui_frame_end(void* command_buffer);
 
