@@ -20,5 +20,13 @@ typedef struct {
     mesh_info_t* mesh_buffer;
 } tac_gltf_info_t;
 
+typedef struct {
+    char name[64];
+
+    uint32_t     mesh_count;
+    mesh_info_t* meshes;
+
+} asset_pack_t;
+
 
 #endif // !TAC_DEF_H

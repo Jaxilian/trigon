@@ -23,8 +23,32 @@ void editor_new_asset_pack() {
 		gui_text(path_buffer.data);
 
 		for (uint32_t i = 0; i < gltf_buffer.mesh_count; i++) {
-			gui_text("[ID:%d]: %s\n", i, gltf_buffer.mesh_buffer[i].name);
+			gui_text("[ID:%d]:", i);
+			gui_same_line(0.0f, -1.0f);
+			char label[64] = "[mesh:%d]";
+			sprintf(label, "[mesh:%d]", i);
+
+			gui_text_input(label, "hint!", gltf_buffer.mesh_buffer[i].name, 64);
 		}
+
+		const char* pop_id = "popup";
+		if (gltf_buffer.mesh_count > 0) {
+			if (gui_button("save to", (float[]) { 0.0f, 0.0f })) gui_popup_open(pop_id);
+			
+		}
+
+		if(gui_popup_begin(pop_id, NULL)) {
+			
+
+
+			gui_button("confirm", (float[]) { 0.0f, 0.0f });
+			gui_same_line(0.0f, -1.0f);
+			if (gui_button("cancel", (float[]) { 0.0f, 0.0f })) {
+				gui_popup_close();
+			}
+			gui_popup_end();
+		}
+
 	}
 	gui_window_end();
 }

@@ -167,3 +167,23 @@ void gui_menu_end() {
 bool gui_menu_item(const char* name, const char* shortcut, bool* is_selected, bool active) {
     return ImGui::MenuItem(name, shortcut, is_selected, active);
 }
+
+bool gui_text_input(const char* label, const char* hint, char* buffer, uint32_t buffer_len) {
+    return ImGui::InputTextWithHint(label, hint, buffer, buffer_len);
+};
+
+bool gui_popup_begin(const char* label, bool* open) {
+    return ImGui::BeginPopupModal(label, open);
+}
+
+void gui_popup_end() {
+    ImGui::EndPopup();
+}
+
+void gui_popup_close() {
+    ImGui::CloseCurrentPopup();
+}
+
+void gui_popup_open(const char* label) {
+    ImGui::OpenPopup(label);
+}

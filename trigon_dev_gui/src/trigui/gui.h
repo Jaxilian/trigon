@@ -37,11 +37,16 @@ extern "C" {
 	bool gui_window_new(const char* name, bool* active);
 	void gui_window_end();
 
+	bool gui_popup_begin(const char* label, bool* open);
+	void gui_popup_end();
+	void gui_popup_open(const char* label);
+	void gui_popup_close();
+
 	void gui_text(const char* content, ...);
 	void gui_same_line(float x_offset, float spacing);
 	bool gui_check_box(const char* label, bool* value);
 	bool gui_button(const char* label, float extent[2]);
-
+	bool gui_text_input(const char* label, const char* hint, char* buffer, uint32_t buffer_len);
 
 #ifdef __cplusplus
 }
