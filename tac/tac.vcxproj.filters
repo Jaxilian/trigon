@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="src\tac\tac_gltf.c" />
     <ClCompile Include="src\tac\tac_db.c" />
+    <ClCompile Include="src\tac\tac_io.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\tac\tac.h" />

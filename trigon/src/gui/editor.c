@@ -39,6 +39,8 @@ void editor_new_asset_pack() {
 
 		if(gui_popup_begin(pop_id, NULL)) {
 			
+			uint32_t pack_count = tac_package_count();
+			gui_text("package count: %d", pack_count);
 
 
 			gui_button("confirm", (float[]) { 0.0f, 0.0f });
