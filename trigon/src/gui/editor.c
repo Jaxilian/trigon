@@ -41,10 +41,19 @@ void editor_new_asset_pack() {
 			
 			uint32_t pack_count = tac_package_count();
 			gui_text("package count: %d", pack_count);
+			path_os_t paths[64] = { 0 };
+			tac_packages_get(paths, pack_count);
+
+			for (uint32_t i = 0; i < pack_count; i++) {
+				const char* name = path_get_last_dir(&paths[i]);
+
+				if (gui_button(name, (float[]) { 0.0f, 0.0f })) {
+
+				}
+			}
 
 
-			gui_button("confirm", (float[]) { 0.0f, 0.0f });
-			gui_same_line(0.0f, -1.0f);
+	
 			if (gui_button("cancel", (float[]) { 0.0f, 0.0f })) {
 				gui_popup_close();
 			}

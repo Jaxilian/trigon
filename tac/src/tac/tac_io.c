@@ -18,5 +18,5 @@ bool tac_packages_get(path_os_t* paths, const uint32_t path_count) {
 	path_change_dir(&package_folder, "data", &package_folder);
 	path_change_dir(&package_folder, "pack", &package_folder);
 
-	return path_get_subfiles_filter(&package_folder, paths, path_count, ".pack");
+	return path_get_subfiles_filter(&package_folder, paths, path_count, "pack");
 }
