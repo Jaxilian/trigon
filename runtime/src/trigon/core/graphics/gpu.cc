@@ -97,6 +97,11 @@ gpu_t::gpu_t() {
 
 gpu_t::~gpu_t() {
 
+    if (cmd_pool != nullptr) {
+        vkDestroyCommandPool((VkDevice)device, (VkCommandPool)cmd_pool, NULL);
+        cmd_pool = nullptr;
+    }
+
     if (device != nullptr) {
         vkDestroyDevice((VkDevice)device, NULL);
         device = nullptr;
@@ -318,5 +323,17 @@ void gpu_t::bind_device(void* surface) {
     graphics_queue = gque;
     present_queue = pque;
 
+    VkCommandPoolCreateInfo pool_info = {};
+    pool_info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    pool_info.queueFamilyIndex = que_fam.graphics_family;
+    pool_info.flags =
+        VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+
+    VkCommandPool _pool;
+    if (vkCreateCommandPool(dev, &pool_info, nullptr, &_pool) != VK_SUCCESS) {
+        debug_t::err("failed to create command pool!");
+    }
+
+    cmd_pool = _pool;
 
 }
