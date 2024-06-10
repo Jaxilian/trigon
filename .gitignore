@@ -13,3 +13,7 @@ runtime/runtime.vcxproj.filters
 runtime/runtime.vcxproj.user
 trigon/trigon.vcxproj.filters
 trigon/trigon.vcxproj.user
+/converter/bin
+converter/converter.vcxproj.filters
+converter/converter.vcxproj.user
+/converter/obj

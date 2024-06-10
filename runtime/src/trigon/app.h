@@ -14,8 +14,10 @@ public:
 	static version_t	engine_version;
 	static app_config_t config;
 	static bool			config_added;
-
-	win_t				main_window;
+	
+	path_t  current_path	= {};
+	path_t  app_path		= {};
+	win_t	main_window		= {};
 
 private:
 
