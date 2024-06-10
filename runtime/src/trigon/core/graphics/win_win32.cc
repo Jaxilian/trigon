@@ -7,6 +7,7 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
 #include "gpu.h"
+#include "swap.h"
 
 
 #ifdef _DEBUG
@@ -139,6 +140,9 @@ void win_t::close() {
 
 win_t::win_t() :_gpu(gpu_t::get()) {
     _init();
+    
+    swapchain_t& swap = (swapchain_t&)_swapchain.get();
+   
 }
 
 win_t::~win_t() {

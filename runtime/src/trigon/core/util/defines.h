@@ -1,7 +1,11 @@
 #pragma once
 #include <inttypes.h>
+#include <string>
 
 typedef const char* cstr_t;
+typedef std::string	str_t;
+typedef char guid_t[64];
+typedef char path_t[255];
 
 struct version_t {
 	uint32_t version	= 1;
@@ -29,3 +33,5 @@ struct version_t {
 		compile();
 	};
 };
+
+void guid_gen(guid_t& id);
