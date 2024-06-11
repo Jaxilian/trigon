@@ -42,6 +42,7 @@ private:
 	);
 
 
+
 public: //singleton
 	gpu_t(const gpu_t&) = delete;
 	gpu_t& operator=(const gpu_t&) = delete;

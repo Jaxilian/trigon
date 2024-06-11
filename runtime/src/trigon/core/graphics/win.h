@@ -1,5 +1,4 @@
 #pragma once
-#include "trigon/core/memory/pointer.h"
 
 class gpu_t;
 class win_t {
@@ -9,6 +8,7 @@ public:
     ~win_t();
 
     void  resize(int width, int height);
+    void  refresh();
     void  update();
     void  close();
     bool  closing()     { return _closing; }
@@ -17,6 +17,9 @@ public:
 
     static const char*  extensions[];
     static int          extension_count;
+
+    const int& width;
+    const int& height;
 
 private:
     bool    _init();
@@ -30,6 +33,5 @@ private:
     void*       _surface = nullptr;
     bool        _closing = false;
     gpu_t&      _gpu;
-
-    ptr_t<void*> _swapchain;
+    void*       _swapchain;
 };
