@@ -202,6 +202,7 @@
     <ClInclude Include="src\trigon\math\matrix.h" />
     <ClInclude Include="src\trigon\math\vector2.h" />
     <ClInclude Include="src\trigon\math\vector3.h" />
+    <ClInclude Include="src\trigon\math\vector4.h" />
     <ClInclude Include="ven\headers\vk_swap_supp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
