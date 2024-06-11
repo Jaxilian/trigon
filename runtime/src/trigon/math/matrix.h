@@ -1,11 +1,15 @@
 #pragma once
+#include <xmmintrin.h> // SSE intrinsics
+#include <pmmintrin.h> // SSE3 intrinsics
+#include <cmath> // for std::sqrt, std::acos, std::atan2
+#include <cstring> // for std::memcpy
 #include "vector3.h"
 
 static float IDENTITY[16] = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
 };
 
 class matrix4_t {
@@ -14,8 +18,8 @@ public:
         identity();
     }
 
-    matrix4_t(const matrix4_t& copy_from) {
-        std::memcpy(_data, copy_from._data, sizeof(_data));
+    matrix4_t(const matrix4_t& other) {
+        std::memcpy(_data, other._data, sizeof(_data));
     }
 
     matrix4_t(const float* data) {
@@ -32,6 +36,28 @@ public:
         _data[12] = m30; _data[13] = m31; _data[14] = m32; _data[15] = m33;
     }
 
+    inline void identity() {
+        std::memcpy(_data, IDENTITY, sizeof(IDENTITY));
+    }
+
+    static inline matrix4_t mul(const matrix4_t& lhs, const matrix4_t& rhs) {
+        alignas(16) float result[16];
+
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                __m128 sum = _mm_setzero_ps();
+                for (int k = 0; k < 4; ++k) {
+                    __m128 a = _mm_set1_ps(lhs._data[i + k * 4]);
+                    __m128 b = _mm_load_ps1(&rhs._data[k + j * 4]);
+                    sum = _mm_add_ps(sum, _mm_mul_ps(a, b));
+                }
+                _mm_store_ss(&result[i + j * 4], sum);
+            }
+        }
+
+        return matrix4_t(result);
+    }
+
     inline matrix4_t& operator*=(const matrix4_t& other) {
         *this = mul(*this, other);
         return *this;
@@ -39,10 +65,6 @@ public:
 
     inline matrix4_t operator*(const matrix4_t& other) const {
         return mul(*this, other);
-    }
-
-    inline void identity() {
-        std::memcpy(_data, IDENTITY, sizeof(IDENTITY));
     }
 
     void translate(const vector3_t& translation) {
@@ -120,10 +142,6 @@ public:
         *this *= rot_z * rot_y * rot_x;
     }
 
-    inline void set_scale(const vector3_t& scale) {
-      
-    }
-
     void print() const {
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; ++j) {
@@ -181,27 +199,6 @@ public:
         }
         return vector3_t(x * 57.2958f, y * 57.2958f, z * 57.2958f); // Convert to degrees
     }
-
-    static inline matrix4_t mul(const matrix4_t& lhs, const matrix4_t& rhs) {
-        alignas(16) float result[16] = { 0 };
-
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                __m128 sum = _mm_setzero_ps();
-                for (int k = 0; k < 4; ++k) {
-                    __m128 a = _mm_set1_ps(lhs._data[i + k * 4]);
-                    __m128 b = _mm_set1_ps(rhs._data[k + j * 4]);
-                    sum = _mm_add_ps(sum, _mm_mul_ps(a, b));
-                }
-                _mm_store_ss(&result[i + j * 4], sum);
-            }
-        }
-
-        matrix4_t res;
-        std::memcpy(res._data, result, sizeof(result));
-        return res;
-    }
-
 
 private:
     alignas(16) float _data[16];
