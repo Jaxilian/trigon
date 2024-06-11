@@ -180,6 +180,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.cc" />
+    <ClCompile Include="src\trigon\core\graphics\backend\vulkan.c" />
     <ClCompile Include="src\trigon\core\graphics\gpu.cc" />
     <ClCompile Include="src\trigon\core\graphics\swap.cc" />
     <ClCompile Include="src\trigon\core\graphics\win_win32.cc" />
@@ -188,10 +189,20 @@
     <ClCompile Include="src\trigon\core\util\defines.cc" />
     <ClCompile Include="src\trigon\core\util\err.cc" />
     <ClCompile Include="src\trigon\ecs\entity.cc" />
-    <ClCompile Include="src\trigon\math\vector2.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trigon\app.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\glad\vulkan.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_platform.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codecs_common.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_av1std.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_av1std_decode.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h264std.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h264std_decode.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h264std_encode.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h265std.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h265std_decode.h" />
+    <ClInclude Include="src\trigon\core\graphics\backend\vk_video\vulkan_video_codec_h265std_encode.h" />
     <ClInclude Include="src\trigon\core\graphics\gpu.h" />
     <ClInclude Include="src\trigon\core\graphics\swap.h" />
     <ClInclude Include="src\trigon\core\graphics\win.h" />
@@ -200,7 +211,9 @@
     <ClInclude Include="src\trigon\core\util\defines.h" />
     <ClInclude Include="src\trigon\core\util\err.h" />
     <ClInclude Include="src\trigon\ecs\entity.h" />
+    <ClInclude Include="src\trigon\math\matrix.h" />
     <ClInclude Include="src\trigon\math\vector2.h" />
+    <ClInclude Include="src\trigon\math\vector3.h" />
     <ClInclude Include="ven\headers\vk_swap_supp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
