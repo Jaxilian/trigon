@@ -228,6 +228,10 @@ public:
         return res;
     }
 
+    static inline float cross(const vector2_t& lhs, const vector2_t& rhs) {
+        return lhs.cross(rhs);
+    }
+
 private:
     alignas(16) float _data[4];
 };

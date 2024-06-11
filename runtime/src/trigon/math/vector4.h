@@ -228,6 +228,7 @@ public:
         return res;
     }
 
+  
 private:
     alignas(16) float _data[4];
 };
