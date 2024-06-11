@@ -337,3 +337,4 @@ void gpu_t::bind_device(void* surface) {
     cmd_pool = _pool;
 
 }
+

@@ -1,12 +1,16 @@
 #pragma once
+#include "win.h"
 
 class swapchain_t  {
 public:
-	void create(void* surface);
-	swapchain_t()	{};
-	~swapchain_t()	{};
+	swapchain_t(win_t& window);
+	void refresh();
+	~swapchain_t();
 
 private:
-	void* _surface = nullptr;
+	
+	void create_swapchain();
 
+	win_t& _window;
+	void* _data;
 };

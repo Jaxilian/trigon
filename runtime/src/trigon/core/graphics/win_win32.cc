@@ -31,8 +31,13 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             }
         }
         return 0;
-    case WM_ENTERSIZEMOVE:
-
+    case WM_EXITSIZEMOVE:
+        for (int i = 0; i < _win_instances.size(); i++) {
+            if (_win_instances[i]->native_ptr() == hwnd) {
+                _win_instances[i]->refresh();
+                break;
+            }
+        }
         break;
     case WM_DESTROY:
         for (int i = 0; i < _win_instances.size(); i++) {
@@ -61,6 +66,7 @@ void win_t::resize(int width, int height) {
         _width, _height,
         SWP_NOMOVE | SWP_NOZORDER
     );
+
 }
 
 bool win_t::_init() {
@@ -138,14 +144,21 @@ void win_t::close() {
     _closing = true;
 }
 
-win_t::win_t() :_gpu(gpu_t::get()) {
+win_t::win_t() :_gpu(gpu_t::get()), width(_width), height(_height){
     _init();
+    _swapchain = new swapchain_t(*this);
+}
+
+void win_t::refresh() {
+    swapchain_t* s = (swapchain_t*)_swapchain;
+    s->refresh();
     
-    swapchain_t& swap = (swapchain_t&)_swapchain.get();
-   
 }
 
 win_t::~win_t() {
+    swapchain_t* s = (swapchain_t*)_swapchain;
+    delete s;
+  
     vkDestroySurfaceKHR((VkInstance)gpu_t::get().instance, (VkSurfaceKHR)_surface, NULL);
     for (int i = 0; i < _win_instances.size(); i++) {
         if (_win_instances[i] == this) {

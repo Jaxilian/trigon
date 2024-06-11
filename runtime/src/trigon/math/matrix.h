@@ -1,8 +1,4 @@
 #pragma once
-#include <xmmintrin.h> // SSE intrinsics
-#include <pmmintrin.h> // SSE3 intrinsics
-#include <cmath> // for std::sqrt, std::acos, std::atan2
-#include <cstring> // for std::memcpy
 #include "vector3.h"
 
 static float IDENTITY[16] = {
@@ -198,6 +194,31 @@ public:
             z = 0;
         }
         return vector3_t(x * 57.2958f, y * 57.2958f, z * 57.2958f); // Convert to degrees
+    }
+
+    void projection(float fov, float aspect, float near_view, float far_view) {
+        float tan_half_fov = tanf(fov / 2.0f);
+        float range = near_view - far_view;
+
+        _data[0] = 1.0f / (aspect * tan_half_fov);
+        _data[1] = 0.0f;
+        _data[2] = 0.0f;
+        _data[3] = 0.0f;
+
+        _data[4] = 0.0f;
+        _data[5] = 1.0f / tan_half_fov;
+        _data[6] = 0.0f;
+        _data[7] = 0.0f;
+
+        _data[8] = 0.0f;
+        _data[9] = 0.0f;
+        _data[10] = (near_view + far_view) / range;
+        _data[11] = -1.0f;
+
+        _data[12] = 0.0f;
+        _data[13] = 0.0f;
+        _data[14] = (2.0f * near_view * far_view) / range;
+        _data[15] = 0.0f;
     }
 
 private:
