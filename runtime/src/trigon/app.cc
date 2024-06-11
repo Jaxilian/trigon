@@ -39,7 +39,7 @@ app_t::app_t() {
 	strcpy_s(app_path, sizeof(app_path), p);
 	strcpy_s(current_path, sizeof(current_path), std::filesystem::current_path().string().data());
 
-	
+
 
 }
 
