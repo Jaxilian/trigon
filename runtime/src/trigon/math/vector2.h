@@ -16,6 +16,13 @@ public:
 
     const float& x;
     const float& y;
+    const float* data() { return _data; }
+
+    inline vector2_t& set(float x_val, float y_val) {
+        _data[0] = x_val;
+        _data[1] = y_val;
+        return *this;
+    }
 
     inline vector2_t& operator+=(const vector2_t& other) {
         __m128 this_vec = _mm_load_ps(_data);
