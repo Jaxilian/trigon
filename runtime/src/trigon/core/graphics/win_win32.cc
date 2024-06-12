@@ -6,7 +6,7 @@
 #include <vector>
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
-#include "gpu.h"
+#include "vdevice.h"
 #include "swap.h"
 
 
@@ -122,11 +122,9 @@ bool win_t::_init() {
     info.hinstance = hInstance;
     info.hwnd = hwnd;
 
-    VkSurfaceKHR surf;
-    vkCreateWin32SurfaceKHR((VkInstance)gpu_t::get().instance, &info, NULL, &surf);
-    _surface = surf;
-    
-    gpu_t::get().bind_device(_surface);
+
+    vkCreateWin32SurfaceKHR(vdevice_t::get().instance, &info, NULL, &_surface);
+    vdevice_t::get().bind_device(_surface);
 
     return true;
 }
@@ -144,22 +142,17 @@ void win_t::close() {
     _closing = true;
 }
 
-win_t::win_t() :_gpu(gpu_t::get()), width(_width), height(_height){
+win_t::win_t() :_vdevice(vdevice_t::get()), width(_width), height(_height){
     _init();
-    _swapchain = new swapchain_t(*this);
 }
 
 void win_t::refresh() {
-    swapchain_t* s = (swapchain_t*)_swapchain;
-    s->refresh();
-    
+
 }
 
 win_t::~win_t() {
-    swapchain_t* s = (swapchain_t*)_swapchain;
-    delete s;
-  
-    vkDestroySurfaceKHR((VkInstance)gpu_t::get().instance, (VkSurfaceKHR)_surface, NULL);
+
+    vkDestroySurfaceKHR(_vdevice.instance, (VkSurfaceKHR)_surface, NULL);
     for (int i = 0; i < _win_instances.size(); i++) {
         if (_win_instances[i] == this) {
             _win_instances.erase(_win_instances.begin() + i);

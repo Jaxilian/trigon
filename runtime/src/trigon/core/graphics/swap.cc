@@ -15,7 +15,7 @@ swapchain_t::~swapchain_t() {
     delete data;
 }
 
-VkSurfaceFormatKHR chooseSwapSurfaceFormat(
+VkSurfaceFormatKHR get_swap_format(
     const std::vector<VkSurfaceFormatKHR>& availableFormats) {
     for (const auto& availableFormat : availableFormats) {
         if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
@@ -69,74 +69,105 @@ VkFormat depth_format() {
         VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }
 
+uint32_t get_mem_type(uint32_t filter, VkMemoryPropertyFlags properties) {
+    VkPhysicalDevice pdev = (VkPhysicalDevice)gpu_t::get().physical;
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(pdev, &memProperties);
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+        if ((filter & (1 << i)) &&
+            (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    debug_t::err("failed to find suitable memory type!");
+}
+
+void quick_image_with_info(
+    VkDevice device,
+    const VkImageCreateInfo& imageInfo,
+    VkMemoryPropertyFlags properties,
+    VkImage& image,
+    VkDeviceMemory& imageMemory) {
+    if (vkCreateImage(device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+        debug_t::err("failed to create image!");
+    }
+
+    VkMemoryRequirements memRequirements;
+    vkGetImageMemoryRequirements(device, image, &memRequirements);
+
+    VkMemoryAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = get_mem_type(memRequirements.memoryTypeBits, properties);
+
+    if (vkAllocateMemory(device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+        debug_t::err("failed to allocate image memory!");
+    }
+
+    if (vkBindImageMemory(device, image, imageMemory, 0) != VK_SUCCESS) {
+        debug_t::err("failed to bind image memory!");
+    }
+}
 
 void swapchain_t::create_swapchain() {
-    VkPhysicalDevice pdev   = (VkPhysicalDevice)gpu_t::get().physical;
-    VkDevice device         = (VkDevice)gpu_t::get().device;
-    VkSurfaceKHR surface    = (VkSurfaceKHR)_window.surface_ptr();
+    VkPhysicalDevice physical_device = (VkPhysicalDevice)gpu_t::get().physical;
+    VkDevice device = (VkDevice)gpu_t::get().device;
+    VkSurfaceKHR surface = (VkSurfaceKHR)_window.surface_ptr();
 
     if (!_data) _data = new swap_data_t();
-    swap_data_t* data       = (swap_data_t*)_data;
+    swap_data_t* data = static_cast<swap_data_t*>(_data);
 
     VkSwapchainKHR old_swapchain = data->swapchain;
     data->cleanup();
 
-    swap_support_t support(pdev, surface);
+    swap_support_t support(physical_device, surface);
 
-    VkSurfaceFormatKHR surface_format = chooseSwapSurfaceFormat(support.formats);
+    VkSurfaceFormatKHR surface_format = get_swap_format(support.formats);
     VkPresentModeKHR present_mode = swap_present_mode(support.present_modes);
     VkExtent2D extent = swap_extent(_window, support.capabilities);
 
     uint32_t image_count = support.capabilities.minImageCount + 1;
-    if (support.capabilities.maxImageCount > 0 &&
-        image_count > support.capabilities.maxImageCount) {
+    if (support.capabilities.maxImageCount > 0 && image_count > support.capabilities.maxImageCount) {
         image_count = support.capabilities.maxImageCount;
     }
 
-    VkSwapchainCreateInfoKHR inf = {};
-    inf.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    inf.surface = surface;
-
-    inf.minImageCount = image_count;
-    inf.imageFormat = surface_format.format;
-    inf.imageColorSpace = surface_format.colorSpace;
-    inf.imageExtent = extent;
-    inf.imageArrayLayers = 1;
-    inf.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    VkSwapchainCreateInfoKHR create_info{};
+    create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    create_info.surface = surface;
+    create_info.minImageCount = image_count;
+    create_info.imageFormat = surface_format.format;
+    create_info.imageColorSpace = surface_format.colorSpace;
+    create_info.imageExtent = extent;
+    create_info.imageArrayLayers = 1;
+    create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
     uint32_t queue_family_indices[] = { gpu_t::get().que_fam.graphics_family, gpu_t::get().que_fam.present_family };
 
     if (gpu_t::get().que_fam.graphics_family != gpu_t::get().que_fam.present_family) {
-        inf.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-        inf.queueFamilyIndexCount = 2;
-        inf.pQueueFamilyIndices = queue_family_indices;
+        create_info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        create_info.queueFamilyIndexCount = 2;
+        create_info.pQueueFamilyIndices = queue_family_indices;
     }
     else {
-        inf.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        inf.queueFamilyIndexCount = 0;      // Optional
-        inf.pQueueFamilyIndices = nullptr;  // Optional
+        create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        create_info.queueFamilyIndexCount = 0;
+        create_info.pQueueFamilyIndices = nullptr;
     }
 
-    inf.preTransform = support.capabilities.currentTransform;
-    inf.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    create_info.preTransform = support.capabilities.currentTransform;
+    create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    create_info.presentMode = present_mode;
+    create_info.clipped = VK_TRUE;
+    create_info.oldSwapchain = old_swapchain;
 
-    inf.presentMode = present_mode;
-    inf.clipped = VK_TRUE;
-
-    inf.oldSwapchain = old_swapchain == nullptr ? VK_NULL_HANDLE : old_swapchain;
-
-    VkSwapchainKHR new_swapchain = VK_NULL_HANDLE;
-    if (vkCreateSwapchainKHR(device, &inf, nullptr, &new_swapchain) != VK_SUCCESS) {
-       debug_t::err("failed to create swap chain!\n");
+    if (vkCreateSwapchainKHR(device, &create_info, nullptr, &data->swapchain) != VK_SUCCESS) {
+        debug_t::err("failed to create swap chain!");
     }
-    data->destroy_swapchain();
-    delete data;
-    data = new swap_data_t();
-    data->swapchain = new_swapchain;
 
-    vkGetSwapchainImagesKHR(device, new_swapchain, &image_count, nullptr);
+    vkGetSwapchainImagesKHR(device, data->swapchain, &image_count, nullptr);
     data->images.resize(image_count);
-    vkGetSwapchainImagesKHR(device, new_swapchain, &image_count, data->images.data());
+    vkGetSwapchainImagesKHR(device, data->swapchain, &image_count, data->images.data());
 
     data->image_format = surface_format.format;
     data->extent = extent;
@@ -154,14 +185,27 @@ void swapchain_t::create_swapchain() {
         view_info.subresourceRange.baseArrayLayer = 0;
         view_info.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(device, &view_info, nullptr, &data->image_views[i]) !=
-            VK_SUCCESS) {
-            debug_t::err("failed to create texture image view!\n");
+        if (vkCreateImageView(device, &view_info, nullptr, &data->image_views[i]) != VK_SUCCESS) {
+            debug_t::err("failed to create texture image view!");
         }
     }
-    
+
+    VkAttachmentDescription color_attachment{};
+    color_attachment.format = data->image_format;
+    color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+    VkAttachmentReference color_attachment_ref{};
+    color_attachment_ref.attachment = 0;
+    color_attachment_ref.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
     VkAttachmentDescription depth_attachment{};
-    depth_attachment.format = depth_format();
+    depth_attachment.format = find_depth_format();
     depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
     depth_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depth_attachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -174,96 +218,73 @@ void swapchain_t::create_swapchain() {
     depth_attachment_ref.attachment = 1;
     depth_attachment_ref.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-    VkAttachmentDescription color_attachment = {};
-    color_attachment.format = data->image_format;
-    color_attachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    color_attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    color_attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    color_attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    color_attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    color_attachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-    VkAttachmentReference colorAttachmentRef = {};
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-    VkSubpassDescription subpass = {};
+    VkSubpassDescription subpass{};
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &colorAttachmentRef;
+    subpass.pColorAttachments = &color_attachment_ref;
     subpass.pDepthStencilAttachment = &depth_attachment_ref;
 
-    VkSubpassDependency dependency = {};
-    dependency.dstSubpass = 0;
-    dependency.dstAccessMask =
-        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-    dependency.dstStageMask =
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    VkSubpassDependency dependency{};
     dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
     dependency.srcAccessMask = 0;
-    dependency.srcStageMask =
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
     std::array<VkAttachmentDescription, 2> attachments = { color_attachment, depth_attachment };
-    VkRenderPassCreateInfo renderpass_info = {};
-    renderpass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderpass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
-    renderpass_info.pAttachments = attachments.data();
-    renderpass_info.subpassCount = 1;
-    renderpass_info.pSubpasses = &subpass;
-    renderpass_info.dependencyCount = 1;
-    renderpass_info.pDependencies = &dependency;
+    VkRenderPassCreateInfo render_pass_info{};
+    render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    render_pass_info.attachmentCount = static_cast<uint32_t>(attachments.size());
+    render_pass_info.pAttachments = attachments.data();
+    render_pass_info.subpassCount = 1;
+    render_pass_info.pSubpasses = &subpass;
+    render_pass_info.dependencyCount = 1;
+    render_pass_info.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(device, &renderpass_info, nullptr, &data->renderpass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(device, &render_pass_info, nullptr, &data->renderpass) != VK_SUCCESS) {
         debug_t::err("failed to create render pass!");
     }
 
     data->depth_format = find_depth_format();
-
     data->depth_images.resize(image_count);
     data->depth_memories.resize(image_count);
-    data->image_views.resize(image_count);
+    data->depth_views.resize(image_count);
 
-    for (int i = 0; i < data->images.size(); i++) {
-        VkImageCreateInfo imageInfo{};
-        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-        imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent.width = extent.width;
-        imageInfo.extent.height = extent.height;
-        imageInfo.extent.depth = 1;
-        imageInfo.mipLevels = 1;
-        imageInfo.arrayLayers = 1;
-        imageInfo.format = data->depth_format;
-        imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-        imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-        imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-        imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        imageInfo.flags = 0;
+    for (size_t i = 0; i < data->depth_images.size(); i++) {
+        VkImageCreateInfo image_info{};
+        image_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        image_info.imageType = VK_IMAGE_TYPE_2D;
+        image_info.extent.width = extent.width;
+        image_info.extent.height = extent.height;
+        image_info.extent.depth = 1;
+        image_info.mipLevels = 1;
+        image_info.arrayLayers = 1;
+        image_info.format = data->depth_format;
+        image_info.tiling = VK_IMAGE_TILING_OPTIMAL;
+        image_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        image_info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        image_info.samples = VK_SAMPLE_COUNT_1_BIT;
+        image_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        image_info.flags = 0;
 
-        device.createImageWithInfo(
-            imageInfo,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            data->depth_images[i],
-            data->depth_memories[i]);
+        quick_image_with_info(device, image_info, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, data->depth_images[i], data->depth_memories[i]);
 
-        VkImageViewCreateInfo viewInfo{};
-        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = depthImages[i];
-        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        viewInfo.format = data->depth_format;
-        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-        viewInfo.subresourceRange.baseMipLevel = 0;
-        viewInfo.subresourceRange.levelCount = 1;
-        viewInfo.subresourceRange.baseArrayLayer = 0;
-        viewInfo.subresourceRange.layerCount = 1;
+        VkImageViewCreateInfo view_info{};
+        view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        view_info.image = data->depth_images[i];
+        view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        view_info.format = data->depth_format;
+        view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+        view_info.subresourceRange.baseMipLevel = 0;
+        view_info.subresourceRange.levelCount = 1;
+        view_info.subresourceRange.baseArrayLayer = 0;
+        view_info.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(device, &viewInfo, nullptr, &data->depth_views[i]) != VK_SUCCESS) {
+        if (vkCreateImageView(device, &view_info, nullptr, &data->depth_views[i]) != VK_SUCCESS) {
             debug_t::err("failed to create texture image view!");
         }
     }
-
 }
 
 

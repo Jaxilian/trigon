@@ -180,8 +180,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.cc" />
-    <ClCompile Include="src\trigon\core\graphics\gpu.cc" />
-    <ClCompile Include="src\trigon\core\graphics\swap.cc" />
+    <ClCompile Include="src\trigon\core\graphics\vdevice.cc" />
+    <ClCompile Include="src\trigon\core\graphics\vimage.cc" />
     <ClCompile Include="src\trigon\core\graphics\win_win32.cc" />
     <ClCompile Include="src\trigon\core\memory\pointer.cc" />
     <ClCompile Include="src\trigon\core\resources\mesh.cc" />
@@ -191,8 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trigon\app.h" />
-    <ClInclude Include="src\trigon\core\graphics\gpu.h" />
-    <ClInclude Include="src\trigon\core\graphics\swap.h" />
+    <ClInclude Include="src\trigon\core\graphics\vdevice.h" />
+    <ClInclude Include="src\trigon\core\graphics\vkimage.h" />
     <ClInclude Include="src\trigon\core\graphics\win.h" />
     <ClInclude Include="src\trigon\core\memory\pointer.h" />
     <ClInclude Include="src\trigon\core\resources\mesh.h" />
@@ -203,7 +203,7 @@
     <ClInclude Include="src\trigon\math\vector2.h" />
     <ClInclude Include="src\trigon\math\vector3.h" />
     <ClInclude Include="src\trigon\math\vector4.h" />
-    <ClInclude Include="ven\headers\vk_swap_supp.h" />
+    <ClInclude Include="src\vulkan\vulkan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

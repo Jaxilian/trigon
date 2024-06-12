@@ -1,6 +1,7 @@
 #pragma once
 
-class gpu_t;
+#include "vdevice.h"
+
 class win_t {
 public:
 
@@ -24,14 +25,14 @@ public:
 private:
     bool    _init();
 
-    int         _posw = 0;
-    int         _posh = 0;
-    int         _width = 800;
-    int         _height = 600;
-    float       _aspect = (800.0f / 600.0f);
-    void*       _handle = nullptr;
-    void*       _surface = nullptr;
-    bool        _closing = false;
-    gpu_t&      _gpu;
-    void*       _swapchain;
+    int          _posw = 0;
+    int          _posh = 0;
+    int          _width = 800;
+    int          _height = 600;
+    float        _aspect = (800.0f / 600.0f);
+    void*        _handle = nullptr;
+    bool         _closing = false;
+    VkSurfaceKHR _surface = nullptr;
+    vdevice_t&   _vdevice;
+    void*        _swapchain;
 };
