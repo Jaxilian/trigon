@@ -1,6 +1,9 @@
 #pragma once
 #include "trigon/core/util/err.h"
-#include "trigon/core/graphics/win.h"
+
+#ifdef _RUNTIME
+#include "trigon/core/vulkan/vkrend.h"
+#endif
 
 struct app_config_t {
 	cstr_t		app_name;
@@ -17,7 +20,10 @@ public:
 	
 	path_t  current_path	= {};
 	path_t  app_path		= {};
-	win_t	main_window		= {};
+	
+#ifdef _RUNTIME
+	vkrend_t& rend;
+#endif
 
 private:
 

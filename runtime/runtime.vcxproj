@@ -90,11 +90,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_RUNTIME;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,9 +113,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_RUNTIME;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -136,11 +136,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_RUNTIME;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,9 +159,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_RUNTIME;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)ven\headers;$(ProjectDir)src\;$(VULKAN_SDK)\Include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -180,30 +180,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.cc" />
-    <ClCompile Include="src\trigon\core\graphics\vdevice.cc" />
-    <ClCompile Include="src\trigon\core\graphics\vimage.cc" />
-    <ClCompile Include="src\trigon\core\graphics\win_win32.cc" />
     <ClCompile Include="src\trigon\core\memory\pointer.cc" />
     <ClCompile Include="src\trigon\core\resources\mesh.cc" />
     <ClCompile Include="src\trigon\core\util\defines.cc" />
     <ClCompile Include="src\trigon\core\util\err.cc" />
+    <ClCompile Include="src\trigon\core\vulkan\vkrend.cc" />
     <ClCompile Include="src\trigon\ecs\entity.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trigon\app.h" />
-    <ClInclude Include="src\trigon\core\graphics\vdevice.h" />
-    <ClInclude Include="src\trigon\core\graphics\vkimage.h" />
-    <ClInclude Include="src\trigon\core\graphics\win.h" />
     <ClInclude Include="src\trigon\core\memory\pointer.h" />
     <ClInclude Include="src\trigon\core\resources\mesh.h" />
     <ClInclude Include="src\trigon\core\util\defines.h" />
     <ClInclude Include="src\trigon\core\util\err.h" />
+    <ClInclude Include="src\trigon\core\vulkan\backend\vkctx.h" />
+    <ClInclude Include="src\trigon\core\vulkan\vkrend.h" />
     <ClInclude Include="src\trigon\ecs\entity.h" />
     <ClInclude Include="src\trigon\math\matrix.h" />
     <ClInclude Include="src\trigon\math\vector2.h" />
     <ClInclude Include="src\trigon\math\vector3.h" />
     <ClInclude Include="src\trigon\math\vector4.h" />
-    <ClInclude Include="src\vulkan\vulkan.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

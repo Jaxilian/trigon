@@ -19,7 +19,7 @@
 
 version_t app_t::engine_version = version_t(1,0,0,0);
 
-app_t::app_t() {
+app_t::app_t()  :rend(vkrend_t::get()){
 	if (!config_added) {
 		debug_t::err("app_t tried to init but a config was never loaded!\n");
 	}
