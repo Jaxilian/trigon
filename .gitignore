@@ -1,0 +1,9 @@
+
+/.vs
+*.vcxproj
+*.user
+/editor/bin
+/editor/obj
+/runtime/bin
+/runtime/obj
+trigon.sln
