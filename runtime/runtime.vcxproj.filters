@@ -37,6 +37,12 @@
     <ClCompile Include="src\trigon\core\graphics\vkdevice.c">
       <Filter>core\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkstate.c">
+      <Filter>core\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkswap.c">
+      <Filter>core\graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\win_win32.c">
       <Filter>core\graphics</Filter>
     </ClCompile>
@@ -49,7 +55,5 @@
     <ClCompile Include="src\trigon\system\rendr.c">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigon\core\graphics\vkswap.c" />
-    <ClCompile Include="src\trigon\core\graphics\vkstate.c" />
   </ItemGroup>
 </Project>

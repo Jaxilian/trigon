@@ -15,8 +15,9 @@ local function linkVulkan()
 end
 
 local function defaultSettings(name, isLib)
-   language "C"
+   language "C++"
    cdialect("C17")
+   cppdialect("C++20")
    targetdir(name .. "/bin/%{cfg.buildcfg}")
    objdir(name .. "/obj/%{cfg.buildcfg}")
    location(name)
