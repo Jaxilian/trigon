@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{4E40957C-3A77-960D-E363-7C10CF79120F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\graphics">
+      <UniqueIdentifier>{6EDCE3F6-DA9C-5F2D-A3D7-A8AA0F57A409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\utils">
+      <UniqueIdentifier>{4ED4EC51-3A8C-2E9F-A393-07FB8F6AC98F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\trigon\app.h" />
+    <ClInclude Include="src\trigon\core\graphics\vkdef.h">
+      <Filter>core\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\graphics\win.h">
+      <Filter>core\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\util.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\debug.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\trigon\app.c" />
+    <ClCompile Include="src\trigon\core\graphics\win_win32.c">
+      <Filter>core\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\utils\util.c" />
+    <ClCompile Include="src\trigon\core\utils\debug.c" />
+  </ItemGroup>
+</Project>

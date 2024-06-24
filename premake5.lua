@@ -6,6 +6,7 @@ local function linkVulkan()
        error("VULKAN_SDK environment variable is not set")
    end
 
+   defines {"_VULKAN_EXPOSED"}
    includedirs {
        vulkan_sdk .. "/Include"
    }
@@ -72,6 +73,9 @@ local function editor()
    project("editor")
    kind("ConsoleApp")
    links {"runtime"}
+   includedirs {
+      "runtime/src"
+   }
    defaultSettings("editor") -- do last!
 end
 
