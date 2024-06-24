@@ -1,5 +1,10 @@
 #ifndef TG_APPLICATION_H
 #define TG_APPLICATION_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "trigon/core/utils/util.h"
 
 typedef struct {
@@ -19,6 +24,10 @@ extern inline cstr_t	app_name();
 extern inline uint32_t	app_version();
 extern inline uint32_t	engine_version();
 extern inline cstr_t	engine_name();
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // !APPLICATION_H

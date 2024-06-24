@@ -1,5 +1,10 @@
 #ifndef TG_WINDOW_H
 #define TG_WINDOW_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "trigon/core/utils/util.h"
 #include "trigon/core/graphics/vkdef.h"
 
@@ -16,6 +21,10 @@ void		win_new(win_t* ptr);
 void		win_upd(win_t* ptr);
 void		win_del(win_t* ptr);
 cstr_t*		win_ext(uint32_t* _extc);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // !TG_WINDOW_H

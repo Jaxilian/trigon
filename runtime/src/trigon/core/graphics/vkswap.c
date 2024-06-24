@@ -131,11 +131,12 @@ static VkFormat fetch_depth_format(vkdevice_t* device) {
         VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }
 
-static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExtent2D extent) {
+static bool create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExtent2D extent) {
     VkSurfaceCapabilitiesKHR capabilities;
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device->physical, device->main_surface, &capabilities);
 
     swapchain->extent = fetch_swap_extent(device, extent);
+    if (swapchain->extent.height == 0 || swapchain->extent.width == 0) return false;
     swapchain->image_format = fetch_surface_format(device->available_formats, device->available_formats_c).format;
 
     uint32_t queue_families[] = {
@@ -189,6 +190,7 @@ static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExt
     vkGetSwapchainImagesKHR(device->device, swapchain->new_swap, &swapchain->image_count, NULL);
     swapchain->images = malloc(sizeof(VkImage) * swapchain->image_count);
     vkGetSwapchainImagesKHR(device->device, swapchain->new_swap, &swapchain->image_count, swapchain->images);
+    return true;
 }
 
 static void create_image_views(vkdevice_t* device, vkswapchain_t* swapchain) {
@@ -453,14 +455,15 @@ static void create_sync_objects(vkdevice_t* device, vkswapchain_t* swapchain) {
     }
 }
 
-void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t extent[2]) {
+void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t width, uint32_t height) {
     if (!device || !device->device) return;
 
-    if (extent[0] <= 0 || extent[1] <= 0) {
-        debug_err("vkl_swapchain_info_t.width/height was smaller or equal to zero! this is not allowed\n");
+    if (width <= 0 || height <= 0) {
+        debug_wrn("vkl_swapchain_info_t.width/height was smaller or equal to zero! this is not allowed\n");
+        return;
     }
     vkDeviceWaitIdle(device->device);
-    create_swapchain(device, swapchain, (VkExtent2D) { extent[0], extent[1] });
+    if(!create_swapchain(device, swapchain, (VkExtent2D) { width, height })) return;
     create_image_views(device, swapchain);
     create_renderpass(device, swapchain);
     create_depth_resource(device, swapchain);

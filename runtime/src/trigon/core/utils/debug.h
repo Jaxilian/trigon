@@ -1,6 +1,10 @@
 #ifndef TG_DEBUG_H
 #define TG_DEBUG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdarg.h>
 #include "util.h"
 
@@ -17,5 +21,10 @@ typedef const char* cstr_t;
 NORETURN void debug_err(cstr_t format, ...);
 void debug_wrn(cstr_t format, ...);
 void debug_log(cstr_t format, ...);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !TG_DEBUG_H

@@ -4,10 +4,7 @@ static rendr_t* handle = NULL;
 static VkResult success = VK_FALSE;
 
 static void on_win_resize() {
-	uint32_t extent[2] = { handle->window.width,handle->window.height };
-
-
-	swapchain_new(&handle->device, &handle->swapchain, extent);
+	swapchain_new(&handle->device, &handle->swapchain, handle->window.width, handle->window.height);
 }
 
 rendr_t* rendr_get() {
@@ -22,8 +19,7 @@ void rendr_new(rendr_t* rendr) {
 	win_new(&rendr->window);
 	vkdevice_new(&rendr->device, rendr->window.surface);
 
-	uint32_t extent[2] = { rendr->window.width,rendr->window.height };
-	swapchain_new(&rendr->device, &rendr->swapchain, extent);
+	swapchain_new(&rendr->device, &rendr->swapchain, handle->window.width, handle->window.height);
 	win_event_resized(on_win_resize);
 	vkstate_new(&rendr->state, &rendr->device, &rendr->swapchain);
 
@@ -31,7 +27,6 @@ void rendr_new(rendr_t* rendr) {
 
 void rendr_upd(rendr_t* rendr) {
 	win_upd(&rendr->window);
-	
 }
 
 void rendr_bgn(rendr_t* rendr) {

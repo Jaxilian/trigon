@@ -28,13 +28,13 @@ void sync_resize(HWND hwnd) {
     win_t* ptr = (win_t*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if (!ptr) return;
     RECT rect;
-    if (GetWindowRect(hwnd, &rect)) {
-        int width = rect.right - rect.left;
-        int height = rect.bottom - rect.top;
-        ptr->width = (uint32_t)width;
-        ptr->height = (uint32_t)height;
+    if (GetClientRect(hwnd, &rect)) {
+        uint32_t width = (uint32_t)(rect.right - rect.left);
+        uint32_t height = (uint32_t)(rect.bottom - rect.top);
+        ptr->width = width;
+        ptr->height = height;
         ptr->aspect = (float)ptr->width / (float)ptr->height;
-        if (resized_cb && !app_quitting()) resized_cb();
+        if (resized_cb && !app_quitting() && width > 0 && height > 0) resized_cb();
     }
 }
 
@@ -43,18 +43,11 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
     case WM_CLOSE:
         app_quit();
         return 0;
-    case WM_SIZE:
-        sync_resize(hwnd);
-        break;
-    case WM_SIZING:
-        sync_resize(hwnd);
-        break;
-    case WM_WINDOWPOSCHANGED:
-        sync_resize(hwnd);
-        break;
     case WM_DWMWINDOWMAXIMIZEDCHANGE:
         sync_resize(hwnd);
         break;
+    case WM_SIZE:
+        sync_resize(hwnd);
     case WM_EXITSIZEMOVE:
         sync_resize(hwnd);
         break;

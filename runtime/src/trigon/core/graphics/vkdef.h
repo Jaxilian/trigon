@@ -1,5 +1,10 @@
 #ifndef TG_VKDEF_H
 #define TG_VKDEF_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 
 #ifdef _VULKAN_EXPOSED
@@ -83,7 +88,7 @@ void vkinstance_del(vkdevice_t* device);
 void vkdevice_new(vkdevice_t* device, VkSurfaceKHR surface);
 void vkdevice_del(vkdevice_t* device);
 
-void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t extent[2]);
+void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t width, uint32_t height);
 void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain);
 
 VkResult		vkstate_next_frame(vkstate_t* state);
@@ -95,5 +100,10 @@ VkResult		vkstate_frame_begin(vkstate_t* state);
 VkResult		vkstate_frame_end(vkstate_t* state);
 void			vkstate_new(vkstate_t* state, vkdevice_t* device, vkswapchain_t* swap);
 void			vkstate_del(vkstate_t* state);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif // !TG_VKDEF_H

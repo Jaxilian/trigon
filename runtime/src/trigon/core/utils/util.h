@@ -1,5 +1,10 @@
 #ifndef TG_UTILS_H
 #define TG_UTILS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <inttypes.h>
 #include <stdbool.h>
 #include "debug.h"
@@ -19,5 +24,10 @@ void version_to_str(const version_t* v, char str[64]);
                            (((uint32_t)((v).major)) << 22U) | \
                            (((uint32_t)((v).minor)) << 12U) | \
                            ((uint32_t)((v).patch)))
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !TG_UTILS_H
