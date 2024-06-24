@@ -10,6 +10,9 @@
     <Filter Include="core\utils">
       <UniqueIdentifier>{4ED4EC51-3A8C-2E9F-A393-07FB8F6AC98F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{8AE4EE1C-7686-19F3-5F41-2D474B82A043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trigon\app.h" />
@@ -19,17 +22,33 @@
     <ClInclude Include="src\trigon\core\graphics\win.h">
       <Filter>core\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\debug.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\core\utils\util.h">
       <Filter>core\utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\trigon\core\utils\debug.h" />
+    <ClInclude Include="src\trigon\system\rendr.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.c" />
+    <ClCompile Include="src\trigon\core\graphics\vkdevice.c">
+      <Filter>core\graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\win_win32.c">
       <Filter>core\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigon\core\utils\util.c" />
-    <ClCompile Include="src\trigon\core\utils\debug.c" />
+    <ClCompile Include="src\trigon\core\utils\debug.c">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\utils\util.c">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\system\rendr.c">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkswap.c" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
 #include "trigon/app.h"
+#include "trigon/system/rendr.h"
 
 #ifdef _DEBUG
 static cstr_t	exts[] = { "VK_KHR_surface","VK_KHR_win32_surface", VK_EXT_DEBUG_UTILS_EXTENSION_NAME };
@@ -14,9 +15,9 @@ static cstr_t	exts[] = { "VK_KHR_surface","VK_KHR_win32_surface" };
 static uint32_t ext_c = 2;
 #endif
 
-uint32_t win_ext(cstr_t* _exts) {
-    _exts = exts;
-    return ext_c;
+cstr_t* win_ext(uint32_t* _extc) {
+    *_extc = ext_c;
+    return exts;
 }
 
 LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -99,8 +100,7 @@ void win_new(win_t* ptr) {
         .hwnd = hwnd
     };
 
-
-    //vkCreateWin32SurfaceKHR(vdevice_t::get().instance, &info, NULL, &_surface);
+    vkCreateWin32SurfaceKHR(rendr_get()->device.instance, &info, NULL, &ptr->surface);
 }
 
 void win_upd(win_t* ptr) {
@@ -114,7 +114,8 @@ void win_upd(win_t* ptr) {
 
 void win_del(win_t* ptr) {
     if (!ptr || !ptr->window_handle) return;
-    //vkDestroySurfaceKHR(_vdevice.instance, (VkSurfaceKHR)_surface, NULL);
+    vkDestroySurfaceKHR(rendr_get()->device.instance, ptr->surface, NULL);
+    ptr->surface = NULL;
 
     DestroyWindow((HWND)ptr->window_handle);
     ptr->window_handle = NULL;

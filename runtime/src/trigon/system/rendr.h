@@ -1,0 +1,18 @@
+#ifndef TG_RENDERER_H
+#define TG_RENDERER_H
+#include "trigon/core/graphics/win.h"
+#include "trigon/core/graphics/vkdef.h"
+
+typedef struct {
+	win_t			window;
+	vkdevice_t		device;
+	vkswapchain_t	swapchain;
+} rendr_t;
+
+void rendr_new(rendr_t* rendr);
+void rendr_upd(rendr_t* rendr);
+void rendr_del(rendr_t* rendr);
+
+rendr_t* rendr_get();
+
+#endif // !TG_RENDERER_H

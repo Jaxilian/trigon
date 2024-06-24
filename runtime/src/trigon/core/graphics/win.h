@@ -14,6 +14,6 @@ typedef struct {
 void		win_new(win_t* ptr);
 void		win_upd(win_t* ptr);
 void		win_del(win_t* ptr);
-uint32_t	win_ext(cstr_t* exts);
+cstr_t*		win_ext(uint32_t* _extc);
 
 #endif // !TG_WINDOW_H

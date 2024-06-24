@@ -14,7 +14,7 @@ local function linkVulkan()
    links { "vulkan-1" }
 end
 
-local function defaultSettings(name)
+local function defaultSettings(name, isLib)
    language "C"
    cdialect("C17")
    targetdir(name .. "/bin/%{cfg.buildcfg}")
@@ -48,6 +48,11 @@ local function defaultSettings(name)
 
 
    filter "configurations:release"
+
+      if not isLib then
+         kind("WindowedApp")
+      end
+
       defines { "_NDEBUG" }
       optimize "On"
       if os.target() == "windows" then
@@ -66,7 +71,7 @@ local function runtime()
    project("runtime")
    kind("StaticLib")
    linkVulkan()
-   defaultSettings("runtime") -- do last!
+   defaultSettings("runtime", true) -- do last!
 end
 
 local function editor()
@@ -76,7 +81,7 @@ local function editor()
    includedirs {
       "runtime/src"
    }
-   defaultSettings("editor") -- do last!
+   defaultSettings("editor", false) -- do last!
 end
 
 

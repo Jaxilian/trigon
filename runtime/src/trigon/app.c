@@ -1,6 +1,6 @@
 #include "app.h"
 #include <stdio.h>
-#include "trigon/core/graphics/win.h"
+#include "trigon/system/rendr.h"
 
 static version_t trigon_version = { 1,0,0,0 };
 static cstr_t	 trigon_name	= "trigon";
@@ -13,7 +13,7 @@ typedef struct {
 	uint32_t app_version;
 	uint32_t eng_version;
 	cstr_t	 app_name;
-	win_t	 window;
+	rendr_t  rendr;
 } tgapp_t;
 
 static tgapp_t app = { 0 };
@@ -42,24 +42,24 @@ void app_load(app_info_t* info) {
 		info->version.patch
 	);
 
-	win_new(&app.window);
+	rendr_new(&app.rendr);
 
 	app.running = true;
 
 	if(app.user_start) app.user_start();
 
 	while (app.running && app.user_update) {
-		win_upd(&app.window);
+		rendr_upd(&app.rendr);
 		app.user_update();
 	}
 
 	if(app.user_quit) app.user_quit();
 
-	win_del(&app.window);
+	rendr_del(&app.rendr);
 }
 
-void		app_quit() {app.running = false;}
-uint32_t	engine_version() {return app.eng_version;}
-cstr_t		engine_name() { return trigon_name; }
-cstr_t		app_name() {return app.app_name;}
-uint32_t	app_version() {return app.app_version;}
+void			app_quit() {app.running = false;}
+inline uint32_t	engine_version() {return app.eng_version;}
+inline cstr_t	engine_name() { return trigon_name; }
+inline cstr_t	app_name() {return app.app_name;}
+inline uint32_t	app_version() {return app.app_version;}

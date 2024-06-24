@@ -15,10 +15,10 @@ void app_quit();
 
 
 
-inline cstr_t	app_name();
-inline uint32_t	app_version();
-inline uint32_t	engine_version();
-inline cstr_t	engine_name();
+extern inline cstr_t	app_name();
+extern inline uint32_t	app_version();
+extern inline uint32_t	engine_version();
+extern inline cstr_t	engine_name();
 
 
 #endif // !APPLICATION_H
