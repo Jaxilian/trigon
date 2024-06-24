@@ -149,7 +149,7 @@ static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExt
     c_info.minImageCount = fetch_image_count(device);
     c_info.imageFormat = swapchain->image_format;
     c_info.imageColorSpace = fetch_surface_format(device->available_formats, device->available_formats_c).colorSpace;
-    c_info.imageExtent = swapchain->extent;  // Use the corrected extent here
+    c_info.imageExtent = swapchain->extent; 
     c_info.imageArrayLayers = 1;
     c_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
@@ -454,6 +454,8 @@ static void create_sync_objects(vkdevice_t* device, vkswapchain_t* swapchain) {
 }
 
 void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t extent[2]) {
+    if (!device || !device->device) return;
+
     if (extent[0] <= 0 || extent[1] <= 0) {
         debug_err("vkl_swapchain_info_t.width/height was smaller or equal to zero! this is not allowed\n");
     }
@@ -508,7 +510,7 @@ void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain) {
     if (swapchain->images_in_flight) {
         for (size_t i = 0; i < swapchain->image_count; i++) {
             if (swapchain->images_in_flight[i] != VK_NULL_HANDLE) {
-                vkDestroyFence(device->device, swapchain->images_in_flight[i], NULL);
+                //vkDestroyFence(device->device, swapchain->images_in_flight[i], NULL);
             }
         }
         free(swapchain->images_in_flight);

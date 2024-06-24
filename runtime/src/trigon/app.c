@@ -50,7 +50,9 @@ void app_load(app_info_t* info) {
 
 	while (app.running && app.user_update) {
 		rendr_upd(&app.rendr);
+		rendr_bgn(&app.rendr);
 		app.user_update();
+		rendr_end(&app.rendr);
 	}
 
 	if(app.user_quit) app.user_quit();
@@ -63,3 +65,4 @@ inline uint32_t	engine_version() {return app.eng_version;}
 inline cstr_t	engine_name() { return trigon_name; }
 inline cstr_t	app_name() {return app.app_name;}
 inline uint32_t	app_version() {return app.app_version;}
+inline bool		app_quitting(){ return !app.running; }

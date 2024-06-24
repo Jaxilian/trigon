@@ -50,5 +50,6 @@
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkswap.c" />
+    <ClCompile Include="src\trigon\core\graphics\vkstate.c" />
   </ItemGroup>
 </Project>

@@ -364,6 +364,20 @@ static void vkl_create_device(vkdevice_t* device) {
     if (vkCreateCommandPool(device->device, &pool_info, NULL, &device->cmd_pool) != VK_SUCCESS) {
         debug_err("failed to create command pool!\n");
     }
+
+    VkCommandBufferAllocateInfo alloc_info = {
+      .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+      .level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+      .commandPool = device->cmd_pool,
+      .commandBufferCount = MAX_FRAMES_IN_FLIGHT
+
+    };
+
+    bool success = false;
+    success = vkAllocateCommandBuffers(device->device, &alloc_info, device->cmd_buffers) == VK_SUCCESS;
+    if (!success) {
+        debug_err("failed to create command buffers!\n");
+    }
 }
 
 void vkdevice_new(vkdevice_t* device, VkSurfaceKHR surface) {

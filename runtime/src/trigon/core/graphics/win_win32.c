@@ -14,28 +14,49 @@ static uint32_t ext_c  = 3;
 static cstr_t	exts[] = { "VK_KHR_surface","VK_KHR_win32_surface" };
 static uint32_t ext_c = 2;
 #endif
+static voidcb_t resized_cb = NULL;
+
+void win_event_resized(voidcb_t cb) { resized_cb = cb; }
 
 cstr_t* win_ext(uint32_t* _extc) {
     *_extc = ext_c;
     return exts;
 }
 
-LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+void sync_resize(HWND hwnd) {
+ 
     win_t* ptr = (win_t*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    if (!ptr) return;
+    RECT rect;
+    if (GetWindowRect(hwnd, &rect)) {
+        int width = rect.right - rect.left;
+        int height = rect.bottom - rect.top;
+        ptr->width = (uint32_t)width;
+        ptr->height = (uint32_t)height;
+        ptr->aspect = (float)ptr->width / (float)ptr->height;
+        if (resized_cb && !app_quitting()) resized_cb();
+    }
+}
 
+LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
     switch (msg) {
     case WM_CLOSE:
         app_quit();
         return 0;
+    case WM_SIZE:
+        sync_resize(hwnd);
+        break;
+    case WM_SIZING:
+        sync_resize(hwnd);
+        break;
+    case WM_WINDOWPOSCHANGED:
+        sync_resize(hwnd);
+        break;
+    case WM_DWMWINDOWMAXIMIZEDCHANGE:
+        sync_resize(hwnd);
+        break;
     case WM_EXITSIZEMOVE:
-        RECT rect;
-        if (GetWindowRect(hwnd, &rect)){
-            int width = rect.right - rect.left;
-            int height = rect.bottom - rect.top;
-            ptr->width  = (uint32_t)width;
-            ptr->height = (uint32_t)height;
-            ptr->aspect = (float)ptr->width / (float)ptr->height;
-        }
+        sync_resize(hwnd);
         break;
     case WM_DESTROY:
         app_quit();

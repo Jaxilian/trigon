@@ -11,9 +11,11 @@ typedef struct {
 	VkSurfaceKHR	surface;
 } win_t;
 
+void		win_event_resized(voidcb_t cb);
 void		win_new(win_t* ptr);
 void		win_upd(win_t* ptr);
 void		win_del(win_t* ptr);
 cstr_t*		win_ext(uint32_t* _extc);
+
 
 #endif // !TG_WINDOW_H
