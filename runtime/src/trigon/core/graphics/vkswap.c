@@ -18,8 +18,7 @@ static VkFormat format_supported(
         if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
             return  candidates[i];
         }
-        else if (
-            tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+        else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
             return  candidates[i];
         }
     }
@@ -32,8 +31,7 @@ static uint32_t get_memory_type(VkPhysicalDevice device, uint32_t type, VkMemory
     VkPhysicalDeviceMemoryProperties mem_prop;
     vkGetPhysicalDeviceMemoryProperties(device, &mem_prop);
     for (uint32_t i = 0; i < mem_prop.memoryTypeCount; i++) {
-        if ((type & (1 << i)) &&
-            (mem_prop.memoryTypes[i].propertyFlags & properties) == properties) {
+        if ((type & (1 << i)) && (mem_prop.memoryTypes[i].propertyFlags & properties) == properties) {
             return i;
         }
     }
@@ -47,8 +45,8 @@ static void create_depth_image_with_info(
     const VkImageCreateInfo* info,
     VkMemoryPropertyFlags properties,
     VkImage* image,
-    VkDeviceMemory* image_memory)
-{
+    VkDeviceMemory* image_memory) {
+
     bool success = vkCreateImage(device->device, info, NULL, image) == VK_SUCCESS;
     if (!success) {
         debug_err("failed to create image!\n");
@@ -72,7 +70,6 @@ static void create_depth_image_with_info(
     if (!success) {
         debug_err("failed to bind image memory!");
     }
-
 }
 
 static VkSurfaceFormatKHR fetch_surface_format(VkSurfaceFormatKHR* available, uint32_t count) {
@@ -88,34 +85,25 @@ static VkSurfaceFormatKHR fetch_surface_format(VkSurfaceFormatKHR* available, ui
 static VkExtent2D fetch_swap_extent(vkdevice_t* device, VkExtent2D extent) {
     VkSurfaceCapabilitiesKHR capabilities;
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device->physical, device->main_surface, &capabilities);
+
     if (capabilities.currentExtent.width != UINT32_MAX) {
         return capabilities.currentExtent;
     }
     else {
-        VkExtent2D extents = extent;
-        extents.width = (capabilities.minImageExtent.width > extents.width) ? capabilities.minImageExtent.width :
-            ((capabilities.maxImageExtent.width < extents.width) ? capabilities.maxImageExtent.width : extents.width);
-
-        extents.height = (capabilities.minImageExtent.height > extents.height) ? capabilities.minImageExtent.height :
-            ((capabilities.maxImageExtent.height < extents.height) ? capabilities.maxImageExtent.height : extents.height);
-
-        return extents;
+        extent.width = (extent.width < capabilities.minImageExtent.width) ? capabilities.minImageExtent.width :
+            (extent.width > capabilities.maxImageExtent.width) ? capabilities.maxImageExtent.width : extent.width;
+        extent.height = (extent.height < capabilities.minImageExtent.height) ? capabilities.minImageExtent.height :
+            (extent.height > capabilities.maxImageExtent.height) ? capabilities.maxImageExtent.height : extent.height;
+        return extent;
     }
 }
 
 static uint32_t fetch_image_count(vkdevice_t* device) {
-
     VkSurfaceCapabilitiesKHR capabilities;
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-        device->physical,
-        device->main_surface,
-        &capabilities
-    );
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device->physical, device->main_surface, &capabilities);
 
-    uint32_t image_count = 0;
-    image_count = capabilities.minImageCount + 1;
-    if (capabilities.maxImageCount > 0 &&
-        image_count > capabilities.maxImageCount) {
+    uint32_t image_count = capabilities.minImageCount + 1;
+    if (capabilities.maxImageCount > 0 && image_count > capabilities.maxImageCount) {
         image_count = capabilities.maxImageCount;
     }
     return image_count;
@@ -144,19 +132,11 @@ static VkFormat fetch_depth_format(vkdevice_t* device) {
 }
 
 static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExtent2D extent) {
+    VkSurfaceCapabilitiesKHR capabilities;
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device->physical, device->main_surface, &capabilities);
 
     swapchain->extent = fetch_swap_extent(device, extent);
-    swapchain->image_format = fetch_surface_format(
-        device->available_formats,
-        device->available_formats_c
-    ).format;
-
-    VkSurfaceCapabilitiesKHR capabilities;
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-        device->physical,
-        device->main_surface,
-        &capabilities
-    );
+    swapchain->image_format = fetch_surface_format(device->available_formats, device->available_formats_c).format;
 
     uint32_t queue_families[] = {
         device->graphics_family,
@@ -169,7 +149,7 @@ static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExt
     c_info.minImageCount = fetch_image_count(device);
     c_info.imageFormat = swapchain->image_format;
     c_info.imageColorSpace = fetch_surface_format(device->available_formats, device->available_formats_c).colorSpace;
-    c_info.imageExtent = extent;
+    c_info.imageExtent = swapchain->extent;  // Use the corrected extent here
     c_info.imageArrayLayers = 1;
     c_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
@@ -188,7 +168,6 @@ static void create_swapchain(vkdevice_t* device, vkswapchain_t* swapchain, VkExt
     c_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     c_info.presentMode = fetch_present_mode(device->available_present_modes, device->available_present_modes_c);
     c_info.clipped = VK_TRUE;
-
     c_info.oldSwapchain = swapchain->old_swap;
 
     bool success = (vkCreateSwapchainKHR(device->device, &c_info, NULL, &swapchain->new_swap) == VK_SUCCESS);
@@ -238,8 +217,7 @@ static void create_image_views(vkdevice_t* device, vkswapchain_t* swapchain) {
         view_inf.subresourceRange.baseArrayLayer = 0;
         view_inf.subresourceRange.layerCount = 1;
 
-        bool success = false;
-        success = vkCreateImageView(device->device, &view_inf, NULL, &swapchain->image_views[i]) == VK_SUCCESS;
+        bool success = vkCreateImageView(device->device, &view_inf, NULL, &swapchain->image_views[i]) == VK_SUCCESS;
         if (!success) {
             debug_err("failed to create image views for swapchain\n");
         }
@@ -293,14 +271,11 @@ static void create_renderpass(vkdevice_t* device, vkswapchain_t* swapchain) {
 
     VkSubpassDependency dependency = {
         .dstSubpass = 0,
-        .dstAccessMask =
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-        .dstStageMask =
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+        .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+        .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
         .srcSubpass = VK_SUBPASS_EXTERNAL,
         .srcAccessMask = 0,
-        .srcStageMask =
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+        .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
     };
 
     VkAttachmentDescription attachments[] = {
@@ -318,8 +293,7 @@ static void create_renderpass(vkdevice_t* device, vkswapchain_t* swapchain) {
         .pDependencies = &dependency
     };
 
-    bool success = false;
-    success = vkCreateRenderPass(device->device, &renderpass_info, NULL, &swapchain->renderpass) == VK_SUCCESS;
+    bool success = vkCreateRenderPass(device->device, &renderpass_info, NULL, &swapchain->renderpass) == VK_SUCCESS;
     if (!success) {
         debug_err("failed to create render pass\n");
     }
@@ -331,7 +305,6 @@ static void create_depth_resource(vkdevice_t* device, vkswapchain_t* swapchain) 
             vkDestroyImageView(device->device, swapchain->depth_views[i], NULL);
             vkDestroyImage(device->device, swapchain->depth_images[i], NULL);
             vkFreeMemory(device->device, swapchain->depth_memories[i], NULL);
-
         }
         free(swapchain->depth_memories);
         free(swapchain->depth_views);
@@ -377,8 +350,6 @@ static void create_depth_resource(vkdevice_t* device, vkswapchain_t* swapchain) 
             .flags = 0
         };
 
-        
-
         create_depth_image_with_info(
             device,
             &image_info,
@@ -386,7 +357,6 @@ static void create_depth_resource(vkdevice_t* device, vkswapchain_t* swapchain) 
             &swapchain->depth_images[i],
             &swapchain->depth_memories[i]
         );
-        
 
         VkImageViewCreateInfo view_info = {
             .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
@@ -400,20 +370,11 @@ static void create_depth_resource(vkdevice_t* device, vkswapchain_t* swapchain) 
             .subresourceRange.layerCount = 1
         };
 
-        bool success = false;
-        success = vkCreateImageView(
-            device->device,
-            &view_info,
-            NULL,
-            &swapchain->depth_views[i]
-        ) == VK_SUCCESS;
-
+        bool success = vkCreateImageView(device->device, &view_info, NULL, &swapchain->depth_views[i]) == VK_SUCCESS;
         if (!success) {
             debug_err("failed to create swapchain depth images!\n");
         }
-
     }
-
 }
 
 static void create_framebuffers(vkdevice_t* device, vkswapchain_t* swapchain) {
@@ -443,11 +404,7 @@ static void create_framebuffers(vkdevice_t* device, vkswapchain_t* swapchain) {
             .layers = 1
         };
 
-        bool success = vkCreateFramebuffer(
-            device->device,
-            &framebuffer_info,
-            NULL,
-            &swapchain->framebuffers[i]) == VK_SUCCESS;
+        bool success = vkCreateFramebuffer(device->device, &framebuffer_info, NULL, &swapchain->framebuffers[i]) == VK_SUCCESS;
         if (!success) {
             debug_err("failed to create swapchain framebuffers\n");
         }
@@ -478,7 +435,6 @@ static void create_sync_objects(vkdevice_t* device, vkswapchain_t* swapchain) {
 
     VkSemaphoreCreateInfo semaphore_info = {
         .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO
-
     };
 
     VkFenceCreateInfo fence_info = {
@@ -487,10 +443,8 @@ static void create_sync_objects(vkdevice_t* device, vkswapchain_t* swapchain) {
     };
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        bool success = vkCreateSemaphore(device->device, &semaphore_info, NULL, &swapchain->available_semaphores[i]) !=
-            VK_SUCCESS ||
-            vkCreateSemaphore(device->device, &semaphore_info, NULL, &swapchain->finished_semaphores[i]) !=
-            VK_SUCCESS ||
+        bool success = vkCreateSemaphore(device->device, &semaphore_info, NULL, &swapchain->available_semaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(device->device, &semaphore_info, NULL, &swapchain->finished_semaphores[i]) != VK_SUCCESS ||
             vkCreateFence(device->device, &fence_info, NULL, &swapchain->in_flight_fences[i]) == VK_SUCCESS;
 
         if (!success) {
@@ -531,7 +485,6 @@ void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain) {
             vkDestroyImageView(device->device, swapchain->depth_views[i], NULL);
             vkDestroyImage(device->device, swapchain->depth_images[i], NULL);
             vkFreeMemory(device->device, swapchain->depth_memories[i], NULL);
-
         }
         free(swapchain->depth_memories);
         free(swapchain->depth_views);
