@@ -41,7 +41,7 @@ void rendr_end(rendr_t* rendr) {
 
 void rendr_del(rendr_t* rendr) {
 	vkDeviceWaitIdle(rendr->device.device);
-	vkstate_del(&rendr->state, &rendr->device, &rendr->swapchain);
+	vkstate_del(&rendr->state);
 	swapchain_del(&rendr->device, &rendr->swapchain);
 	vkdevice_del(&rendr->device);
 	win_del(&rendr->window);

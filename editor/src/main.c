@@ -1,8 +1,8 @@
 #include "trigon/app.h"
+#include "trigon/types/sprite.h"
 
 void engine_start() {
-
-
+    sprite_t* sprite = sprite_new(1,2);
 }
 
 void engine_update() {

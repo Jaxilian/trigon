@@ -31,6 +31,9 @@
     <ClInclude Include="src\trigon\system\rendr.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\sha256.h" />
+    <ClInclude Include="src\trigon\core\utils\guid.h" />
+    <ClInclude Include="src\trigon\types\sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.c" />
@@ -55,5 +58,8 @@
     <ClCompile Include="src\trigon\system\rendr.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\core\utils\sha256.c" />
+    <ClCompile Include="src\trigon\core\utils\guid.c" />
+    <ClCompile Include="src\trigon\types\sprite.c" />
   </ItemGroup>
 </Project>
