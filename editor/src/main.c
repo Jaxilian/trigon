@@ -1,29 +1,7 @@
-#include "trigon/app.h"
-#include "trigon/types/sprite.h"
-
-void engine_start() {
-    sprite_t* sprite = sprite_new(1,2);
-}
-
-void engine_update() {
-
-}
-
-void engine_quit() {
-
-}
 
 
 int app_main() {
-    app_info_t info = {
-      .version = {1,0,0,0},
-      .name = "engine",
-      .on_start = engine_start,
-      .on_update = engine_update,
-      .on_quit = engine_quit
-    };
-
-    app_load(&info);
+  
     return 0;
 }
 
