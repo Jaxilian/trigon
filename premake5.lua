@@ -21,7 +21,13 @@ local function defaultSettings(name, isLib)
    targetdir(name .. "/bin/%{cfg.buildcfg}")
    objdir(name .. "/obj/%{cfg.buildcfg}")
    location(name)
-   files { name .. "/src/**.h", name .. "/src/**.c" }
+   files { 
+      name .. "/src/**.h",
+      name .. "/src/**.c",
+      name .. "/src/**.hpp",
+      name .. "/src/**.cc" ,
+      name .. "/src/**.cpp",
+      }
    includedirs {
       name .. "/src"
   }
@@ -29,6 +35,7 @@ local function defaultSettings(name, isLib)
 
    if os.target() == "windows" then
       defines { "_WIN32" } 
+      buildoptions { "/wd4996", "/WX-" }
    elseif os.target() == "linux" then
       defines { "_LINUX" } 
    elseif os.target() == "macosx" then
@@ -57,6 +64,7 @@ local function defaultSettings(name, isLib)
       defines { "_NDEBUG" }
       optimize "On"
       if os.target() == "windows" then
+         
          buildoptions { "/O2", "/GL" } 
          linkoptions { "/LTCG" }     
      elseif os.target() == "linux" then
@@ -94,6 +102,4 @@ workspace "trigon"
    runtime()
    editor()
 
-filter "action:vs*"
-   defines { "VISUAL_STUDIO" }
-   buildoptions { "/wd4996" }
+
