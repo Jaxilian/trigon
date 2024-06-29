@@ -29,6 +29,9 @@ typedef void* VkFramebuffer;
 typedef void* VkSemaphore;
 typedef void* VkFence;
 typedef void* VkPresentModeKHR;
+typedef void* VkShaderModule;
+typedef void* VkPipelineLayout;
+typedef void* VkPipeline;
 #endif
 #define MAX_FRAMES_IN_FLIGHT 2
 
@@ -83,13 +86,17 @@ typedef struct {
 	bool				frame_in_progress;
 } vkstate_t;
 
+
 void vkinstance_new(vkdevice_t* device);
 void vkinstance_del(vkdevice_t* device);
+
 void vkdevice_new(vkdevice_t* device, VkSurfaceKHR surface);
 void vkdevice_del(vkdevice_t* device);
 
 void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t width, uint32_t height);
 void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain);
+
+
 
 VkResult		vkstate_next_frame(vkstate_t* state);
 VkCommandBuffer vkstate_command_buffer(vkstate_t* state);

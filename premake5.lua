@@ -1,4 +1,8 @@
 
+local function compileShaders()
+
+end
+
 local function linkVulkan()
    local vulkan_sdk = os.getenv("VULKAN_SDK")
 
@@ -26,13 +30,14 @@ local function defaultSettings(name, isLib)
       name .. "/src"
   }
 
-
+   disablewarnings{4996}
+   
    if os.target() == "windows" then
       defines { "_WIN32" } 
    elseif os.target() == "linux" then
-      defines { "_LINUX" } 
+      defines { "_LINUX", "_UNIX" } 
    elseif os.target() == "macosx" then
-      defines { "_MACOSX" } 
+      defines { "_MACOSX", "_UNIX" } 
    end
 
 

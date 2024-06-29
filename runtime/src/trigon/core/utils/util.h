@@ -18,6 +18,10 @@ typedef struct  {
 	uint32_t patch;
 } version_t;
 
+
+bool cstr_to_wchar(const char* str, wchar_t* wchar);
+bool wchar_to_cstr(const wchar_t* wchar, char* str);
+bool string_split(const char* in, const char* delimiter, char** out, int out_len);
 void version_to_str(const version_t* v, char str[64]);
 
 #define version_to_int(v) ((((uint32_t)((v).version)) << 29U) | \

@@ -10,8 +10,17 @@
     <Filter Include="core\utils">
       <UniqueIdentifier>{4ED4EC51-3A8C-2E9F-A393-07FB8F6AC98F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\vfs">
+      <UniqueIdentifier>{AC80D44A-984D-2F56-C166-1DFEAD9264E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{0F45D591-7B24-542D-843C-DF03F09ABA8E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="system">
       <UniqueIdentifier>{8AE4EE1C-7686-19F3-5F41-2D474B82A043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="types">
+      <UniqueIdentifier>{5A5E7610-C672-9EC1-8FF4-4121FBC79AF2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,15 +34,27 @@
     <ClInclude Include="src\trigon\core\utils\debug.h">
       <Filter>core\utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\guid.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\utils\sha256.h">
+      <Filter>core\utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\core\utils\util.h">
       <Filter>core\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\vfs\vfs.h">
+      <Filter>core\vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\shaders\shader.h">
+      <Filter>shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\system\rendr.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="src\trigon\core\utils\sha256.h" />
-    <ClInclude Include="src\trigon\core\utils\guid.h" />
-    <ClInclude Include="src\trigon\types\sprite.h" />
+    <ClInclude Include="src\trigon\types\sprite.h">
+      <Filter>types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.c" />
@@ -52,14 +73,29 @@
     <ClCompile Include="src\trigon\core\utils\debug.c">
       <Filter>core\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\core\utils\guid.c">
+      <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\utils\sha256.c">
+      <Filter>core\utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\trigon\core\utils\util.c">
       <Filter>core\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\vfs\vfs_unix.c">
+      <Filter>core\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\vfs\vfs_win32.c">
+      <Filter>core\vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\shaders\shader.c">
+      <Filter>shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\system\rendr.c">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigon\core\utils\sha256.c" />
-    <ClCompile Include="src\trigon\core\utils\guid.c" />
-    <ClCompile Include="src\trigon\types\sprite.c" />
+    <ClCompile Include="src\trigon\types\sprite.c">
+      <Filter>types</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

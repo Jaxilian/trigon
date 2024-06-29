@@ -67,6 +67,9 @@ void win_new(win_t* ptr) {
     WNDCLASSEXW wc = {0};
     HWND hwnd;
 
+    wchar_t buffer[260] = { 0 };
+    cstr_to_wchar(app_name(), buffer);
+
     wc.cbSize = sizeof(WNDCLASSEXW);
     wc.style = 0;
     wc.lpfnWndProc = wnd_proc;
@@ -88,7 +91,7 @@ void win_new(win_t* ptr) {
     hwnd = CreateWindowExW(
         WS_EX_CLIENTEDGE,
         wc.lpszClassName,
-        L"window",
+        buffer,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
         NULL, NULL, hinstance, NULL
