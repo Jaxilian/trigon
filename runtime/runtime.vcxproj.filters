@@ -103,5 +103,12 @@
     <ClCompile Include="src\trigon\mesh\mesh.c" />
     <ClCompile Include="src\trigon\core\math\tgmath.c" />
     <ClCompile Include="src\trigon\core\math\mat4_avx.c" />
+    <ClCompile Include="src\trigon\core\math\mat4_sse.c" />
+    <ClCompile Include="src\trigon\core\math\vec3_avx.c" />
+    <ClCompile Include="src\trigon\core\math\vec2_avx.c" />
+    <ClCompile Include="src\trigon\core\math\vec4_avx.c" />
+    <ClCompile Include="src\trigon\core\math\vec2_sse.c" />
+    <ClCompile Include="src\trigon\core\math\vec3_sse.c" />
+    <ClCompile Include="src\trigon\core\math\vec4_sse.c" />
   </ItemGroup>
 </Project>

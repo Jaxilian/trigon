@@ -23,6 +23,7 @@ void _tgmath_init() {
         mat4_mul = _avxmat4_mul;
     }
     else {
+        mat4_mul = _ssemat4_mul;
       
     }
 }

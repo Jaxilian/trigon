@@ -6,7 +6,7 @@ void engine_start() {
     mat4_t mat2 = mat4_identity;
     mat4_t mat3 = mat4_identity;
 
-
+    mat4_mul(mat1, mat2, mat3);
 
 }
 
