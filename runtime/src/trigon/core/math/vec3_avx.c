@@ -219,18 +219,55 @@ void _avxvec3_sqrt(vec3_t r, const vec3_t v) {
 
 void _avxvec3_transform(vec3_t r, const vec3_t v, const mat4_t m) {
     __m128 vv = _load_vec3(v);
-    __m128 mv0 = _mm_loadu_ps(&m[0]); 
-    __m128 mv1 = _mm_loadu_ps(&m[4]); 
-    __m128 mv2 = _mm_loadu_ps(&m[8]); 
-    __m128 mv3 = _mm_loadu_ps(&m[12]);
+    __m128 mv0 = _mm_loadu_ps(&m[0]);  // First column
+    __m128 mv1 = _mm_loadu_ps(&m[4]);  // Second column
+    __m128 mv2 = _mm_loadu_ps(&m[8]);  // Third column
+    __m128 mv3 = _mm_loadu_ps(&m[12]); // Fourth column
 
     __m128 res = _mm_add_ps(
         _mm_add_ps(
-            _mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(0, 0, 0, 0)), mv0),
-            _mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(1, 1, 1, 1)), mv1)),
-        _mm_add_ps(
-            _mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(2, 2, 2, 2)), mv2),
-            mv3));
+            _mm_add_ps(_mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(0, 0, 0, 0)), mv0),
+                _mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(1, 1, 1, 1)), mv1)),
+            _mm_mul_ps(_mm_shuffle_ps(vv, vv, _MM_SHUFFLE(2, 2, 2, 2)), mv2)),
+        mv3);
 
     _store_vec3(r, res);
+}
+
+float _avxvec3_distance_squared(const vec3_t a, const vec3_t b) {
+    __m128 av = _load_vec3(a);
+    __m128 bv = _load_vec3(b);
+    __m128 diff = _mm_sub_ps(av, bv);
+    __m128 sq_diff = _mm_mul_ps(diff, diff);
+    __m128 shuf = _mm_movehdup_ps(sq_diff);
+    __m128 sums = _mm_add_ps(sq_diff, shuf);
+    shuf = _mm_movehl_ps(shuf, sums);
+    sums = _mm_add_ss(sums, shuf);
+    float result;
+    _mm_store_ss(&result, sums);
+    return result;
+}
+
+void _avxvec3_rotate(vec3_t r, const vec3_t v, const vec3_t axis, float angle) {
+    float cos_theta = cosf(angle);
+    float sin_theta = sinf(angle);
+    float dot_va = _avxvec3_dot(v, axis);
+    vec3_t temp;
+    _avxvec3_scalar_mul(temp, axis, dot_va * (1 - cos_theta));
+    __m128 temp_v = _load_vec3(temp);
+    __m128 v_v = _load_vec3(v);
+    __m128 axis_v = _load_vec3(axis);
+
+    __m128 axis_yzx = _mm_shuffle_ps(axis_v, axis_v, _MM_SHUFFLE(3, 0, 2, 1));
+    __m128 axis_zxy = _mm_shuffle_ps(axis_v, axis_v, _MM_SHUFFLE(3, 1, 0, 2));
+    __m128 v_yzx = _mm_shuffle_ps(v_v, v_v, _MM_SHUFFLE(3, 0, 2, 1));
+    __m128 v_zxy = _mm_shuffle_ps(v_v, v_v, _MM_SHUFFLE(3, 1, 0, 2));
+    __m128 cross_product = _mm_sub_ps(_mm_mul_ps(axis_yzx, v_zxy), _mm_mul_ps(axis_zxy, v_yzx));
+
+    __m128 rotated_v = _mm_add_ps(
+        _mm_add_ps(_mm_mul_ps(v_v, _mm_set1_ps(cos_theta)), _mm_mul_ps(cross_product, _mm_set1_ps(sin_theta))),
+        temp_v
+    );
+
+    _store_vec3(r, rotated_v);
 }

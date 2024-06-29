@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#define PI 3.14159265358979323846
+
 #define mat4_identity {1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f}
 
 typedef float vec4_t[4];
@@ -40,6 +42,9 @@ void _avxvec3_max(vec3_t r, const vec3_t a, const vec3_t b);
 void _avxvec3_clamp(vec3_t r, const vec3_t v, const vec3_t min, const vec3_t max);
 void _avxvec3_abs(vec3_t r, const vec3_t v);
 void _avxvec3_sqrt(vec3_t r, const vec3_t v);
+void _avxvec3_transform(vec3_t r, const vec3_t v, const mat4_t m);
+float _avxvec3_distance_squared(const vec3_t a, const vec3_t b);
+void _avxvec3_rotate(vec3_t r, const vec3_t v, const vec3_t axis, float angle);
 
 void _avxvec2_mul(vec3_t r, const vec3_t a, const vec3_t b);
 void _avxvec4_mul(vec3_t r, const vec3_t a, const vec3_t b);
