@@ -1,4 +1,5 @@
 #include "vkdef.h"
+#include "trigon/mesh/mesh.h"
 
 #define default_dynamic_state_enable_count 2
 static const VkDynamicState default_dynamic_states_enables[] = {
@@ -46,7 +47,31 @@ static const VkVertexInputAttributeDescription vertex3_attributes[vertex3_attrib
     }
 };
 
-void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config) {
+static const VkVertexInputBindingDescription vertex2_binding[vertex2_binding_count] = {
+    {
+    .binding = 0,
+    .stride = sizeof(vertex2_t),
+    .inputRate = VK_VERTEX_INPUT_RATE_VERTEX
+    }
+};
+
+static const VkVertexInputAttributeDescription vertex2_attributes[vertex2_attribute_count] = {
+    {
+        .binding = 0,
+        .location = 0,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
+        .offset = offsetof(vertex2_t, position)
+    },
+    {
+        .binding = 0,
+        .location = 1,
+        .format = VK_FORMAT_R32G32_SFLOAT,
+        .offset = offsetof(vertex2_t, uv)
+    }
+};
+
+
+void vkpipeline_conf_default(vkpipeline_conf_t* config) {
     config->input_assembly = (VkPipelineInputAssemblyStateCreateInfo){
         .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
         .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
@@ -115,7 +140,7 @@ void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config) {
     };
 
     
-    if (config->use_for_3D) {
+    if (config->use3D) {
         config->vertex_attribute_count = vertex3_attribute_count;
         config->vertex_binding_count = vertex3_binding_count;
         config->vertex_attribute = (VkVertexInputAttributeDescription*)vertex3_attributes;

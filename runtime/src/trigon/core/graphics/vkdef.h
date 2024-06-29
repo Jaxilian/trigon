@@ -86,6 +86,26 @@ typedef struct {
 	bool				frame_in_progress;
 } vkstate_t;
 
+#ifdef _VULKAN_EXPOSED
+typedef struct {
+	VkPipelineViewportStateCreateInfo		viewport;
+	VkPipelineInputAssemblyStateCreateInfo	input_assembly;
+	VkPipelineRasterizationStateCreateInfo	rasterization;
+	VkPipelineMultisampleStateCreateInfo	multisample;
+	VkPipelineColorBlendAttachmentState		color_blend_attachment;
+	VkPipelineColorBlendStateCreateInfo		color_blend_state;
+	VkPipelineDepthStencilStateCreateInfo	depth_stencil;
+	VkPipelineDynamicStateCreateInfo		dynamic_state;
+	VkVertexInputBindingDescription*		vertex_binding;
+	VkVertexInputAttributeDescription*		vertex_attribute;
+	uint32_t								subpass;
+	uint32_t								vertex_binding_count;
+	uint32_t								vertex_attribute_count;
+	bool									use3D;
+} vkpipeline_conf_t;
+
+void vkpipeline_conf_default(vkpipeline_conf_t* conf);
+#endif
 
 void vkinstance_new(vkdevice_t* device);
 void vkinstance_del(vkdevice_t* device);

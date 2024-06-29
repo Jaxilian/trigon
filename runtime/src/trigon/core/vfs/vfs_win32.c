@@ -10,7 +10,7 @@
 #define UNIX_PATH_END_STD '/'
 
 static void convert_winstd(vpath_t path) {
-	uint32_t len = strlen(path);
+	uint32_t len = (uint32_t)strlen(path);
 	for (uint32_t i = 0; i < len; i++) {
 		if (path[i] == UNIX_PATH_END_STD) {
 			path[i] = WIN_PATH_END_STD;
@@ -21,10 +21,10 @@ static void convert_winstd(vpath_t path) {
 static void validate_path(vpath_t path) {
 	convert_winstd(path);
 
-	uint32_t parent_length = strlen(path);
+	uint32_t parent_length = (uint32_t)strlen(path);
 	char lastchar = path[parent_length - 1];
 	if (lastchar != WIN_PATH_END_STD && lastchar != UNIX_PATH_END_STD) {
-		strcat(path, WIN_PATH_END_STD);
+		strcat(path, (const char*)WIN_PATH_END_STD);
 	}
 }
 

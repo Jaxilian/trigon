@@ -1,19 +1,17 @@
 #ifndef TG_MESH_H
 #define TG_MESH_H
-
-typedef float vec3[3];
-typedef float vec2[2];
+#include "trigon/math/tgmath.h"
 
 typedef struct {
-	vec3 position;
-	vec3 normal;
-	vec3 color;
-	vec2 uv;
+	vec3_t position;
+	vec3_t normal;
+	vec3_t color;
+	vec2_t uv;
 } vertex3_t;
 
 typedef struct {
-	vec3 position;
-	vec2 uv;
+	vec3_t position;
+	vec2_t uv;
 } vertex2_t;
 
 #endif

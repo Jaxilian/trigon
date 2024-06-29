@@ -1,6 +1,7 @@
 #include "app.h"
 #include <stdio.h>
 #include "trigon/system/rendr.h"
+#include "trigon/math/tgmath.h"
 
 static version_t trigon_version = { 1,0,0,0 };
 static cstr_t	 trigon_name	= "trigon";
@@ -19,6 +20,8 @@ typedef struct {
 static tgapp_t app = { 0 };
 
 void app_load(app_info_t* info) {
+	_tgmath_init(); 
+
 	app.user_start	= info->on_start;
 	app.user_update = info->on_update;
 	app.user_quit	= info->on_quit;
