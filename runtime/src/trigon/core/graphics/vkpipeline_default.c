@@ -73,6 +73,7 @@ void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config) {
         .dynamicStateCount = default_dynamic_state_enable_count
     };
 
+    /*
     if (config->use_for_3D) {
         config->vertex_attribute_count = vertex3_attribute_count;
         config->vertex_binding_count = vertex3_binding_count;
@@ -87,5 +88,6 @@ void vkl_pipeline_config_set_default(vkl_pipeline_config_t* config) {
         config->vertex_binding = (VkVertexInputBindingDescription*)vertex2_binding;
         config->subpass = 0;
     }
+    */
 
 }
