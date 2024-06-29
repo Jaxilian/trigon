@@ -2,6 +2,11 @@
 #include "trigon/core/math/tgmath.h"
 
 void engine_start() {
+    mat4_t mat1 = mat4_identity;
+    mat4_t mat2 = mat4_identity;
+    mat4_t mat3 = mat4_identity;
+
+
 
 }
 

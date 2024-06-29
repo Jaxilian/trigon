@@ -102,5 +102,6 @@
     <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c" />
     <ClCompile Include="src\trigon\mesh\mesh.c" />
     <ClCompile Include="src\trigon\core\math\tgmath.c" />
+    <ClCompile Include="src\trigon\core\math\mat4_avx.c" />
   </ItemGroup>
 </Project>

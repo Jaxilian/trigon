@@ -3,13 +3,19 @@
 
 #include <stdbool.h>
 
+#define mat4_identity {1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f}
+
 typedef float vec4_t[4];
 typedef float vec3_t[3];
 typedef float vec2_t[2];
 typedef float mat4_t[16];
 
-void _tgmath_init(); // super important to call before math
+typedef void (*mat4_mul_ptr)(mat4_t r, const mat4_t a, const mat4_t b);
 
+extern mat4_mul_ptr mat4_mul;
+
+void _avxmat4_mul(mat4_t r, const mat4_t a, const mat4_t b);
+void _tgmath_init(); // super important to call before math
 bool _avx_supported();
 
-#endif // !TG_MATH_H
+#endif // TG_MATH_H
