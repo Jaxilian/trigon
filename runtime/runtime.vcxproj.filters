@@ -55,6 +55,7 @@
     <ClInclude Include="src\trigon\types\sprite.h">
       <Filter>types</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\mesh\mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.c" />
@@ -97,5 +98,7 @@
     <ClCompile Include="src\trigon\types\sprite.c">
       <Filter>types</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c" />
+    <ClCompile Include="src\trigon\mesh\mesh.c" />
   </ItemGroup>
 </Project>
