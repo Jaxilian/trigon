@@ -1,6 +1,6 @@
 #ifndef TG_MESH_H
 #define TG_MESH_H
-#include "trigon/math/tgmath.h"
+#include "trigon/core/math/tgmath.h"
 
 typedef struct {
 	vec3_t position;

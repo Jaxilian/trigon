@@ -1,14 +1,7 @@
 #include "trigon/app.h"
-#include "trigon/shaders/shader.h"
-#include "trigon/core/vfs/vfs.h"
+#include "trigon/core/math/tgmath.h"
 
 void engine_start() {
-    //shader_new();
-    //shader_compile();
-
-    vpath_t path = { 0 };
-    vfs_init("C:/projects/", path);
-    vfs_create(path, "example.txt", VFS_TYPE_FILE);
 
 }
 
@@ -18,7 +11,7 @@ void engine_update() {
 }
 
 void engine_quit() {
-    //shader_del();
+ 
 }
 
 

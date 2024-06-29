@@ -1,7 +1,7 @@
 #include "app.h"
 #include <stdio.h>
+#include "trigon/core/math/tgmath.h"
 #include "trigon/system/rendr.h"
-#include "trigon/math/tgmath.h"
 
 static version_t trigon_version = { 1,0,0,0 };
 static cstr_t	 trigon_name	= "trigon";
