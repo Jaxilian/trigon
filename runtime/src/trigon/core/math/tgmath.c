@@ -1,4 +1,6 @@
+#include "trigon/core/utils/debug.h"
 #include "avxmath.h"
+#include <stdio.h>
 
 #ifdef _WIN32
 #include <intrin.h>
@@ -23,7 +25,16 @@ void _tgmath_init() {
         mat4_mul = _avxmat4_mul;
     }
     else {
-        mat4_mul = _ssemat4_mul;
-      
+        debug_err("SSE math not supported yet!\n");
+    }
+}
+
+void mat4_print(const char* label, const mat4_t m) {
+    printf("%s\n", label);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            printf("%f ", m[i * 4 + j]);
+        }
+        printf("\n");
     }
 }

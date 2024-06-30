@@ -16,13 +16,15 @@ typedef void (*mat4_mul_ptr)(mat4_t r, const mat4_t a, const mat4_t b);
 
 extern mat4_mul_ptr mat4_mul;
 
-
+void _avxmath_test();
 
 // SSE
 void _ssemat4_mul(mat4_t r, const mat4_t a, const mat4_t b);
 
 void _tgmath_init(); // super important to call before math
 bool _avx_supported();
+
+void mat4_print(const char* label, const mat4_t m);
 
 
 #endif // TG_MATH_H

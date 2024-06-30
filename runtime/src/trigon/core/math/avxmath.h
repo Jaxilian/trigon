@@ -86,6 +86,10 @@ float _avxvec4_distance_squared(const vec4_t a, const vec4_t b);
 void _avxvec4_rotate(vec4_t r, const vec4_t v, const vec4_t axis, float angle);
 
 void _avxmat4_mul(mat4_t r, const mat4_t a, const mat4_t b);
+void _avxmat4_setpos(mat4_t r, const vec3_t t);
+void _avxmat4_translate(mat4_t r, const vec3_t t);
+
+
 
 #endif // !AVXMATH_H
 

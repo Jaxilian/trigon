@@ -102,7 +102,7 @@ void vkinstance_new(vkdevice_t* device) {
         .applicationVersion = app_version(),
         .pEngineName = engine_name(),
         .engineVersion = engine_version(),
-        .apiVersion = VK_API_VERSION_1_3
+        .apiVersion = VK_API_VERSION_1_2
     };
 
     VkDebugUtilsMessengerCreateInfoEXT debug_info = {
@@ -150,7 +150,24 @@ void vkinstance_new(vkdevice_t* device) {
     }
 #endif
 
-    debug_log("loaded: vulkan 1.3\n");
+    switch (app_info.apiVersion)
+    {
+    case VK_API_VERSION_1_0:
+        debug_log("loaded: vulkan 1.0\n");
+        break;
+    case VK_API_VERSION_1_1:
+        debug_log("loaded: vulkan 1.1\n");
+        break;
+    case VK_API_VERSION_1_2:
+        debug_log("loaded: vulkan 1.2\n");
+        break;
+    case VK_API_VERSION_1_3:
+        debug_log("loaded: vulkan 1.3\n");
+        break;
+    default:
+        break;
+    }
+   
 }
 
 /*---------- DEVICE ----------*/

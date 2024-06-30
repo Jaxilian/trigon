@@ -1,9 +1,9 @@
 #include "trigon/app.h"
-#include "trigon/core/math/tgmath.h"
+#include "trigon/core/math/mathr.h"
 
 
 void engine_start() {
-
+    mathr_unit_test();
 }
 
 void engine_update() {
