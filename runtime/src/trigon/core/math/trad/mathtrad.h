@@ -86,4 +86,27 @@ void _tradvec2_sqrt(vec2_t r, const vec2_t v);
 float _tradvec2_distance_squared(const vec2_t a, const vec2_t b);
 void _tradvec2_test();
 
+void _tradmat4_mul(mat4_t r, const mat4_t a, const mat4_t b);
+void _tradmat4_setscale(mat4_t r, const vec3_t s);
+void _tradmat4_setpos(mat4_t r, const vec3_t s);
+void _tradmat4_scale(mat4_t r, const vec3_t s);
+void _tradmat4_lookat(mat4_t r, const vec3_t eye, const vec3_t center, const vec3_t up);
+void _tradmat4_perspective(mat4_t r, float fovy, float aspect, float znear, float zfar);
+void _tradmat4_ortho(mat4_t r, float left, float right, float bottom, float top, float znear, float zfar);
+void _tradmat4_translate(mat4_t r, const vec3_t t);
+void _tradmat4_rotate(mat4_t r, float angle, const vec3_t axis);
+void _tradmat4_transpose(mat4_t r, const mat4_t m);
+bool _tradmat4_inverse(mat4_t r, const mat4_t m);
+void _tradmat4_from_quat(mat4_t r, const quat_t q);
+void _tradmat4_to_quat(quat_t q, const mat4_t m);
+float _tradmat4_determinant(const mat4_t m);
+bool _tradmat4_inverse_affine(mat4_t r, const mat4_t m);
+void _tradmat4_forward(vec3_t forward, const mat4_t m);
+void _tradmat4_up(vec3_t up, const mat4_t m);
+void _tradmat4_right(vec3_t right, const mat4_t m);
+void _tradmat4_position(vec3_t position, const mat4_t m);
+void _tradmat4_test();
+
+
+
 #endif // !TG_MATHTRAD_H

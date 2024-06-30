@@ -1,6 +1,6 @@
 #include "app.h"
 #include <stdio.h>
-#include "trigon/core/math/tgmath.h"
+#include "trigon/core/math/mathr.h"
 #include "trigon/system/rendr.h"
 
 static version_t trigon_version = { 1,0,0,0 };
@@ -20,7 +20,7 @@ typedef struct {
 static tgapp_t app = { 0 };
 
 void app_load(app_info_t* info) {
-	_tgmath_init(); 
+	_mathr_init();
 
 	app.user_start	= info->on_start;
 	app.user_update = info->on_update;

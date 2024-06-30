@@ -56,8 +56,6 @@
       <Filter>types</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\mesh\mesh.h" />
-    <ClInclude Include="src\trigon\core\math\tgmath.h" />
-    <ClInclude Include="src\trigon\core\math\avxmath.h" />
     <ClInclude Include="src\trigon\core\math\mathr.h" />
     <ClInclude Include="src\trigon\core\math\trad\mathtrad.h" />
   </ItemGroup>
@@ -104,18 +102,11 @@
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c" />
     <ClCompile Include="src\trigon\mesh\mesh.c" />
-    <ClCompile Include="src\trigon\core\math\tgmath.c" />
-    <ClCompile Include="src\trigon\core\math\mat4_avx.c" />
-    <ClCompile Include="src\trigon\core\math\mat4_sse.c" />
-    <ClCompile Include="src\trigon\core\math\vec3_avx.c" />
-    <ClCompile Include="src\trigon\core\math\vec2_avx.c" />
-    <ClCompile Include="src\trigon\core\math\vec4_avx.c" />
-    <ClCompile Include="src\trigon\core\math\vec2_sse.c" />
-    <ClCompile Include="src\trigon\core\math\vec3_sse.c" />
-    <ClCompile Include="src\trigon\core\math\vec4_sse.c" />
     <ClCompile Include="src\trigon\core\math\trad\vec4_trad.c" />
     <ClCompile Include="src\trigon\core\math\mathr.c" />
     <ClCompile Include="src\trigon\core\math\trad\vec3_trad.c" />
     <ClCompile Include="src\trigon\core\math\trad\vec2_trad.c" />
+    <ClCompile Include="src\trigon\core\math\trad\mat4_trad.c" />
+    <ClCompile Include="src\trigon\core\math\trad\mat3_trad.c" />
   </ItemGroup>
 </Project>

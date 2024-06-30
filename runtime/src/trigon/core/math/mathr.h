@@ -8,6 +8,7 @@
 
 #define mat4_identity {1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f}
 
+typedef float quat_t[4];
 typedef float vec4_t[4];
 typedef float vec3_t[3];
 typedef float vec2_t[2];
@@ -17,5 +18,8 @@ void mathr_unit_test();
 void print_vec4(const char* label, const vec4_t v);
 void print_vec3(const char* label, const vec3_t v);
 void print_vec2(const char* label, const vec3_t v);
+void print_mat4(const char* label, const mat4_t mat);
 
+
+void _mathr_init();
 #endif // !TG_MATHR_H
