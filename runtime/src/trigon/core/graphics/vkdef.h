@@ -107,6 +107,8 @@ typedef struct {
 void vkpipeline_conf_default(vkpipeline_conf_t* conf);
 #endif
 
+void vkpipeline_conf_default(vkpipeline_conf_t* config);
+
 void vkinstance_new(vkdevice_t* device);
 void vkinstance_del(vkdevice_t* device);
 
