@@ -7,11 +7,20 @@
     <Filter Include="core\graphics">
       <UniqueIdentifier>{6EDCE3F6-DA9C-5F2D-A3D7-A8AA0F57A409}</UniqueIdentifier>
     </Filter>
+    <Filter Include="core\math">
+      <UniqueIdentifier>{07925FA5-73FC-131C-BC3A-C5C128E4F170}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\math\trad">
+      <UniqueIdentifier>{E1FBD27D-CDC9-C683-B65D-37AAA2CAA2E8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="core\utils">
       <UniqueIdentifier>{4ED4EC51-3A8C-2E9F-A393-07FB8F6AC98F}</UniqueIdentifier>
     </Filter>
     <Filter Include="core\vfs">
       <UniqueIdentifier>{AC80D44A-984D-2F56-C166-1DFEAD9264E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{B2919A7C-9EC8-9B0D-47B5-811033CB170F}</UniqueIdentifier>
     </Filter>
     <Filter Include="shaders">
       <UniqueIdentifier>{0F45D591-7B24-542D-843C-DF03F09ABA8E}</UniqueIdentifier>
@@ -31,6 +40,12 @@
     <ClInclude Include="src\trigon\core\graphics\win.h">
       <Filter>core\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\core\math\mathr.h">
+      <Filter>core\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\core\math\trad\mathtrad.h">
+      <Filter>core\math\trad</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\core\utils\debug.h">
       <Filter>core\utils</Filter>
     </ClInclude>
@@ -46,6 +61,9 @@
     <ClInclude Include="src\trigon\core\vfs\vfs.h">
       <Filter>core\vfs</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\mesh\mesh.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\shaders\shader.h">
       <Filter>shaders</Filter>
     </ClInclude>
@@ -55,13 +73,13 @@
     <ClInclude Include="src\trigon\types\sprite.h">
       <Filter>types</Filter>
     </ClInclude>
-    <ClInclude Include="src\trigon\mesh\mesh.h" />
-    <ClInclude Include="src\trigon\core\math\mathr.h" />
-    <ClInclude Include="src\trigon\core\math\trad\mathtrad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\trigon\app.c" />
     <ClCompile Include="src\trigon\core\graphics\vkdevice.c">
+      <Filter>core\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c">
       <Filter>core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkstate.c">
@@ -72,6 +90,24 @@
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\win_win32.c">
       <Filter>core\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\mathr.c">
+      <Filter>core\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\trad\mat3_trad.c">
+      <Filter>core\math\trad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\trad\mat4_trad.c">
+      <Filter>core\math\trad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\trad\vec2_trad.c">
+      <Filter>core\math\trad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\trad\vec3_trad.c">
+      <Filter>core\math\trad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\math\trad\vec4_trad.c">
+      <Filter>core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\utils\debug.c">
       <Filter>core\utils</Filter>
@@ -91,6 +127,9 @@
     <ClCompile Include="src\trigon\core\vfs\vfs_win32.c">
       <Filter>core\vfs</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\mesh\mesh.c">
+      <Filter>mesh</Filter>
+    </ClCompile>
     <ClCompile Include="src\trigon\shaders\shader.c">
       <Filter>shaders</Filter>
     </ClCompile>
@@ -100,13 +139,5 @@
     <ClCompile Include="src\trigon\types\sprite.c">
       <Filter>types</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c" />
-    <ClCompile Include="src\trigon\mesh\mesh.c" />
-    <ClCompile Include="src\trigon\core\math\trad\vec4_trad.c" />
-    <ClCompile Include="src\trigon\core\math\mathr.c" />
-    <ClCompile Include="src\trigon\core\math\trad\vec3_trad.c" />
-    <ClCompile Include="src\trigon\core\math\trad\vec2_trad.c" />
-    <ClCompile Include="src\trigon\core\math\trad\mat4_trad.c" />
-    <ClCompile Include="src\trigon\core\math\trad\mat3_trad.c" />
   </ItemGroup>
 </Project>
