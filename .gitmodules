@@ -1,3 +1,6 @@
 [submodule "Luna"]
 	path = Luna
 	url = https://github.com/Jaxilian/Luna.git
+[submodule "luna"]
+	path = luna
+	url = https://github.com/Jaxilian/luna.git

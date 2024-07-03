@@ -1,6 +1,6 @@
 git submodule update --init --recursive
 
-cd luajit
+cd luna
 msvcbuild
 
 cd ..
