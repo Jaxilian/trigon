@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "trigon/core/math/mathr.h"
 #include "trigon/system/rendr.h"
+#include "trigon/scripts/luna.h"
 
 static version_t trigon_version = { 1,0,0,0 };
 static cstr_t	 trigon_name	= "trigon";
@@ -49,17 +50,20 @@ void app_load(app_info_t* info) {
 
 	app.running = true;
 
+	luna_start();
 	if(app.user_start) app.user_start();
-
 	while (app.running && app.user_update) {
+		luna_update();
+		app.user_update();
+
 		rendr_upd(&app.rendr);
 		rendr_bgn(&app.rendr);
-		app.user_update();
+		// draw here
 		rendr_end(&app.rendr);
 	}
 
 	if(app.user_quit) app.user_quit();
-
+	luna_stop();
 	rendr_del(&app.rendr);
 }
 

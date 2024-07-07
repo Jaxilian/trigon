@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="luna">
+      <UniqueIdentifier>{B5489A7C-A17F-9B0D-4A6C-81103682170F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="luna\src">
+      <UniqueIdentifier>{4C59655D-3826-C068-613F-AE104D6BF5F6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\luna\src\lauxlib.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\lua.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\luajit.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\lualib.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

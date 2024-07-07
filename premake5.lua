@@ -1,4 +1,6 @@
 
+local USE_LUNA = true
+
 local function compileShaders()
 
 end
@@ -18,6 +20,30 @@ local function linkVulkan()
    links { "vulkan-1" }
 end
 
+local function linkLuna()
+   if USE_LUNA then
+      defines { "_LUNA" } 
+
+      includedirs {
+          "luna/src/"
+      }
+
+      files { 
+         "luna/src/lua.h",
+         "luna/src/lualib.h",
+         "luna/src/lauxlib.h",
+         "luna/src/luajit.h"
+      }
+      links {
+         "lua51",
+         "luajit"
+      }
+      libdirs {
+         "luna/src"
+      }
+   end
+end
+
 local function defaultSettings(name, isLib)
    language "C++"
    cdialect("C17")
@@ -28,8 +54,7 @@ local function defaultSettings(name, isLib)
    files { name .. "/src/**.h", name .. "/src/**.c" }
    includedirs {
       name .. "/src"
-  }
-
+   }
    disablewarnings{4996}
    
    if os.target() == "windows" then
@@ -77,6 +102,7 @@ local function runtime()
    project("runtime")
    kind("StaticLib")
    linkVulkan()
+   linkLuna()
    defaultSettings("runtime", true) -- do last!
 end
 

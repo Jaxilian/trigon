@@ -1,143 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="core">
-      <UniqueIdentifier>{4E40957C-3A77-960D-E363-7C10CF79120F}</UniqueIdentifier>
+    <Filter Include="luna">
+      <UniqueIdentifier>{B5489A7C-A17F-9B0D-4A6C-81103682170F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\graphics">
-      <UniqueIdentifier>{6EDCE3F6-DA9C-5F2D-A3D7-A8AA0F57A409}</UniqueIdentifier>
+    <Filter Include="luna\src">
+      <UniqueIdentifier>{4C59655D-3826-C068-613F-AE104D6BF5F6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\math">
-      <UniqueIdentifier>{07925FA5-73FC-131C-BC3A-C5C128E4F170}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\math\trad">
-      <UniqueIdentifier>{E1FBD27D-CDC9-C683-B65D-37AAA2CAA2E8}</UniqueIdentifier>
+    <Filter Include="src\trigon">
+      <UniqueIdentifier>{0F891E7C-FB40-60C9-6448-3925501FFBB9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\utils">
-      <UniqueIdentifier>{4ED4EC51-3A8C-2E9F-A393-07FB8F6AC98F}</UniqueIdentifier>
+    <Filter Include="src\trigon\core">
+      <UniqueIdentifier>{E73A2478-53C6-913C-5CD7-1431C8E1ED3C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="core\vfs">
-      <UniqueIdentifier>{AC80D44A-984D-2F56-C166-1DFEAD9264E4}</UniqueIdentifier>
+    <Filter Include="src\trigon\core\graphics">
+      <UniqueIdentifier>{27D33C8E-13F8-8B0E-3C43-719E28C78A2C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mesh">
-      <UniqueIdentifier>{B2919A7C-9EC8-9B0D-47B5-811033CB170F}</UniqueIdentifier>
+    <Filter Include="src\trigon\core\math">
+      <UniqueIdentifier>{40144098-2CA3-C961-D5C1-DD5CC12FDA07}</UniqueIdentifier>
     </Filter>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{0F45D591-7B24-542D-843C-DF03F09ABA8E}</UniqueIdentifier>
+    <Filter Include="src\trigon\core\math\trad">
+      <UniqueIdentifier>{BAC94A00-268C-7E8A-6F3C-0D17DB3D5768}</UniqueIdentifier>
     </Filter>
-    <Filter Include="system">
-      <UniqueIdentifier>{8AE4EE1C-7686-19F3-5F41-2D474B82A043}</UniqueIdentifier>
+    <Filter Include="src\trigon\core\utils">
+      <UniqueIdentifier>{A79DDDA0-130A-999B-DCFD-30F94829BB03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="types">
-      <UniqueIdentifier>{5A5E7610-C672-9EC1-8FF4-4121FBC79AF2}</UniqueIdentifier>
+    <Filter Include="src\trigon\core\vfs">
+      <UniqueIdentifier>{C51F2114-3181-FE21-BAEE-44D4264F35E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\trigon\mesh">
+      <UniqueIdentifier>{4B8C2978-B717-973C-C028-1A312C33F33C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\trigon\scripts">
+      <UniqueIdentifier>{66A79A09-528B-5B5F-BBEB-55B2A7EE45E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\trigon\shaders">
+      <UniqueIdentifier>{08E50D14-F4C8-CE69-5D29-C9BC492CB9EB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\trigon\system">
+      <UniqueIdentifier>{63E92638-CFFF-24CE-1877-B0EF84CCF555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\trigon\types">
+      <UniqueIdentifier>{13ACE47D-FFA4-03D0-28D7-E854142FE3DB}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\trigon\app.h" />
+    <ClInclude Include="..\luna\src\lauxlib.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\lua.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\luajit.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\luna\src\lualib.h">
+      <Filter>luna\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\app.h">
+      <Filter>src\trigon</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\core\graphics\vkdef.h">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\graphics\win.h">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\math\mathr.h">
-      <Filter>core\math</Filter>
+      <Filter>src\trigon\core\math</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\math\trad\mathtrad.h">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\utils\debug.h">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\utils\guid.h">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\utils\sha256.h">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\utils\util.h">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\core\vfs\vfs.h">
-      <Filter>core\vfs</Filter>
+      <Filter>src\trigon\core\vfs</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\mesh\mesh.h">
-      <Filter>mesh</Filter>
+      <Filter>src\trigon\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\scripts\luna.h">
+      <Filter>src\trigon\scripts</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\shaders\shader.h">
-      <Filter>shaders</Filter>
+      <Filter>src\trigon\shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\system\rendr.h">
-      <Filter>system</Filter>
+      <Filter>src\trigon\system</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\types\sprite.h">
-      <Filter>types</Filter>
+      <Filter>src\trigon\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\trigon\app.c" />
+    <ClCompile Include="src\trigon\app.c">
+      <Filter>src\trigon</Filter>
+    </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkdevice.c">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkpipeline_default.c">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkstate.c">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\vkswap.c">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\graphics\win_win32.c">
-      <Filter>core\graphics</Filter>
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\mathr.c">
-      <Filter>core\math</Filter>
+      <Filter>src\trigon\core\math</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\trad\mat3_trad.c">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\trad\mat4_trad.c">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\trad\vec2_trad.c">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\trad\vec3_trad.c">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\math\trad\vec4_trad.c">
-      <Filter>core\math\trad</Filter>
+      <Filter>src\trigon\core\math\trad</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\utils\debug.c">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\utils\guid.c">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\utils\sha256.c">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\utils\util.c">
-      <Filter>core\utils</Filter>
+      <Filter>src\trigon\core\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\vfs\vfs_unix.c">
-      <Filter>core\vfs</Filter>
+      <Filter>src\trigon\core\vfs</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\core\vfs\vfs_win32.c">
-      <Filter>core\vfs</Filter>
+      <Filter>src\trigon\core\vfs</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\mesh\mesh.c">
-      <Filter>mesh</Filter>
+      <Filter>src\trigon\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\scripts\luna.c">
+      <Filter>src\trigon\scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\shaders\shader.c">
-      <Filter>shaders</Filter>
+      <Filter>src\trigon\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\system\rendr.c">
-      <Filter>system</Filter>
+      <Filter>src\trigon\system</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\types\sprite.c">
-      <Filter>types</Filter>
+      <Filter>src\trigon\types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
