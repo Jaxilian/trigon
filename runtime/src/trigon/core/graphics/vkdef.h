@@ -40,6 +40,7 @@ typedef uint32_t VkDeviceSize;
 typedef uint32_t VkBufferUsageFlags;
 typedef uint32_t VkImageTiling;
 typedef uint32_t VkImageUsageFlags;
+typedef uint32_t VkImageLayout;
 #endif
 #define MAX_FRAMES_IN_FLIGHT 2
 
@@ -144,6 +145,21 @@ void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain);
 void vkimage_new(vkimage_info_t* info, vkimage_t* out);
 void vkimage_del(VkDevice device, vkimage_t* img);
 
+void vkimage_transition_layout(
+	vkstate_t*		state,
+	VkImage			image,
+	VkFormat		format,
+	VkImageLayout	oldlayout,
+	VkImageLayout	newlayout
+);
+void vkimage_copy_buffer(
+	vkstate_t* state,
+	vkimage_t* to,
+	VkBuffer src,
+	uint32_t width, 
+	uint32_t height
+);
+
 VkResult		vkstate_next_frame(vkstate_t* state);
 VkCommandBuffer vkstate_command_buffer(vkstate_t* state);
 VkResult		vkstate_submit_commands(vkstate_t* state);
@@ -164,6 +180,7 @@ void vkbuffer_new(
 	VkBuffer* buffer,
 	VkDeviceMemory* memory
 );
+
 
 #ifdef __cplusplus
 }

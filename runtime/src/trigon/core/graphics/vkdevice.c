@@ -437,3 +437,6 @@ void vkinstance_del(vkdevice_t* device) {
         device->instance = NULL;
     }
 }
+
+
+

@@ -1,5 +1,6 @@
 #include "vkdef.h"
 #include "trigon/core/utils/debug.h"
+
 void vkbuffer_new(
     vkdevice_t* device,
     VkDeviceSize size,
@@ -33,4 +34,13 @@ void vkbuffer_new(
     }
 
     vkBindBufferMemory(device->device, *buffer, *memory, 0);
+}
+
+void vkbuffer_copy(vkstate_t* state, VkBuffer to, VkBuffer src, VkDeviceSize size) {
+    VkCommandBuffer cmdbuff = vkstate_single_cmd(state);
+    VkBufferCopy cp = {
+        .size = size
+    };
+    vkCmdCopyBuffer(cmdbuff, src, to, 1, &cp);
+    vkstate_single_cmd_submit(state,cmdbuff);
 }

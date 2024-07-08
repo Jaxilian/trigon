@@ -28,7 +28,7 @@ void engine_update() {
 }
 
 void engine_quit() {
-
+    texture_del();
 }
 
 int app_main() {
