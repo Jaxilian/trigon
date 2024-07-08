@@ -8,6 +8,7 @@ extern "C" {
 #include <inttypes.h>
 #include <stdbool.h>
 #include "debug.h"
+#include "../vfs/vfs.h"
 
 typedef void (*voidcb_t)();
 
@@ -18,9 +19,11 @@ typedef struct  {
 	uint32_t patch;
 } version_t;
 
+typedef char title_t[32];
 
-bool cstr_to_wchar(const char* str, wchar_t* wchar);
-bool wchar_to_cstr(const wchar_t* wchar, char* str);
+void title_new(title_t title, const char* string);
+
+
 bool string_split(const char* in, const char* delimiter, char** out, int out_len);
 void version_to_str(const version_t* v, char str[64]);
 

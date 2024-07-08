@@ -28,6 +28,9 @@
     <Filter Include="src\trigon\core\utils">
       <UniqueIdentifier>{A79DDDA0-130A-999B-DCFD-30F94829BB03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\trigon\core\ven">
+      <UniqueIdentifier>{9F1F2114-0B81-FE21-94EE-44D4004F35E1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\trigon\core\vfs">
       <UniqueIdentifier>{C51F2114-3181-FE21-BAEE-44D4264F35E1}</UniqueIdentifier>
     </Filter>
@@ -87,6 +90,9 @@
     <ClInclude Include="src\trigon\core\utils\util.h">
       <Filter>src\trigon\core\utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigon\core\ven\stb_image.h">
+      <Filter>src\trigon\core\ven</Filter>
+    </ClInclude>
     <ClInclude Include="src\trigon\core\vfs\vfs.h">
       <Filter>src\trigon\core\vfs</Filter>
     </ClInclude>
@@ -103,6 +109,9 @@
       <Filter>src\trigon\system</Filter>
     </ClInclude>
     <ClInclude Include="src\trigon\types\sprite.h">
+      <Filter>src\trigon\types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigon\types\texture.h">
       <Filter>src\trigon\types</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,10 +164,7 @@
     <ClCompile Include="src\trigon\core\utils\util.c">
       <Filter>src\trigon\core\utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigon\core\vfs\vfs_unix.c">
-      <Filter>src\trigon\core\vfs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\trigon\core\vfs\vfs_win32.c">
+    <ClCompile Include="src\trigon\core\vfs\vfs.c">
       <Filter>src\trigon\core\vfs</Filter>
     </ClCompile>
     <ClCompile Include="src\trigon\mesh\mesh.c">
@@ -175,6 +181,15 @@
     </ClCompile>
     <ClCompile Include="src\trigon\types\sprite.c">
       <Filter>src\trigon\types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\types\texture.c">
+      <Filter>src\trigon\types</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkbuffer.c">
+      <Filter>src\trigon\core\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkutils.c">
+      <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,9 +1,11 @@
 #ifndef TG_GUID_H
 #define TG_GUID_H
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+	
 
 	typedef char guid_t[64];
 	void guid_gen(guid_t id);

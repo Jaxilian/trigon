@@ -48,6 +48,7 @@ local function defaultSettings(name, isLib)
    language "C++"
    cdialect("C17")
    cppdialect("C++20")
+   debugdir (name .. "/bin/%{cfg.buildcfg}")
    targetdir(name .. "/bin/%{cfg.buildcfg}")
    objdir(name .. "/obj/%{cfg.buildcfg}")
    location(name)
@@ -101,6 +102,7 @@ end
 local function runtime()
    project("runtime")
    kind("StaticLib")
+   ignoredefaultlibraries { "libraries" }
    linkVulkan()
    linkLuna()
    defaultSettings("runtime", true) -- do last!

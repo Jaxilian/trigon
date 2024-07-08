@@ -19,19 +19,18 @@ void luna_start() {
 
 	if (luaL_loadfile(lua_state, "scripts/main.lua") || lua_pcall(lua_state, 0, 0, 0)) {
 		fprintf(stderr, "Cannot run script: %s\n", lua_tostring(lua_state, -1));
-		return 1;
+		return;
 	}
 
 	lua_getglobal(lua_state, "main");
 	if (lua_pcall(lua_state, 0, 0, 0) != LUA_OK) {
 		fprintf(stderr, "Failed to call function: %s\n", lua_tostring(lua_state, -1));
-		return 1;
+		return;
 	}
 }
 
 void luna_update() {
-	lua_state = luaL_newstate();
-	luaL_openlibs(lua_state);
+
 }
 
 void luna_stop() {

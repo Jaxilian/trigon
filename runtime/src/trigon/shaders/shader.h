@@ -5,6 +5,8 @@
 
 #define MAX_DESC_PER_SET 8
 
+
+
 typedef enum {
 	SHADER_STAGE_FRAGMENT,
 	SHADER_STAGE_VERTEX

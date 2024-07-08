@@ -32,6 +32,7 @@ typedef void* VkPresentModeKHR;
 typedef void* VkShaderModule;
 typedef void* VkPipelineLayout;
 typedef void* VkPipeline;
+typedef uint32_t VkMemoryPropertyFlags;
 #endif
 #define MAX_FRAMES_IN_FLIGHT 2
 
@@ -129,6 +130,17 @@ VkResult		vkstate_frame_begin(vkstate_t* state);
 VkResult		vkstate_frame_end(vkstate_t* state);
 void			vkstate_new(vkstate_t* state, vkdevice_t* device, vkswapchain_t* swap);
 void			vkstate_del(vkstate_t* state);
+
+uint32_t vk_memory_type(VkPhysicalDevice device, uint32_t type, VkMemoryPropertyFlags properties);
+
+void vkbuffer_new(
+	vkdevice_t* device,
+	VkDeviceSize size,
+	VkBufferUsageFlags usage,
+	VkMemoryPropertyFlags properties,
+	VkBuffer buffer,
+	VkDeviceMemory memory
+);
 
 #ifdef __cplusplus
 }

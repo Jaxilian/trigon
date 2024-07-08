@@ -2,8 +2,12 @@
 /.vs
 *.vcxproj
 *.user
-/editor/bin
+*.exp
+*.exe
+*.lib
+*.pdb
 /editor/obj
 /runtime/bin
 /runtime/obj
 trigon.sln
+*.filters

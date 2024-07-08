@@ -12,22 +12,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\luna\src\lauxlib.h">
-      <Filter>luna\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\luna\src\lua.h">
-      <Filter>luna\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\luna\src\luajit.h">
-      <Filter>luna\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\luna\src\lualib.h">
-      <Filter>luna\src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\main.c">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="bin\debug\res\textures\texture.jpg" />
   </ItemGroup>
 </Project>
