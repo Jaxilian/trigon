@@ -32,9 +32,32 @@ typedef void* VkPresentModeKHR;
 typedef void* VkShaderModule;
 typedef void* VkPipelineLayout;
 typedef void* VkPipeline;
+typedef void* VkSurfaceFormatKHR;
+typedef void* VkBuffer;
+typedef uint32_t VkResult;
 typedef uint32_t VkMemoryPropertyFlags;
+typedef uint32_t VkDeviceSize;
+typedef uint32_t VkBufferUsageFlags;
+typedef uint32_t VkImageTiling;
+typedef uint32_t VkImageUsageFlags;
 #endif
 #define MAX_FRAMES_IN_FLIGHT 2
+
+typedef struct {
+	VkImage			image;
+	VkDeviceMemory	memory;
+} vkimage_t;
+
+typedef struct {
+	VkDevice				device;
+	VkPhysicalDevice		physical;
+	uint32_t				width;
+	uint32_t				height;
+	VkFormat				format;
+	VkImageTiling			tiling;
+	VkImageUsageFlags		usage;
+	VkMemoryPropertyFlags	properties;
+} vkimage_info_t;
 
 typedef struct {
 	VkInstance					instance;
@@ -108,7 +131,6 @@ typedef struct {
 void vkpipeline_conf_default(vkpipeline_conf_t* conf);
 #endif
 
-void vkpipeline_conf_default(vkpipeline_conf_t* config);
 
 void vkinstance_new(vkdevice_t* device);
 void vkinstance_del(vkdevice_t* device);
@@ -119,7 +141,8 @@ void vkdevice_del(vkdevice_t* device);
 void swapchain_new(vkdevice_t* device, vkswapchain_t* swapchain, uint32_t width, uint32_t height);
 void swapchain_del(vkdevice_t* device, vkswapchain_t* swapchain);
 
-
+void vkimage_new(vkimage_info_t* info, vkimage_t* out);
+void vkimage_del(VkDevice device, vkimage_t* img);
 
 VkResult		vkstate_next_frame(vkstate_t* state);
 VkCommandBuffer vkstate_command_buffer(vkstate_t* state);
@@ -138,8 +161,8 @@ void vkbuffer_new(
 	VkDeviceSize size,
 	VkBufferUsageFlags usage,
 	VkMemoryPropertyFlags properties,
-	VkBuffer buffer,
-	VkDeviceMemory memory
+	VkBuffer* buffer,
+	VkDeviceMemory* memory
 );
 
 #ifdef __cplusplus

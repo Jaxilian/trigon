@@ -1,10 +1,18 @@
 #include "texture.h"
 #include "trigon/core/utils/debug.h"
-#include "trigon/core/graphics/vkdef.h"
+
 #include "trigon/system/rendr.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <trigon/core/ven/stb_image.h>
+
+typedef struct {
+	VkImage			image;
+	VkDeviceMemory	memory;
+} texture_internal_t;
+
+
+
 
 texture_info_t	texture_read(vpath_t path) {
 	texture_info_t info = { 0 };
@@ -43,11 +51,12 @@ uint32_t texture_new(texture_info_t* info) {
 		VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 		VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-		staging_buffer,
-		staging_memory
+		&staging_buffer,
+		&staging_memory
 	);
 
 	void* data = NULL;
+
 	vkMapMemory(
 		renderer->device.device,
 		staging_memory,
@@ -59,9 +68,24 @@ uint32_t texture_new(texture_info_t* info) {
 	memcpy_s(data, info->pixel_count, info->pixels, info->pixel_count);
 	vkUnmapMemory(renderer->device.device, staging_memory);
 
-	s
 	free(info->pixels);
 	info->pixels = NULL;
+
+	vkimage_t		image = { 0 };
+	vkimage_info_t	image_info = {
+		.device = renderer->device.device,
+		.physical = renderer->device.physical,
+		.width	= info->width,
+		.height = info->height,
+		.format = VK_FORMAT_R8G8B8A8_SRGB,
+		.tiling	= VK_IMAGE_TILING_OPTIMAL,
+		.usage	= VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+		.properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+	};
+
+	vkimage_new(&image_info, &image);
+	
+
 	return 0;
 }
 

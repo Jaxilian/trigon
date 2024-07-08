@@ -191,5 +191,8 @@
     <ClCompile Include="src\trigon\core\graphics\vkutils.c">
       <Filter>src\trigon\core\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\trigon\core\graphics\vkimage.c">
+      <Filter>src\trigon\core\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

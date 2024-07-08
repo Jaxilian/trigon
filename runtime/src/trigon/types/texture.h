@@ -1,5 +1,6 @@
 #ifndef TG_TEXTURE_H
 #define TG_TEXTURE_H
+#include "trigon/core/graphics/vkdef.h"
 #include "trigon/core/vfs/vfs.h"
 #include <inttypes.h>
 

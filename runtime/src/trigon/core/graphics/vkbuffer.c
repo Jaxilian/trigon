@@ -5,8 +5,8 @@ void vkbuffer_new(
     VkDeviceSize size,
     VkBufferUsageFlags usage,
     VkMemoryPropertyFlags properties,
-    VkBuffer buffer,
-    VkDeviceMemory memory) {
+    VkBuffer* buffer,
+    VkDeviceMemory* memory) {
 
     VkBufferCreateInfo buffer_info = {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
@@ -15,12 +15,12 @@ void vkbuffer_new(
         .sharingMode = VK_SHARING_MODE_EXCLUSIVE
     };
 
-    if (vkCreateBuffer(device->device, &buffer_info, NULL, &buffer) != VK_SUCCESS) {
+    if (vkCreateBuffer(device->device, &buffer_info, NULL, buffer) != VK_SUCCESS) {
         debug_err("failed to create vkbuffer!\n");
     }
 
     VkMemoryRequirements memreq = { 0 };
-    vkGetBufferMemoryRequirements(device->device, buffer, &memreq);
+    vkGetBufferMemoryRequirements(device->device, *buffer, &memreq);
 
     VkMemoryAllocateInfo alloc = {
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
@@ -28,9 +28,9 @@ void vkbuffer_new(
         .memoryTypeIndex = vk_memory_type(device->physical, memreq.memoryTypeBits, properties)
     };
 
-    if (vkAllocateMemory(device->device, &alloc, NULL, &memory) != VK_SUCCESS) {
+    if (vkAllocateMemory(device->device, &alloc, NULL, memory) != VK_SUCCESS) {
         debug_err("failed to allocate buffer memory!");
     }
 
-    vkBindBufferMemory(device->device, buffer, memory, 0);
+    vkBindBufferMemory(device->device, *buffer, *memory, 0);
 }

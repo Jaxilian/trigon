@@ -47,3 +47,48 @@ void rendr_del(rendr_t* rendr) {
 	win_del(&rendr->window);
 	vkinstance_del(&rendr->device);
 }
+
+rendr_cmd_t rendr_new_single_cmd() {
+
+	VkCommandBufferAllocateInfo alloc = {
+		.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+		.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+		.commandPool = handle->device.cmd_pool,
+		.commandBufferCount = 1
+	};
+
+	VkCommandBuffer cmdbuff = { 0 };
+	vkAllocateCommandBuffers(
+		handle->device.device,
+		&alloc,
+		&cmdbuff
+	);
+
+	VkCommandBufferBeginInfo info = {
+		.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+		.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT
+	};
+
+	vkBeginCommandBuffer(cmdbuff, &info);
+	rendr_cmd_t ptr = (rendr_cmd_t)cmdbuff;
+	return ptr;
+}
+
+void rendr_end_single_cmd(rendr_cmd_t cmd) {
+	VkCommandBuffer cmdbuff = (VkCommandBuffer)cmd;
+	VkSubmitInfo info = {
+		.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+		.commandBufferCount = 1,
+		.pCommandBuffers = &cmdbuff
+	};
+
+	vkQueueSubmit(handle->device.graphics_queue, 1, &info, VK_NULL_HANDLE);
+	vkQueueWaitIdle(handle->device.graphics_queue);
+
+	vkFreeCommandBuffers(
+		handle->device.device,
+		handle->device.cmd_pool,
+		1, 
+		&cmdbuff
+	);
+}
