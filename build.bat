@@ -1,8 +1,13 @@
-git submodule update --init --recursive
+REM git submodule update --init --recursive
 
-cd luna\src
-msvcbuild static
+REM cd luna\src
+REM msvcbuild static
 
 cd ..
+cd cglm
+cd win
+.\build.bat
+devenv cglm.sln /Build Release
+cd ..\..
 
-premake5 vs2022
+REM premake5 vs2022

@@ -52,14 +52,18 @@ local function defaultSettings(name, isLib)
    targetdir(name .. "/bin/%{cfg.buildcfg}")
    objdir(name .. "/obj/%{cfg.buildcfg}")
    location(name)
-   files { name .. "/src/**.h", name .. "/src/**.c" }
+   files {
+      name .. "/src/**.h", name .. "/src/**.c",
+      name .. "/ven/**.h", name .. "/ven/**.c",
+    }
    includedirs {
-      name .. "/src"
+      name .. "/src",
+      name .. "/ven/include/"
    }
    disablewarnings{4996}
    
    if os.target() == "windows" then
-      defines { "_WIN32" } 
+      defines { "_WIN32", "CGLM_STATIC" } 
    elseif os.target() == "linux" then
       defines { "_LINUX", "_UNIX" } 
    elseif os.target() == "macosx" then

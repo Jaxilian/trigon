@@ -4,3 +4,6 @@
 [submodule "luna"]
 	path = luna
 	url = https://github.com/Jaxilian/luna.git
+[submodule "cglm"]
+	path = cglm
+	url = https://github.com/recp/cglm.git
