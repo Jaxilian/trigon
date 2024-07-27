@@ -20,9 +20,11 @@ https://releases.llvm.org/download.html
 ### Installing
 
 clone https://github.com/Jaxilian/Premake5.git to custom/path/to/premake
+
 add custom/path/to/premake to enviroment variable "PATH" 
 
 clone https://github.com/Jaxilian/trigon.git to custom/path/to/trigon
+
 open terminal in custom/path/to/trigon
 
 windows
