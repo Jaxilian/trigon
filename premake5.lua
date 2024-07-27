@@ -2,9 +2,14 @@ local Workspace = require("workspace")
 local Project   = require("project")
 local Vulkan    = require("vulkan")
 
-local name = "trigon"
-local cpp_enabled = true
-local show_console = false
+
+local projects  = {
+    "test",
+    "trigon"
+}
+
+local cpp_enabled   = true
+local show_console  = false
 
 Workspace.New(name)
 
