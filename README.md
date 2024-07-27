@@ -29,7 +29,7 @@ open terminal in custom/path/to/trigon
 
 ### Build
 #### Windows
-
+```
 Open premake5.lua and change the paths to libraries if needed
 
 Open Developer Command Prompt x64
@@ -37,11 +37,14 @@ Open Developer Command Prompt x64
 cd to custom/path/to/trigon
 
 run build.bat
+```
 
 #### Linux
+```
 run "premake gmake2"
 
 run make 
+```
 
 ## Help
 
