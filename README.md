@@ -1,5 +1,5 @@
-![alt text](https://github.com/Jaxilian/trigon/tree/main/trigon.png?raw=true)
-
+<p align="center"><img align="center" width="280" src="https://github.com/Jaxilian/trigon/blob/main/trigon.png"/></p>
+<hr>
 # Trigon
 
 Trigon is a game engine, currently under development
