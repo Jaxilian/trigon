@@ -17,6 +17,15 @@ todo
 clang & llvm
 https://releases.llvm.org/download.html
 
+future dependencies will need to be installed at:
+
+C:\Development\static and C:\Development\include
+
+linux:
+
+/Development/static and /Development/include
+
+
 ### Installing
 
 clone https://github.com/Jaxilian/Premake5.git to custom/path/to/premake
@@ -30,8 +39,6 @@ open terminal in custom/path/to/trigon
 ### Build
 #### Windows
 ```
-Open premake5.lua and change the paths to libraries if needed
-
 Open Developer Command Prompt x64
 
 cd to custom/path/to/trigon
@@ -45,10 +52,6 @@ cd to custom/path/to/trigon
 chmod +x ./build.sh
 run ./build.sh 
 ```
-
-## Help
-
-todo
 
 ## Authors
 

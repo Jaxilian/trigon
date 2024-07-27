@@ -1,4 +1,4 @@
-#include "trigon.h"
+#include "trigon/trigon.h"
 #include <stdio.h>
 
 int app_main(){
