@@ -1,0 +1,7 @@
+
+/.vs
+*.sln
+/trigon/bin
+/trigon/obj
+*.vcxproj
+*.user
