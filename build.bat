@@ -11,7 +11,7 @@ REM
 set start_dir=include
 
 REM 
-for /r "%start_dir%" %%f in (*.c *.cpp *.cc) do (
+for /r "%start_dir%" %%f in (*.filter *.vcxproj *.user *.c *.cpp *.cc) do (
     echo Deleting %%f
     del "%%f"
 )
