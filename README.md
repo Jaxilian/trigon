@@ -27,12 +27,20 @@ clone https://github.com/Jaxilian/trigon.git to custom/path/to/trigon
 
 open terminal in custom/path/to/trigon
 
-windows
-run "premake5 vs2022"
+# Build
+windows:
 
-linux
+Open premake5.lua and change the paths to libraries if needed
+
+Open Developer Command Prompt x64
+
+cd to custom/path/to/trigon
+
+run build.bat
+
+linux:
 run "premake gmake2"
-
+run make 
 
 ## Help
 
