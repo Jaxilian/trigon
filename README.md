@@ -27,7 +27,7 @@ clone https://github.com/Jaxilian/trigon.git to custom/path/to/trigon
 
 open terminal in custom/path/to/trigon
 
-# Build
+### Build
 windows:
 
 Open premake5.lua and change the paths to libraries if needed
