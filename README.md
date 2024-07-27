@@ -1,6 +1,6 @@
 <p align="center"><img align="center" src="https://github.com/Jaxilian/trigon/blob/main/trigon.png"/></p>
-<hr>
-## Trigon
+
+# Trigon
 
 Trigon is a game engine, currently under development
 
