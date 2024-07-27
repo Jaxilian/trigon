@@ -41,9 +41,9 @@ run build.bat
 
 #### Linux
 ```
-run "premake gmake2"
-
-run make 
+cd to custom/path/to/trigon
+chmod +x ./build.sh
+run ./build.sh 
 ```
 
 ## Help
