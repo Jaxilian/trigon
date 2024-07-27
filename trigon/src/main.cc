@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 
-
 static int main_local() {
     printf("%s\n", "hello world");
     return 0;
