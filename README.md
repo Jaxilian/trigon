@@ -28,7 +28,7 @@ clone https://github.com/Jaxilian/trigon.git to custom/path/to/trigon
 open terminal in custom/path/to/trigon
 
 ### Build
-windows:
+#### Windows
 
 Open premake5.lua and change the paths to libraries if needed
 
@@ -38,8 +38,9 @@ cd to custom/path/to/trigon
 
 run build.bat
 
-linux:
+#### Linux
 run "premake gmake2"
+
 run make 
 
 ## Help
