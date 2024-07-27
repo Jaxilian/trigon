@@ -1,9 +1,7 @@
-#include <stdio.h>
-
+#include "trigon.h"
 
 static int main_local() {
-    printf("%s\n", "hello world");
-    return 0;
+    return app_main();
 }
 
 #if defined(_NDEBUG) && defined(_WIN32) && defined(_CONSOLE_HIDDEN)

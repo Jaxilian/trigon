@@ -5,3 +5,6 @@
 /trigon/obj
 *.vcxproj
 *.user
+bin
+obj
+*.filters
