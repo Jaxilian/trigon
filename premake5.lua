@@ -4,7 +4,9 @@ local function link_vulkan()
         error("VULKAN_SDK environment variable is not set, have you installed Vulkan SDK?")
     end
 
-    defines { "_USING_VULKAN_SDK" }
+    defines {
+         "_USING_VULKAN_SDK" 
+        }
 
     includedirs {
         vulkan_sdk .. "/Include"
