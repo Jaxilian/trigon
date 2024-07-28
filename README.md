@@ -14,13 +14,13 @@ todo
 
 ### Dependencies
 
--Static version of [cglm](https://github.com/recp/cglm)
--[clang & llvm](https://releases.llvm.org/download.html)
+- Static version of [cglm](https://github.com/recp/cglm)
+- [clang & llvm](https://releases.llvm.org/download.html)
 
 
 #### Install libs here:
--Windows: C:\Development\static and C:\Development\include
--Linux:   /Development/static and /Development/include
+- Windows: C:\Development\static and C:\Development\include
+- Linux:   /Development/static and /Development/include
 
 
 ### Installing
