@@ -1,8 +1,13 @@
 #include "trigon/trigon.h"
-
+#include "cstd/cstd.h"
 
 
 static int main_local() {
+    fs_t path = { 0 };
+    fs_usr(path);
+    printf("%s\n", path);
+
+
     return app_main();
 }
 

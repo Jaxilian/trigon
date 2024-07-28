@@ -20,10 +20,15 @@ Project.Begin(
 )
 
 Vulkan.Link()
-Project.Link("cglm")
-Project.UseModule(trigon, "tgstd")
+
+Project.UseModule(trigon, "cstd")
 Project.UseModule(trigon, "tgcore")
 Project.UseModule(trigon, "trigon")
+
+Project.AddDefinition("MEMORY_DEBUG")
+
+Project.Link("cglm")
+
 Project.End(trigon)
 
 -- BEGIN APP
@@ -35,9 +40,9 @@ Project.Begin(
     show_console
 )
 
-Project.UseModule(app_name, "test")
-Project.Link("cglm")
 Project.Link(trigon)
+Project.Link("cglm")
+Project.UseModule(app_name, "test")
 Project.End(app_name)
 
 
