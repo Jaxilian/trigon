@@ -1,0 +1,10 @@
+#include "cstd/cstd.h"
+
+
+
+
+int main() {
+
+
+	return 0;
+}
