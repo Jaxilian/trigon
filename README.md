@@ -26,6 +26,7 @@ git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
 trigon.sln
+echo you deserve a cookie
 ```
 #### Linux:
 ```
@@ -34,6 +35,7 @@ git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
 make
+echo you deserve a cookie
 ```
 
 ## Authors
