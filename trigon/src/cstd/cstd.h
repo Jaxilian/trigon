@@ -32,7 +32,7 @@ typedef struct {
 /* -------------------------------- CASSERT ---------------------------------*/
 
 
-void _assert_dump(const char* file, int line, const char* format, ...);
+void _assert_dump(cstr_t file, int line, cstr_t format, ...);
 void cassert_enable_file_dump(bool val);
 
 #define cassert(expr, ...) do { \
@@ -46,6 +46,7 @@ void cassert_enable_file_dump(bool val);
 
 typedef char str4_t[4];
 typedef char str64_t[64];
+typedef char str256_t[256];
 
 void cstr_to_wchar(cstr_t str, wchar_t* wchar);
 void wchar_to_cstr(const wchar_t* wchar, char* str);
@@ -164,6 +165,25 @@ typedef char md5str_t[33]; // + 1 for the null terminator
 void md5_str(char* input, md5_t result);
 void md5_file(FILE* file, md5_t result);
 void md5_to_str(md5_t hash, md5str_t output);
+
+
+/* -------------------------------- LOGGIN ----------------------------------*/
+
+
+#define DEBUG_MAX_LOGS 50
+
+typedef enum {
+    DEBUG_LOG,
+    DEBUG_WRN,
+    DEBUG_ERR
+} DEBUG_TYPE;
+
+void _debug_logger_add(
+    DEBUG_TYPE type, cstr_t file, int line, cstr_t format, ...);
+
+#define debug_log(...)_debug_logger_add(DEBUG_LOG, __FILE__, __LINE__, __VA_ARGS__)
+#define debug_wrn(...)_debug_logger_add(DEBUG_WRN, __FILE__, __LINE__, __VA_ARGS__)
+#define debug_err(...)_debug_logger_add(DEBUG_ERR, __FILE__, __LINE__, __VA_ARGS__)
 
 
 #endif // !__CSTD_H
