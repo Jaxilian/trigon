@@ -17,7 +17,7 @@ todo
 - [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
 - [Premake5](https://premake.github.io/)
 
-### Build
+### Building in a nutshell
 
 #### Windows:
 ```
