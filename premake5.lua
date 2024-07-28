@@ -20,6 +20,7 @@ Project.Begin(
 )
 
 Vulkan.Link()
+Project.Link("cglm")
 Project.UseModule(trigon, "tgstd")
 Project.UseModule(trigon, "tgcore")
 Project.UseModule(trigon, "trigon")
@@ -35,6 +36,7 @@ Project.Begin(
 )
 
 Project.UseModule(app_name, "test")
+Project.Link("cglm")
 Project.Link(trigon)
 Project.End(app_name)
 
