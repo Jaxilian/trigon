@@ -14,7 +14,7 @@ todo
 
 ### Dependencies
 
-- Static version of [cglm](https://github.com/recp/cglm)
+- [cglm](https://github.com/recp/cglm) (static lib)
 - [clang & llvm](https://releases.llvm.org/download.html)
 
 
