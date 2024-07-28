@@ -56,7 +56,5 @@ This code is licensed under the Personal Use License.
 ## Acknowledgments & Third Party
 
 ### Trigon uses the fellowing packages:
--[cglm](https://github.com/recp/cglm)
+- [cglm](https://github.com/recp/cglm)
 
-
-todo
