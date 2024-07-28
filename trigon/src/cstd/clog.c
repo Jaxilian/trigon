@@ -6,6 +6,11 @@
 static uint32_t log_index = 0;
 static str256_t logs[DEBUG_MAX_LOGS] = { 0 };
 
+void debug_log_clear() {
+    FILE* f = fopen("LOGS", "w");
+    fclose(f);
+    memset(logs, 0, sizeof(logs));
+}
 
 void 
 _debug_logger_add(DEBUG_TYPE type, cstr_t file, int line, cstr_t format, ...) {

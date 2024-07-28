@@ -185,5 +185,6 @@ void _debug_logger_add(
 #define debug_wrn(...)_debug_logger_add(DEBUG_WRN, __FILE__, __LINE__, __VA_ARGS__)
 #define debug_err(...)_debug_logger_add(DEBUG_ERR, __FILE__, __LINE__, __VA_ARGS__)
 
+void debug_log_clear();
 
 #endif // !__CSTD_H

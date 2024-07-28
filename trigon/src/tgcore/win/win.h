@@ -1,6 +1,7 @@
 #ifndef TG_WIN_H
 #define TG_WIN_H
 
+#include "tgcore/rdr/vkdef.h"
 #include "cstd/cstd.h"
 #include "cglm/vec2.h"
 
@@ -9,8 +10,11 @@ void		win_del(uint32_t id);
 
 void		win_get_extent(uint32_t id, vec2 out);
 void		win_get_position(uint32_t id, vec2 out);
-uint32_t	win_get_aspect(uint32_t id);
-vptr_t		win_get_handle();
+float		win_get_aspect(uint32_t id);
+vptr_t		win_get_handle(uint32_t id);
+cstr_t*		win_extensions(uint32_t* _extc);
+
+VkSurfaceKHR win_surface(uint32_t id);
 
 void service_win_start();
 void service_win_stop();
