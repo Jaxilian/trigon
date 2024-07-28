@@ -16,14 +16,14 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
 
-typedef char		tag_t[4];
+typedef char tag_t[4];
 typedef const char* cstr_t;
 
 typedef struct {
-	uint32_t version;
-	uint32_t major;
-	uint32_t minor;
-	uint32_t patch;
+    uint32_t version;
+    uint32_t major;
+    uint32_t minor;
+    uint32_t patch;
 } version_t;
 
 
@@ -39,30 +39,6 @@ void version_to_str(const version_t* v, char str[64]);
                            (((uint32_t)((v).major)) << 22U) | \
                            (((uint32_t)((v).minor)) << 12U) | \
                            ((uint32_t)((v).patch)))
-
-
-/* ------------------------------ FILE SYSTEM -------------------------------*/
-
-
-#define __TG_FS_MAX 260
-typedef char fs_t[__TG_FS_MAX];
-
-void fs_usr(fs_t dest);
-void fs_root(fs_t dest);
-void fs_append(fs_t dest, fs_t extra);
-bool fs_exists(fs_t dest);
-bool fs_isfile(fs_t dest);
-bool fs_find(fs_t path, fs_t child);
-void fs_get(fs_t path, fs_t child);
-void fs_valid(fs_t path);
-int  fs_ls(fs_t path, fs_t* out, const char* exc_ext, bool recursive);
-void fs_ext(fs_t dest, fs_t path);
-void fs_name(fs_t dest, fs_t path);
-void fs_rel(fs_t dest, fs_t ancestor, fs_t descandant);
-void fs_dir(fs_t dest);
-void fs_app(fs_t dest);
-void fs_parent(fs_t dest, fs_t path);
-void fs_cp(fs_t dest, fs_t src);
 
 
 /* -------------------------------- FLAGS -----------------------------------*/
@@ -91,23 +67,23 @@ void assert_enable_file_dump(bool val);
 
 
 typedef struct {
-	uint32_t	max_count;	// max slots
-	uint32_t	length;		// occupied slots
-	size_t		stride;		// size of each slots
-	void*		data;		// buffer
+    uint32_t    max_count;  // max slots
+    uint32_t    length;     // occupied slots
+    size_t      stride;     // size of each slots
+    void*       data;       // buffer
 
-	uint32_t	queue_out_ptr;	// next id going out
-	uint32_t	queue_in_ptr;	// next id going in
-	uint32_t*	queue;			// queue buffer
+    uint32_t    queue_out_ptr;  // next id going out
+    uint32_t    queue_in_ptr;   // next id going in
+    uint32_t* queue;          // queue buffer
 } cpool_t;
 
-void		cpool_new(cpool_t* pool, size_t stride, uint32_t preset_length);
-uint32_t	cpool_add(cpool_t* pool, void* data);
-uint32_t	cpool_len(cpool_t* pool);
-#define		cpool_get(pool, id) (void*)((char*)pool->data+id*pool->stride);
-void		cpool_pop(cpool_t* pool, uint32_t index);
-void		cpool_del(cpool_t* pool);
-size_t		cpool_mem(cpool_t* pool);
+void        cpool_new(cpool_t* pool, size_t stride, uint32_t preset_length);
+uint32_t    cpool_add(cpool_t* pool, void* data);
+uint32_t    cpool_len(cpool_t* pool);
+#define     cpool_get(pool, id) (void*)((char*)pool->data+id*pool->stride);
+void        cpool_pop(cpool_t* pool, uint32_t index);
+void        cpool_del(cpool_t* pool);
+size_t      cpool_mem(cpool_t* pool);
 
 
 /* ------------------------------ MD5 HASHING -------------------------------*/
@@ -133,4 +109,4 @@ void md5_to_str(md5_t hash, md5str_t output);
 #else
 
 #endif
-#endif // !
+#endif // TG_CSTD_H
