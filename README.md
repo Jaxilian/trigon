@@ -21,7 +21,7 @@ todo
 
 #### Windows:
 ```
-cd C:\Users\%USERNAME%\Downloads
+cd %USERPROFILE%/Downloads
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
