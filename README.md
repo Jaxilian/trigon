@@ -14,40 +14,26 @@ todo
 
 ### Dependencies
 
-- [cglm](https://github.com/recp/cglm) (static lib)
-- [clang & llvm](https://releases.llvm.org/download.html)
-
-
-#### Install libs here:
-- Windows: C:\Development\static and C:\Development\include
-- Linux:   /Development/static and /Development/include
-
-
-### Installing
-
-clone https://github.com/Jaxilian/Premake5.git to custom/path/to/premake
-
-add custom/path/to/premake to enviroment variable "PATH" 
-
-clone https://github.com/Jaxilian/trigon.git to custom/path/to/trigon
-
-open terminal in custom/path/to/trigon
+- [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
+- [Premake5](https://premake.github.io/)
 
 ### Build
-#### Windows
-```
-Open Developer Command Prompt x64
 
-cd to custom/path/to/trigon
-
-run build.bat
+#### Windows:
 ```
-
-#### Linux
+cd /path/to/somewhere/
+git clone https://github.com/Jaxilian/trigon.git
+cd trigon
+premake5 vs2022
+trigon.sln
 ```
-cd to custom/path/to/trigon
-chmod +x ./build.sh
-run ./build.sh 
+#### Linux:
+```
+cd /path/to/somewhere/
+git clone https://github.com/Jaxilian/trigon.git
+cd trigon
+premake5 vs2022
+make
 ```
 
 ## Authors
