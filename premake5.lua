@@ -1,6 +1,6 @@
-local Workspace = require("workspace")
-local Project   = require("project")
-local Vulkan    = require("vulkan")
+local Workspace = require("Workspace")
+local Project   = require("Project")
+local Vulkan    = require("Vulkan")
 
 local cpp_enabled   = false
 local show_console  = true
@@ -20,7 +20,9 @@ Project.Begin(
 )
 
 Vulkan.Link()
-
+Project.UseModule(trigon, "tgstd")
+Project.UseModule(trigon, "tgcore")
+Project.UseModule(trigon, "trigon")
 Project.End(trigon)
 
 -- BEGIN APP
@@ -32,8 +34,8 @@ Project.Begin(
     show_console
 )
 
+Project.UseModule(app_name, "test")
 Project.Link(trigon)
-
 Project.End(app_name)
 
 
