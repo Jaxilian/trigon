@@ -21,7 +21,7 @@ todo
 
 #### Windows:
 ```
-cd /path/to/somewhere/
+cd C:\Users\%USERNAME%\Downloads
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
@@ -29,7 +29,7 @@ trigon.sln
 ```
 #### Linux:
 ```
-cd /path/to/somewhere/
+cd ~
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
