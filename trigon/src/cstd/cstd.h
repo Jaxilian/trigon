@@ -63,13 +63,13 @@ uint32_t cstr_split(cstr_t in, cstr_t delimiter, char** out);
 /* -------------------------------- FLAGS -----------------------------------*/
 
 
-#define FLAG_NEW(num)               1 << num
-#define FLAG_ON(flags, flag)       flags |= flag
-#define FLAG_OFF(flags, flag)       flags &= ~flag;
-#define FLAG_ACTIVE(flags, flag)    flags & flag
-#define FLAG_TOGGLE(flags, flag)    flags ^= FLAG_B;
-#define FLAG_SHIFTL(flags, num)     flags << num
-#define FLAG_SHIFTR(flags, num)     flags >> num
+#define FLAG_NEW(num)               (1 << num)
+#define FLAG_ON(flags, flag)        (flags |= flag)
+#define FLAG_OFF(flags, flag)       (flags &= ~flag)
+#define FLAG_ACTIVE(flags, flag)    (flags & flag)
+#define FLAG_TOGGLE(flags, flag)    (flags ^= FLAG_B)
+#define FLAG_SHIFTL(flags, num)     (flags << num)
+#define FLAG_SHIFTR(flags, num)     (flags >> num)
 typedef uint32_t flags_t;
 
 
