@@ -61,7 +61,7 @@ end
 
 -- [WORKSPACE] WORKSPACE BEGIN
 workspace(WORKSPACE_NAME)
-
+    defines{"CGLM_STATIC"}
     configurations({ "debug", "release" })
     architecture("x86_64")
     startproject(APP_NAME)
@@ -85,9 +85,13 @@ filter "configurations:debug"
 filter "configurations:release"
     optimize "Full"
     symbols "Off"
+    defines {
+        "_NDEBUG",
+        "_RELEASE"
+    }
 
 filter {}
 
-project_new(LIB_NAME, false, false)
+project_new(LIB_NAME, false, true)
 link_vulkan()
-project_new(APP_NAME, true, false)
+project_new(APP_NAME, true, true)

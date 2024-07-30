@@ -20,6 +20,7 @@
 typedef char        tag_t[4];
 typedef const char* cstr_t;
 typedef void*		vptr_t;
+typedef void        (*vptrcb_t)();
 
 typedef struct {
     uint32_t version;
@@ -62,13 +63,13 @@ uint32_t cstr_split(cstr_t in, cstr_t delimiter, char** out);
 /* -------------------------------- FLAGS -----------------------------------*/
 
 
-#define flag_new(num)               1 << num
-#define flag_set(flags, flag)       flags |= flag
-#define flag_off(flags, flag)       flags &= ~flag;
-#define flag_active(flags, flag)    flags & flag
-#define flag_toggle(flags, flag)    flags ^= FLAG_B;
-#define flag_shiftl(flags, num)     flags << num
-#define flag_shiftr(flags, num)     flags >> num
+#define FLAG_NEW(num)               1 << num
+#define FLAG_ON(flags, flag)       flags |= flag
+#define FLAG_OFF(flags, flag)       flags &= ~flag;
+#define FLAG_ACTIVE(flags, flag)    flags & flag
+#define FLAG_TOGGLE(flags, flag)    flags ^= FLAG_B;
+#define FLAG_SHIFTL(flags, num)     flags << num
+#define FLAG_SHIFTR(flags, num)     flags >> num
 typedef uint32_t flags_t;
 
 
@@ -169,8 +170,6 @@ void md5_to_str(md5_t hash, md5str_t output);
 
 /* -------------------------------- LOGGIN ----------------------------------*/
 
-
-#define DEBUG_MAX_LOGS 50
 
 typedef enum {
     DEBUG_LOG,

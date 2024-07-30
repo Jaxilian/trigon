@@ -23,8 +23,6 @@
 #include <float.h>
 #include <stdbool.h>
 
-#define CGLM_STATIC
-
 #if defined(_MSC_VER)
 #  ifdef CGLM_STATIC
 #    define CGLM_EXPORT
