@@ -1,3 +1,0 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-converter/ven/lib/assimp_debug.lib filter=lfs diff=lfs merge=lfs -text
