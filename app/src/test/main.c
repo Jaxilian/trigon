@@ -1,10 +1,21 @@
 #include "trigon/trigon.h"
 
 int local_main() {
-    SERVICE_FLAGS services = 0;
-    FLAG_ON(services, SERVICE_RENDERER);
 
-    trigon_start(services);
+    app_info_t info = {
+        .name = "Trigon Editor",
+        .services = 0, // declared later
+        .version = {
+            .version    = 1,
+            .major      = 0,
+            .minor      = 0,
+            .patch      = 0
+        },
+    };
+
+    FLAG_ON(info.services, SERVICE_RENDERER);
+
+    trigon_start(&info);
     return 0;
 }
 
