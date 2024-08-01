@@ -1,4 +1,5 @@
 #include "trigon/trigon.h"
+#include "trigon/scene/scene.h"
 
 int local_main() {
 
@@ -14,6 +15,8 @@ int local_main() {
     };
 
     FLAG_ON(info.services, SERVICE_RENDERER);
+
+    scene_load("my_scene");
 
     trigon_start(&info);
     return 0;
