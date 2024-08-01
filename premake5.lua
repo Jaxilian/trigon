@@ -1,24 +1,20 @@
-local function link_vulkan()
-    local vulkan_sdk = os.getenv("VULKAN_SDK")
-    if not vulkan_sdk then
-        error("VULKAN_SDK environment variable is not set, have you installed Vulkan SDK?")
-    end
-
-    defines {
-         "_USING_VULKAN_SDK" 
-        }
-
-    includedirs {
-        vulkan_sdk .. "/Include"
-    }
-
-    libdirs { vulkan_sdk .. "/Lib" }
-    links { "vulkan-1" }
-end
-
+local USE_CPP = false
 local WORKSPACE_NAME = "trigon"
 local LIB_NAME = "trigon"
 local APP_NAME = "app"
+
+local function link_vulkan()
+    local vulkan_sdk = os.getenv("VULKAN_SDK")
+    if not vulkan_sdk then
+        error("VULKAN_SDK environment variable is not set. Have you installed Vulkan SDK?")
+    end
+
+    defines { "_USING_VULKAN_SDK" }
+
+    includedirs { path.join(vulkan_sdk, "Include") }
+    libdirs { path.join(vulkan_sdk, "Lib") }
+    links { "vulkan-1" }
+end
 
 local function project_new(name, isApp, hide_console)
     project(name)
@@ -29,7 +25,8 @@ local function project_new(name, isApp, hide_console)
     includedirs({ name .. "/src/" })
     files {
         name .. "/src/**.h",
-        name .. "/src/**.c"
+        name .. "/src/**.c",
+        name .. "/src/**.cpp"
     }
 
     if not isApp then
@@ -49,7 +46,7 @@ local function project_new(name, isApp, hide_console)
     end
 
     filter "configurations:debug"
-      
+        -- Add debug-specific settings here
 
     filter "configurations:release"
         if isApp and hide_console then
@@ -59,39 +56,71 @@ local function project_new(name, isApp, hide_console)
     filter {}
 end
 
--- [WORKSPACE] WORKSPACE BEGIN
-workspace(WORKSPACE_NAME)
-    defines{"CGLM_STATIC"}
-    configurations({ "debug", "release" })
+local function setup_workspace()
+    workspace(WORKSPACE_NAME)
+
+    defines { "CGLM_STATIC" }
+    configurations { "debug", "release" }
     architecture("x86_64")
     startproject(APP_NAME)
-    compileas "C"
-    language("C")
     cdialect("C17")
     includedirs { LIB_NAME .. "/src/cglm/include" }
-    --flags { "FatalCompileWarnings" }
-    flags{"FatalWarnings"}
--- [WORKSPACE] VISUAL STUDIO 
-filter "action:vs*"
-    defines { "VISUAL_STUDIO" }
-    buildoptions { "/wd4996" }
-    disablewarnings { 4996 }
+    
+    if USE_CPP then
+        compileas "C++"
+        language("C++")
+        cppdialect("C++latest")
+    else
+        compileas "C"
+        language("C")
+    end
 
--- [WORKSPACE] DEBUG 
-filter "configurations:debug"
-    symbols "On"
+    if os.target() == "windows" then
+        defines { "VISUAL_STUDIO", "_WIN32", "_WIN64" }
+        buildoptions { "/GR-", "/wd4996" }
+        disablewarnings { 4996 }
+    end
 
--- [WORKSPACE] RELEASE 
-filter "configurations:release"
-    optimize "Full"
-    symbols "Off"
-    defines {
-        "_NDEBUG",
-        "_RELEASE"
-    }
+    flags { "FatalWarnings" }
 
-filter {}
+    filter "configurations:debug"
+        symbols "On"
+        defines { "_DEBUG" }
 
+    filter "configurations:release"
+        flags {
+            "LinkTimeOptimization",
+            "MultiProcessorCompile",
+            "FatalWarnings",
+            "NoMinimalRebuild",
+            "NoBufferSecurityCheck",
+            "NoIncrementalLink"
+        }
+
+        if os.target() == "windows" then
+            buildoptions { "/O2", "/arch:AVX2", "/GL", "/wd4996" }
+            linkoptions { "/LTCG" }
+        else
+            buildoptions {
+                "-fno-rtti",
+                "-O2",
+                "-march=native",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-flto"
+            }
+            linkoptions { "-flto" }
+        end
+
+        optimize "Full"
+        symbols "Off"
+        defines { "_NDEBUG", "_RELEASE" }
+
+    filter {}
+end
+
+setup_workspace()
 project_new(LIB_NAME, false, true)
 link_vulkan()
 project_new(APP_NAME, true, true)
