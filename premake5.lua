@@ -16,6 +16,10 @@ local function link_vulkan()
     links { "vulkan-1" }
 end
 
+local function link_sdl()
+    links{"SDL3_%{cfg.buildcfg}"}
+end
+
 local function project_new(name, isApp, hide_console)
     project(name)
     location(name)
@@ -26,11 +30,25 @@ local function project_new(name, isApp, hide_console)
     files {
         name .. "/src/**.h",
         name .. "/src/**.c",
-        name .. "/src/**.cpp"
+        name .. "/ven/src/**.c",
+        name .. "/ven/src/**.h",
     }
+
+    if USE_CPP then
+        files {
+            name .. "/src/**.cpp",
+            name .. "/src/**.cc",
+            name .. "/ven/src/**.cc",
+            name ..  "/ven/src/**.cpp",
+        }
+    end
+
+    includedirs { name .. "/ven/include/" }
+    libdirs { name .. "/ven/lib/"  }
 
     if not isApp then
         kind("StaticLib")
+  
     else
         kind "ConsoleApp"
         includedirs({ LIB_NAME .. "/src/" })
@@ -64,8 +82,7 @@ local function setup_workspace()
     architecture("x86_64")
     startproject(APP_NAME)
     cdialect("C17")
-    --includedirs { LIB_NAME .. "/src/cglm/include" }
-
+  
     if USE_CPP then
         compileas "C++"
         language("C++")
@@ -123,4 +140,5 @@ end
 setup_workspace()
 project_new(LIB_NAME, false, true)
 link_vulkan()
+--link_sdl()
 project_new(APP_NAME, true, true)
