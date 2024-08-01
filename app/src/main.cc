@@ -1,7 +1,11 @@
 #include "trigon/trigon.h"
+#include <stdio.h>
 
-int app_main() {
-    
-    return 0;
+app_t app_main() {
+    app_t app = {};
+    app.name = "Editor";
+    app.version = version_t(1, 0, 0, 0);
+
+    return app;
 }
 

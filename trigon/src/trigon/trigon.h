@@ -1,10 +1,14 @@
 #pragma once
+#include "core/std/std.h"
 
-extern int app_main();
+
 
 struct app_t {
-	const char* name;
+	cstr_t		name;
+	version_t	version;
 };
+extern app_t app_main();
+
 
 class trigon_t{
 
