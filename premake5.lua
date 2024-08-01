@@ -64,6 +64,7 @@ local function setup_workspace()
     architecture("x86_64")
     startproject(APP_NAME)
     cdialect("C17")
+    --includedirs { LIB_NAME .. "/src/cglm/include" }
 
     if USE_CPP then
         compileas "C++"
