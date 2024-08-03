@@ -16,7 +16,6 @@ version_t::version_t(u32 version, u32 major, u32 minor, u32 patch)
 };
 
 cstr_t version_t::str() const {
-
 	return _text;
 }
 

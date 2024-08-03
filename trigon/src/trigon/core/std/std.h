@@ -1,8 +1,16 @@
 #pragma once
 
+
+/* ------------------------------ INCLUDES ----------------------------------*/
+
+
 #include <inttypes.h>
 #include <stdarg.h>
 #include <string.h>
+
+
+/* ------------------------------- DEFINES ----------------------------------*/
+
 
 typedef void*       vptr_t;
 typedef void        (*vptrcb_t)();
@@ -14,6 +22,8 @@ typedef float       f32;
 typedef double      f64;
 typedef const char* cstr_t;
 
+
+/* ------------------------------- VERSION ----------------------------------*/
 
 
 class version_t {
@@ -27,7 +37,7 @@ public:
     u32     _patch      = 0;
     char    _text[16]   = {}; //Max 999.999.999.999
 
-    u32 combined() {
+    u32 combined() const {
         return  ((((u32)(_version)) << 29U) | \
                 (((u32)(_major)) << 22U) | \
                 (((u32)(_minor)) << 12U) | \
@@ -40,6 +50,10 @@ public:
 private:
 };
 
+
+/* ------------------------------- STRINGS ----------------------------------*/
+
+
 class str_t {
 public:
      str_t(cstr_t txt = nullptr, ...);
@@ -47,43 +61,73 @@ public:
 
     void        log();
     cstr_t      cstr();
+    u32         length() const { return buff_len; }
+
+    static void wchar(char* in, wchar_t* out);
 
 private:
     char*   buff        = NULL;
     u32     buff_len    = 0;
 };
 
-template <u32 T>
-class sstr_t {
-public:
-    sstr_t(cstr_t base = nullptr) {
-        if (!base) return;
 
-        u32 l = (u32)strlen(base);
-        if (l >= len_max) {
-            return;
-        }
+/* ----------------------------- DEBUG_LOG ----------------------------------*/
 
-        len = l;
-        strcpy(buffer, base);
-    }
 
-    void append(cstr_t s) {
-        u32 l = (u32)strlen(s);
-        if (l + len >= len_max) {
-            return;
-        }
-
-        len += l;
-        strcat(buffer, s);
-    }
-
-    cstr_t str() {
-        return buffer;
-    }
-
-private:
-    u32  len        = 0;
-    u32  len_max    = T;
-    char buffer[T]  = {};
+enum DEBUG_TYPE {
+    DEBUG_LOG,
+    DEBUG_WRN,
+    DEBUG_ERR
 };
+
+void _debug_logger_add(
+    bool force_quit,
+    DEBUG_TYPE type,
+    cstr_t file, 
+    int line,
+    cstr_t format,
+    ...
+);
+
+#define debug_log(...) _debug_logger_add( \
+    false, \
+    DEBUG_LOG, \
+    __FILE__, \
+    __LINE__, \
+    __VA_ARGS__ \
+)
+
+#define debug_wrn(...) _debug_logger_add( \
+    false, \
+    DEBUG_WRN, \
+    __FILE__, \
+    __LINE__, \
+    __VA_ARGS__ \
+)
+
+#define debug_err(...) _debug_logger_add( \
+    false, \
+    DEBUG_ERR, \
+    __FILE__, \
+    __LINE__, \
+    __VA_ARGS__ \
+)
+
+#define cassert(expr, ...) do { \
+    if (!(expr)) { \
+        _debug_logger_add(\
+        true,\
+        DEBUG_ERR,\
+        __FILE__,\
+        __LINE__,\
+        __VA_ARGS__\
+        ); \
+    } \
+} while (0)
+
+
+void debug_log_clear();
+
+
+/* ----------------------------- DEBUG_LOG ----------------------------------*/
+

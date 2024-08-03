@@ -52,4 +52,9 @@ cstr_t str_t::cstr(){
 	return buff;
 }
 
+void str_t::wchar(char* in, wchar_t* out) {;
+	size_t len = mbstowcs(NULL, in, 0);
+	if (len == (size_t)(-1)) return;
+	mbstowcs(out, in, len + 1);
+}
 
