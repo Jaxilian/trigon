@@ -184,7 +184,6 @@ VkPresentModeKHR swap_t::get_present_mode(
 
 	for (u32 i = 0; i < count; i++) {
 		if (available[i] == VK_PRESENT_MODE_MAILBOX_KHR) {
-			debug_log("Use: Mailbox\n");
 			return available[i];
 		}
 	}
@@ -196,8 +195,6 @@ VkPresentModeKHR swap_t::get_present_mode(
 		}
 	}
 	*/
-
-	debug_log("Use: V-Sync\n");
 	return VK_PRESENT_MODE_FIFO_KHR;
 }
 

@@ -29,7 +29,10 @@ int trigon_t::__trigon_main() {
 
     while (trigon_t::running) {
         window_t::poll_events();
-        if (!window_t::main().active()) quit();
+        if (!window_t::main().active()) {
+            quit();
+            continue;
+        }
         
        
 
@@ -40,6 +43,7 @@ int trigon_t::__trigon_main() {
        
     }
 
+    renderer_t::ref().destroy();
     return 0;
 }
 

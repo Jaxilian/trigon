@@ -50,7 +50,7 @@ private:
 
     static win_event_cb_t resize_callback;
     void create_surface();
-
+    void destroy_surface();
 
 public:
     static void connect_resize(win_event_cb_t cb);

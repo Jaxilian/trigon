@@ -66,7 +66,17 @@ vgpu_t::vgpu_t() {
     debug_log("Virtual GPU built\n");
 }
 
+void vgpu_t::destroy() {
+    if (cmdpool) {
+        vkDestroyCommandPool(handle, cmdpool, NULL);
+        cmdpool = VK_NULL_HANDLE;
+    }
+    if (handle) {
+        vkDestroyDevice(handle, NULL);
+        handle = VK_NULL_HANDLE;
+    }
+}
+
 vgpu_t::~vgpu_t() {
-    vkDestroyCommandPool(handle, cmdpool, NULL);
-    vkDestroyDevice(handle, NULL);
+    destroy();
 }

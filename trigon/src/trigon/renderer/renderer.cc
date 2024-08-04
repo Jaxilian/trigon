@@ -13,7 +13,21 @@ renderer_t::renderer_t() {
 
 }
 
-renderer_t::~renderer_t() {
+void renderer_t::destroy() {
+    if (!vgpu_t::ref().handle) return;
+
     vkDeviceWaitIdle(vgpu_t::ref().handle);
+
+
     destroy_cmdr();
+
+    swap_t::ref().destroy();
+    vgpu_t::ref().destroy();
+    window_t::main().destroy_surface();
+    gpu_t::ref().destroy();
+    vkinst_t::ref().destroy();
+}
+
+renderer_t::~renderer_t() {
+    destroy();
 }

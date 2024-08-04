@@ -19,6 +19,7 @@ public:
     static cstr_t           APP_NAME;
     static version_t        APP_VERSION;
 
+    void destroy();
 private:
 #ifdef _DEBUG
     VkDebugUtilsMessengerEXT vkdbg = VK_NULL_HANDLE;
@@ -55,6 +56,8 @@ public:
         u32 candidate_count,
         VkImageTiling tiling,
         VkFormatFeatureFlags features);
+
+    void destroy();
 
 private:
      gpu_t();
@@ -110,6 +113,8 @@ public:
     VkQueue         graphics_queue  = VK_NULL_HANDLE;
     VkQueue         present_queue   = VK_NULL_HANDLE;
     VkCommandPool   cmdpool         = VK_NULL_HANDLE;
+
+    void destroy();
 
 private:
 

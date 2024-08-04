@@ -112,11 +112,6 @@ void window_t::close() {
         resize_callback(this, WIN_EVENT::DELETED);
     }
 
-    if (surface) {
-        vkDestroySurfaceKHR(vkinst_t::ref().vki, surface, NULL);
-        surface = nullptr;
-    }
-
     HWND hwnd = (HWND)handles[0];
     HINSTANCE hinstance = (HINSTANCE)handles[1];
 
@@ -196,6 +191,7 @@ window_t::window_t() {
     running = true;
     if (resize_callback) resize_callback(this, WIN_EVENT::CREATED);
 
+    debug_log("created window\n");
     create_surface();
 }
 
@@ -219,5 +215,11 @@ void window_t::set_name(cstr_t new_name) {
     SetWindowText((HWND)handles[0], buffer);
 }
 
+void window_t::destroy_surface() {
+    if (surface) {
+        vkDestroySurfaceKHR(vkinst_t::ref().vki, surface, NULL);
+        surface = VK_NULL_HANDLE;
+    }
+}
 
 #endif

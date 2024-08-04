@@ -190,7 +190,7 @@ void vkinst_t::load(cstr_t app_name, version_t app_ver) {
 
 }
 
-vkinst_t::~vkinst_t() {
+void vkinst_t::destroy() {
     if (!vki) return;
 
 #ifdef _DEBUG
@@ -198,4 +198,9 @@ vkinst_t::~vkinst_t() {
 #endif
 
     vkDestroyInstance(vki, NULL);
+    vki = VK_NULL_HANDLE;
+}
+
+vkinst_t::~vkinst_t() {
+    destroy();
 }

@@ -1,6 +1,10 @@
 #include "gpu.h"
 #include <stdlib.h>
 
+void gpu_t::destroy() {
+
+}
+
 gpu_t::gpu_t() {
 
     u32 dc = 0;

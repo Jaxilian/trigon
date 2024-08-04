@@ -5,7 +5,7 @@ class window_t;
 
 class renderer_t {
 public:
-
+    void destroy();
     VkCommandBuffer cmd_begin();
     void cmd_end(VkCommandBuffer buff);
 
