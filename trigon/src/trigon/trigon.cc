@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "trigon/core/dev/gpu/gpu.h"
+#include "trigon/renderer/renderer.h"
 #include "trigon/core/dev/win/window.h"
 
 trigon_t::trigon_t() {
@@ -10,18 +11,9 @@ trigon_t::trigon_t() {
         strlen(app.name) >= 3,
         "app_info_t.name needs to be at least 3 chars\n"
     );
-       
-  
+
     vkinst_t& instance = vkinst_t::ref();
     instance.load(app.name, app.version);
-
-    window_t&   window  = window_t::main();
-    gpu_t&      gpu     = gpu_t::ref();
-    vgpu_t&     vgpu    = vgpu_t::ref();
-    swap_t      swap(window);
-    window.swap = &swap;
-
-    vkDeviceWaitIdle(vgpu.handle);
 }  
 
 trigon_t::~trigon_t() {
@@ -33,7 +25,20 @@ void trigon_t::quit() {
 }
 
 int trigon_t::__trigon_main() {
- 
+    renderer_t::ref();
+
+    while (trigon_t::running) {
+        window_t::poll_events();
+        if (!window_t::main().active()) quit();
+        
+       
+
+        if (renderer_t::ref().frame_begin() != VK_SUCCESS) continue;
+
+
+        renderer_t::ref().frame_end();
+       
+    }
 
     return 0;
 }

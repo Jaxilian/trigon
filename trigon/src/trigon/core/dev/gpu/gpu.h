@@ -160,9 +160,6 @@ public:
 
 class swap_t {
 public:
-     swap_t(window_t& _win);
-    ~swap_t();
-
     void create();
     void destroy();
 
@@ -182,8 +179,8 @@ public:
     VkFence         in_flight_fences[MAX_FRAMES_IN_FLIGHT] = {};
     VkFence*        images_in_flight = VK_NULL_HANDLE;
     u32		        current_frame = 0;
-    window_t&       window;
 
+    VkResult submit(const VkCommandBuffer* buffers, u32* img_idx);
     VkResult acquire_next(u32* img_idx);
 
 private:
@@ -208,4 +205,18 @@ private:
 
     VkExtent2D get_extent();
 
+    swap_t();
+    ~swap_t();
+
+public:
+    swap_t(const swap_t&) = delete;
+    swap_t& operator=(const swap_t&) = delete;
+    swap_t(swap_t&&) = delete;
+    swap_t& operator=(swap_t&&) = delete;
+
+
+    static swap_t& ref() {
+        static swap_t instance;
+        return instance;
+    }
 };

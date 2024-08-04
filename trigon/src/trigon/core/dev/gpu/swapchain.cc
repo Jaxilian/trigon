@@ -4,6 +4,72 @@
 #include <memory.h>
 #include "trigon/core/dev/win/window.h"
 
+VkResult swap_t::submit(const VkCommandBuffer* buffers, u32* img_idx) {
+
+	VkDevice& dev = vgpu_t::ref().handle;
+	if (images_in_flight[*img_idx] != VK_NULL_HANDLE) {
+		VkFence fence = images_in_flight[*img_idx];
+		vkWaitForFences(
+			dev,
+			1,
+			&fence,
+			VK_TRUE,
+			UINT64_MAX
+		);
+	}
+
+	images_in_flight[*img_idx] = in_flight_fences[current_frame];
+
+	VkSubmitInfo submit_info = {};
+	submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+	VkSemaphore wait_sema[] = { available_semaphores[current_frame] };
+	VkPipelineStageFlags wait_stages[] = {
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT 
+	};
+
+	submit_info.waitSemaphoreCount = 1;
+	submit_info.pWaitSemaphores = wait_sema;
+	submit_info.pWaitDstStageMask = wait_stages;
+
+	submit_info.commandBufferCount = 1;
+	submit_info.pCommandBuffers = buffers;
+
+	VkSemaphore signal[] = { finished_semaphores[current_frame] };
+	submit_info.signalSemaphoreCount = 1;
+	submit_info.pSignalSemaphores = signal;
+
+	vkResetFences(dev, 1, &in_flight_fences[current_frame]);
+
+	cassert(
+		vkQueueSubmit(
+			vgpu_t::ref().graphics_queue,
+			1,
+			&submit_info,
+			in_flight_fences[current_frame]
+		) == VK_SUCCESS,
+		"failed to submit command buffer!\n"
+	);
+
+	VkPresentInfoKHR present_info = {};
+	present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	present_info.waitSemaphoreCount = 1;
+	present_info.pWaitSemaphores = signal;
+
+	VkSwapchainKHR swapchains[] = { new_swap };
+	present_info.swapchainCount = 1;
+	present_info.pSwapchains = swapchains;
+	present_info.pImageIndices = img_idx;
+
+	VkResult result = vkQueuePresentKHR(
+		vgpu_t::ref().present_queue,
+		&present_info
+	);
+
+	current_frame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT;
+	return result;
+}
+
 VkResult swap_t::acquire_next(u32* img_idx) {
 	vkWaitForFences(
 		vgpu_t::ref().handle,
@@ -139,13 +205,13 @@ VkExtent2D swap_t::get_extent() {
 	VkSurfaceCapabilitiesKHR capabilities;
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
 		gpu_t::ref().handle,
-		window.surface,
+		window_t::main().surface,
 		&capabilities
 	);
 	
 	VkExtent2D extent = {};
-	extent.width	= window.width();
-	extent.height	= window.height();
+	extent.width	= window_t::main().width();
+	extent.height	= window_t::main().height();
 
 	if (capabilities.currentExtent.width != UINT32_MAX) {
 		return capabilities.currentExtent;
@@ -187,7 +253,7 @@ void swap_t::create_swap() {
 
 	VkSwapchainCreateInfoKHR info = {};
 	info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	info.surface = window.surface;
+	info.surface = window_t::main().surface;
 
 	info.minImageCount		= images_count;
 	info.imageFormat		= surface_format.format;
@@ -447,6 +513,8 @@ void swap_t::create_sync_objects() {
 	destroy_sync_objects();
 	images_in_flight = new VkFence[images_count];
 
+	memset(images_in_flight, NULL, sizeof(VkFence) * images_count);
+
 	VkSemaphoreCreateInfo info = {};
 	info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -506,7 +574,8 @@ void swap_t::destroy() {
 	destroy_sync_objects();
 }
 
-swap_t::swap_t(window_t& _win) :window(_win){
+swap_t::swap_t(){
+	current_frame = 0;
 	create();
 }
 

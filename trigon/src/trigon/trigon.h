@@ -6,6 +6,7 @@ struct app_info_t {
 	cstr_t		name;
 	version_t	version;
 };
+
 extern app_info_t app_main();
 
 

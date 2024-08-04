@@ -35,7 +35,7 @@ public:
     void    set_name(cstr_t new_name);
 
     VkSurfaceKHR    surface = NULL;
-    swap_t*         swap    = nullptr;
+
 private:
     vptr_t          handles[2] = { NULL,NULL };
     bool            running = false;

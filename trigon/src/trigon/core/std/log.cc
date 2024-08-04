@@ -4,7 +4,7 @@
 #include "errno.h"
 #include <stdlib.h>
 
-#define MAX_LOG_SIZE 512
+#define MAX_LOG_SIZE 1024
 
 typedef char log_msg_t[MAX_LOG_SIZE];
 

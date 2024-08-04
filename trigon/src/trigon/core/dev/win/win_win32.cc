@@ -12,6 +12,7 @@
 
 win_event_cb_t window_t::resize_callback = NULL;
 void window_t::connect_resize(win_event_cb_t cb) { resize_callback = cb; }
+static bool first_check = false;
 
 cstr_t* window_t::extensions(uint32_t* count) {
 
@@ -45,10 +46,10 @@ void window_t::sync(window_t* win) {
     if (GetClientRect(hwnd, &rect)) {
         ClientToScreen(hwnd, &pt);
 
-        u32 px = (u32)pt.x;
-        u32 py = (u32)pt.y;
-        u32 w = (u32)(rect.right - rect.left);
-        u32 h = (u32)(rect.bottom - rect.top);
+        u32 px  = (u32)pt.x;
+        u32 py  = (u32)pt.y;
+        u32 w   = (u32)(rect.right - rect.left);
+        u32 h   = (u32)(rect.bottom - rect.top);
 
         if (w == win->width() && h == win->height()) return;
 
@@ -57,10 +58,15 @@ void window_t::sync(window_t* win) {
         win->properties[2] = w;
         win->properties[3] = h;
 
-        if (resize_callback && (w != 0 || h != 0)) {
-            if (win->swap) {
-                win->swap->create();
+        if (first_check) {
+            if (w != 0 || h != 0) {
+                vkDeviceWaitIdle(vgpu_t::ref().handle);
+                swap_t::ref().create();
             }
+        }
+        first_check = true;
+
+        if (resize_callback && (w != 0 || h != 0)) {
             resize_callback(win, WIN_EVENT::RESIZE_MOVE);
         }
     }
