@@ -1,16 +1,14 @@
 #include "gpu.h"
 
-vkimage_t::vkimage_t(
-    VkFormat frm, VkImageCreateInfo inf, VkMemoryPropertyFlags prop)
-    : format(frm) {
 
+void vkimage_t::create_from_info(VkImageCreateInfo inf, VkMemoryPropertyFlags prop) {
     cassert(
         vkCreateImage(
             vgpu_t::ref().handle,
             &inf,
             NULL,
             &img
-            ) == VK_SUCCESS,
+        ) == VK_SUCCESS,
         "vkimage_t failed to create image!\n"
     );
 
@@ -31,11 +29,11 @@ vkimage_t::vkimage_t(
     );
 
     cassert(vkAllocateMemory(
-            vgpu_t::ref().handle,
-            &alloc,
-            nullptr,
-            &mem
-        ) == VK_SUCCESS,
+        vgpu_t::ref().handle,
+        &alloc,
+        nullptr,
+        &mem
+    ) == VK_SUCCESS,
         "vkimage_t failed to allocate memory\n"
     );
 
@@ -46,6 +44,13 @@ vkimage_t::vkimage_t(
         0) == VK_SUCCESS,
         "vkimage_t failed to bind image memory!\n"
     );
+}
+
+vkimage_t::vkimage_t(
+    VkFormat frm, VkImageCreateInfo inf, VkMemoryPropertyFlags prop)
+    : format(frm) {
+
+    create_from_info(inf, prop);
 }
 
 void vkimage_t::destroy() {

@@ -19,6 +19,7 @@ trigon_t::trigon_t() {
     gpu_t&      gpu     = gpu_t::ref();
     vgpu_t&     vgpu    = vgpu_t::ref();
     swap_t      swap(window);
+    window.swap = &swap;
 
     vkDeviceWaitIdle(vgpu.handle);
 }  

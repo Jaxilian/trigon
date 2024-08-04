@@ -5,6 +5,7 @@
 #define WIN_MAX_NAME_LEN 16
 class renderer_t;
 class window_t;
+class swap_t;
 
 enum WIN_EVENT {
     CREATED,
@@ -34,7 +35,7 @@ public:
     void    set_name(cstr_t new_name);
 
     VkSurfaceKHR    surface = NULL;
-
+    swap_t*         swap    = nullptr;
 private:
     vptr_t          handles[2] = { NULL,NULL };
     bool            running = false;

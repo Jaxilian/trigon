@@ -140,6 +140,7 @@ public:
     VkImageView     view    = VK_NULL_HANDLE;
     bool            swapimg = false;
 
+    void create_from_info(VkImageCreateInfo inf, VkMemoryPropertyFlags prop);
     void create_view(VkImageViewCreateInfo& inf);
     void destroy();
 
@@ -172,7 +173,7 @@ public:
     u32		        images_count    = 0;
     vkimage_t*      images          = {};
 
-    u32             deoth_images_count  = 0;
+    u32             depth_images_count  = 0;
     vkimage_t*      depth_images        = {};
     u32             framebuffer_count   = 0;
     VkFramebuffer*  framebuffers        = nullptr;
@@ -182,6 +183,8 @@ public:
     VkFence*        images_in_flight = VK_NULL_HANDLE;
     u32		        current_frame = 0;
     window_t&       window;
+
+    VkResult acquire_next(u32* img_idx);
 
 private:
     void create_swap();

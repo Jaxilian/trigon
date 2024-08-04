@@ -4,6 +4,27 @@
 #include <memory.h>
 #include "trigon/core/dev/win/window.h"
 
+VkResult swap_t::acquire_next(u32* img_idx) {
+	vkWaitForFences(
+		vgpu_t::ref().handle,
+		1,
+		&in_flight_fences[current_frame],
+		VK_TRUE,
+		UINT64_MAX
+	);
+
+	VkResult result = vkAcquireNextImageKHR(
+		vgpu_t::ref().handle,
+		new_swap,
+		UINT64_MAX,
+		available_semaphores[current_frame],
+		VK_NULL_HANDLE,
+		img_idx
+	);
+
+	return result;
+}
+
 void swap_t::destroy_old_swap() {
 	if (old_swap) {
 		vkDestroySwapchainKHR(
@@ -68,6 +89,7 @@ void  swap_t::destroy_framebuffers() {
 
 		delete[] framebuffers;
 		framebuffers = nullptr;
+		framebuffer_count = 0;
 	}
 }
 
@@ -265,19 +287,204 @@ void swap_t::create_imgs() {
 void swap_t::create_render() {
 	destroy_render();
 
+	VkAttachmentDescription da{};
+	da.format = vkimage_t::depth_format();
+	da.samples = VK_SAMPLE_COUNT_1_BIT;
+	da.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	da.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	da.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	da.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	da.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	da.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
+	VkAttachmentReference dar{};
+	dar.attachment = 1;
+	dar.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	VkAttachmentDescription ca = {};
+	ca.format = vkimage_t::swap_format().format;
+	ca.samples = VK_SAMPLE_COUNT_1_BIT;
+	ca.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	ca.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	ca.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	ca.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	ca.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	ca.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+	VkAttachmentReference car = {};
+	car.attachment = 0;
+	car.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkSubpassDescription subpass = {};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &car;
+	subpass.pDepthStencilAttachment = &dar;
+
+	VkSubpassDependency dependency = {};
+	dependency.dstSubpass = 0;
+	dependency.dstAccessMask =
+		VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+		VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+	dependency.dstStageMask =
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | 
+		VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+	dependency.srcAccessMask = 0;
+	dependency.srcStageMask =
+		VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT |
+		VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+
+	VkAttachmentDescription attachments[2] = {ca, da};
+	VkRenderPassCreateInfo rpi = {};
+	rpi.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	rpi.attachmentCount = 2;
+	rpi.pAttachments = attachments;
+	rpi.subpassCount = 1;
+	rpi.pSubpasses = &subpass;
+	rpi.dependencyCount = 1;
+	rpi.pDependencies = &dependency;
+
+	cassert(
+		vkCreateRenderPass(
+			vgpu_t::ref().handle,
+			&rpi,
+			NULL,
+			&renderpass
+		) == VK_SUCCESS,
+		"swap_t failed to create renderpass!\n");
 }
 
 void swap_t::create_depth() {
+	destroy_depth();
+	depth_images = new vkimage_t[images_count];
+	VkFormat depth_format = vkimage_t::depth_format();
 
+	for (u32 i = 0; i < images_count; i++) {
+		VkImageCreateInfo info{};
+		info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+		info.imageType = VK_IMAGE_TYPE_2D;
+		info.extent.width = extent.width;
+		info.extent.height = extent.height;
+		info.extent.depth = 1;
+		info.mipLevels = 1;
+		info.arrayLayers = 1;
+		info.format = depth_format;
+		info.tiling = VK_IMAGE_TILING_OPTIMAL;
+		info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+		info.samples = VK_SAMPLE_COUNT_1_BIT;
+		info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		info.flags = 0;
+
+		depth_images[i].create_from_info(
+			info,
+			VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+		);
+		
+
+		VkImageViewCreateInfo view_info{};
+		view_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+		view_info.image = depth_images[i].img;
+		view_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+		view_info.format = depth_format;
+		view_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+		view_info.subresourceRange.baseMipLevel = 0;
+		view_info.subresourceRange.levelCount = 1;
+		view_info.subresourceRange.baseArrayLayer = 0;
+		view_info.subresourceRange.layerCount = 1;
+
+		cassert(
+			vkCreateImageView(
+				vgpu_t::ref().handle,
+				&view_info,
+				nullptr,
+				&depth_images[i].view
+			) == VK_SUCCESS,
+			"swap_t failed to create depth images!\n"
+		);
+	}
 }
 
 void swap_t::create_framebuffers() {
+	destroy_framebuffers();
 
+	framebuffers = new VkFramebuffer[images_count];
+	framebuffer_count = images_count;
+
+	for (u32 i = 0; i < images_count; i++) {
+		
+		VkImageView attachments[2] = { 
+			images[i].view,
+			depth_images[i].view
+		};
+
+
+		VkExtent2D se = extent;
+		VkFramebufferCreateInfo fi = {};
+		fi.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		fi.renderPass = renderpass;
+		fi.attachmentCount = 2;
+		fi.pAttachments = attachments;
+		fi.width = se.width;
+		fi.height = se.height;
+		fi.layers = 1;
+
+		cassert(
+			vkCreateFramebuffer(
+				vgpu_t::ref().handle,
+				&fi,
+				nullptr,
+				&framebuffers[i]
+			) == VK_SUCCESS,
+			"swap_t failed to create framebuffer!\n"
+		);
+		
+	}
 }
 
 void swap_t::create_sync_objects() {
+	destroy_sync_objects();
+	images_in_flight = new VkFence[images_count];
 
+	VkSemaphoreCreateInfo info = {};
+	info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+	VkFenceCreateInfo fence_info = {};
+	fence_info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	fence_info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+	for (u32 i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+
+		cassert(
+			vkCreateSemaphore(
+				vgpu_t::ref().handle,
+				&info,
+				nullptr,
+				&available_semaphores[i]
+			) == VK_SUCCESS,
+			"swap_t failed to create semaphores\n"
+		);
+
+		cassert(
+			vkCreateSemaphore(
+				vgpu_t::ref().handle,
+				&info,
+				nullptr,
+				&finished_semaphores[i]) == VK_SUCCESS,
+				"swap_t failed to create finished semaphores\n"
+		);
+
+		cassert(
+			vkCreateFence(
+				vgpu_t::ref().handle,
+				&fence_info,
+				nullptr,
+				&in_flight_fences[i]
+			) == VK_SUCCESS,
+			"swap_t failed to create in flight fences!\n"
+		);
+	}
 }
 
 void swap_t::create() {

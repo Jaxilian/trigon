@@ -58,6 +58,9 @@ void window_t::sync(window_t* win) {
         win->properties[3] = h;
 
         if (resize_callback && (w != 0 || h != 0)) {
+            if (win->swap) {
+                win->swap->create();
+            }
             resize_callback(win, WIN_EVENT::RESIZE_MOVE);
         }
     }
