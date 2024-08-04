@@ -4,7 +4,7 @@
 #include "errno.h"
 #include <stdlib.h>
 
-#define MAX_LOG_SIZE 256
+#define MAX_LOG_SIZE 512
 
 typedef char log_msg_t[MAX_LOG_SIZE];
 
@@ -75,6 +75,7 @@ _debug_logger_add(bool force_quit,
             logs = (log_msg_t*)malloc(size_new);
         }
     };
+
     if (!logs) {
         printf("failed to get memory for logs, should not happen!\n");
         exit(1);
@@ -84,6 +85,7 @@ _debug_logger_add(bool force_quit,
         strcpy(logs[i], logs[i - 1]);
         fputs(logs[i], f);
     }
+
     log_len = new_len;
     strcpy(logs[0], complete);
     printf("%s", complete);

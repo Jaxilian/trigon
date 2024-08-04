@@ -1,6 +1,8 @@
 #include "trigon/trigon.h"
 #include <stdio.h>
-#include "trigon/core/renderer/renderer.h"
+
+#include "trigon/core/dev/gpu/gpu.h"
+#include "trigon/core/dev/win/window.h"
 
 trigon_t::trigon_t() {
     app_info_t app = app_main();
@@ -8,17 +10,18 @@ trigon_t::trigon_t() {
         strlen(app.name) >= 3,
         "app_info_t.name needs to be at least 3 chars\n"
     );
+       
+  
+    vkinst_t& instance = vkinst_t::ref();
+    instance.load(app.name, app.version);
 
-    renderer_t& renderer    = renderer_t::ref();
-    renderer.APP_NAME       = app.name;
-    renderer.APP_VERSION    = app.version;
-    renderer.init();
+    window_t&   window  = window_t::main();
+    gpu_t&      gpu     = gpu_t::ref();
+    vgpu_t&     vgpu    = vgpu_t::ref();
+    swap_t      swap(window);
 
-    debug_log("%s : %s\n", renderer.ENGINE_NAME, renderer.ENGINE_VERSION.str());
-    debug_log("%s : %s\n", renderer.APP_NAME, renderer.APP_VERSION.str());
-
-    window_t::main().set_name(app.name);
-}
+    vkDeviceWaitIdle(vgpu.handle);
+}  
 
 trigon_t::~trigon_t() {
 
@@ -29,12 +32,7 @@ void trigon_t::quit() {
 }
 
 int trigon_t::__trigon_main() {
-    while (running) {
-        window_t::poll_events();
-
-        bool win_active = window_t::main().active();
-        if (!win_active) quit();
-    }
+ 
 
     return 0;
 }

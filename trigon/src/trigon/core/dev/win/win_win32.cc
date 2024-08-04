@@ -6,16 +6,17 @@
 #include <Windows.h>
 #include <vulkan/vulkan_win32.h>
 
-#include "renderer.h"
+#include "window.h"
+#include "trigon/core/dev/gpu/gpu.h"
 
-VkInstance      window_t::vkinstance = NULL;
+
 win_event_cb_t window_t::resize_callback = NULL;
 void window_t::connect_resize(win_event_cb_t cb) { resize_callback = cb; }
 
 cstr_t* window_t::extensions(uint32_t* count) {
 
-    #ifdef _DEBUG
-    *count = 3;
+#ifdef _DEBUG
+    * count = 3;
     static cstr_t ext[3] = {
         "VK_KHR_surface",
         "VK_KHR_win32_surface",
@@ -24,14 +25,14 @@ cstr_t* window_t::extensions(uint32_t* count) {
 
     return ext;
 
-    #else
-    *count = 2;
+#else
+    * count = 2;
     static cstr_t ext[3] = {
         "VK_KHR_surface",
         "VK_KHR_win32_surface"
     };
     return ext;
-    #endif
+#endif
 }
 
 void window_t::sync(window_t* win) {
@@ -44,10 +45,10 @@ void window_t::sync(window_t* win) {
     if (GetClientRect(hwnd, &rect)) {
         ClientToScreen(hwnd, &pt);
 
-        u32 px  = (u32)pt.x;
-        u32 py  = (u32)pt.y;
-        u32 w   = (u32)(rect.right - rect.left);
-        u32 h   = (u32)(rect.bottom - rect.top);
+        u32 px = (u32)pt.x;
+        u32 py = (u32)pt.y;
+        u32 w = (u32)(rect.right - rect.left);
+        u32 h = (u32)(rect.bottom - rect.top);
 
         if (w == win->width() && h == win->height()) return;
 
@@ -84,7 +85,7 @@ static LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     default:
         break;
     }
-    
+
     return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
@@ -103,10 +104,11 @@ void window_t::close() {
     }
 
     if (surface) {
-        vkDestroySurfaceKHR(vkinstance, surface, NULL);
+        vkDestroySurfaceKHR(vkinst_t::ref().vki, surface, NULL);
+        surface = nullptr;
     }
-   
-    HWND hwnd           = (HWND)handles[0];
+
+    HWND hwnd = (HWND)handles[0];
     HINSTANCE hinstance = (HINSTANCE)handles[1];
 
     DestroyWindow(hwnd);
@@ -115,13 +117,9 @@ void window_t::close() {
     UnregisterClassA("WIN_CREATION", hinstance);
 }
 
-void window_t::create_surface(VkInstance instance) {
-    if (!vkinstance) {
-        vkinstance = instance;
-    }
-
-    HWND        hwnd        = (HWND)handles[0];
-    HINSTANCE   hinstance   = (HINSTANCE)handles[1];
+void window_t::create_surface() {
+    HWND        hwnd = (HWND)handles[0];
+    HINSTANCE   hinstance = (HINSTANCE)handles[1];
 
     VkWin32SurfaceCreateInfoKHR info = {
         .sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
@@ -129,11 +127,20 @@ void window_t::create_surface(VkInstance instance) {
         .hinstance = hinstance,
         .hwnd = hwnd
     };
+
+    cassert(
+        vkCreateWin32SurfaceKHR(
+            vkinst_t::ref().vki,
+            &info,
+            NULL,
+            &surface) == VK_SUCCESS,
+        "failed to create window surface! [WIN32] \n"
+    );
 }
 
 window_t::window_t() {
-    HWND        hwnd        = NULL;
-    HINSTANCE   hinstance    = NULL;
+    HWND        hwnd = NULL;
+    HINSTANCE   hinstance = NULL;
 
     hinstance = GetModuleHandle(NULL);
     WNDCLASSEXW wc = { 0 };
@@ -179,6 +186,8 @@ window_t::window_t() {
     sync(this);
     running = true;
     if (resize_callback) resize_callback(this, WIN_EVENT::CREATED);
+
+    create_surface();
 }
 
 

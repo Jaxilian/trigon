@@ -1,7 +1,10 @@
-#include "renderer.h"
+#include "gpu.h"
+#include "trigon/core/dev/win/window.h"
 
-cstr_t    renderer_t::APP_NAME		= "TRIGON_APP";
-version_t renderer_t::APP_VERSION	= version_t(1, 0, 0, 0);
+cstr_t			vkinst_t::APP_NAME = "TRIGON_APP";
+version_t		vkinst_t::APP_VERSION = version_t(1, 0, 0, 0);
+const  cstr_t	vkinst_t::ENGINE_NAME = "Trigon";
+const version_t	vkinst_t::ENGINE_VERSION = version_t(1, 0, 0, 0);
 
 #ifdef _DEBUG
 static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
@@ -91,11 +94,14 @@ static void debug_gen_info(VkDebugUtilsMessengerCreateInfoEXT* inf) {
     inf->pUserData = NULL;
 }
 #endif
+vkinst_t::vkinst_t() {};
 
-void renderer_t::init() {
+void vkinst_t::load(cstr_t app_name, version_t app_ver) {
+    APP_NAME    = app_name;
+    APP_VERSION = app_ver;
 
     cstr_t validations[] = {
-        "VK_LAYER_KHRONOS_validation"
+      "VK_LAYER_KHRONOS_validation"
     };
 #ifdef _DEBUG
     u32 validations_count = 1;
@@ -106,11 +112,11 @@ void renderer_t::init() {
     VkApplicationInfo app_info = {
         .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO
     };
-    app_info.pApplicationName = APP_NAME;
+    app_info.pApplicationName   = APP_NAME;
     app_info.applicationVersion = APP_VERSION.combined();
-    app_info.pEngineName = ENGINE_NAME;
-    app_info.engineVersion = ENGINE_VERSION.combined();
-    app_info.apiVersion = VK_API_VERSION_1_2;
+    app_info.pEngineName        = ENGINE_NAME;
+    app_info.engineVersion      = ENGINE_VERSION.combined();
+    app_info.apiVersion         = VK_API_VERSION_1_2;
 
 #ifdef _DEBUG
     VkDebugUtilsMessengerCreateInfoEXT debug_info = {
@@ -147,7 +153,7 @@ void renderer_t::init() {
         vkCreateInstance(
             &create_info,
             NULL,
-            &vkinst
+            &vki
         ) == VK_SUCCESS,
         "failed to find create VkInstance!\n"
     );
@@ -155,7 +161,7 @@ void renderer_t::init() {
 #ifdef _DEBUG
     cassert(
         create_debug_util(
-            vkinst,
+            vki,
             &debug_info,
             NULL,
             &vkdbg
@@ -182,6 +188,14 @@ void renderer_t::init() {
         break;
     }
 
-    initialized = true;
 }
 
+vkinst_t::~vkinst_t() {
+    if (!vki) return;
+
+#ifdef _DEBUG
+    destroy_debug_util(vki, vkdbg, NULL);
+#endif
+
+    vkDestroyInstance(vki, NULL);
+}

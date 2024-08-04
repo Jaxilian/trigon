@@ -1,28 +1,7 @@
-#ifndef TG_VK_DEF
-#define TG_VK_DEF
+#ifndef TG_VK_DEFINES
+#define TG_VK_DEFINES
 #ifdef _USING_VULKAN_SDK
-#include "trigon/core/std/std.h"
 #include <vulkan/vulkan.h>
-
-struct swap_support_t {
-	VkSurfaceCapabilitiesKHR	capabilities	= {};
-	VkSurfaceFormatKHR*			formats			= NULL;
-	VkPresentModeKHR*			present_modes	= NULL;
-	u32 format_count	= 0;
-	u32 present_count	= 0;
-
-	swap_support_t(u32 _format_count, u32 _present_count);
-	~swap_support_t();
-};
-
-struct queue_family_indices_t {
-	u32 graphics_family	= 0;
-	u32 present_family	= 0;
-	bool graphics_valued = false;
-	bool present_valued = false;
-	bool completed() { return graphics_valued && present_valued; }
-};
-
 #else
 typedef vptr_t VkSurfaceKHR;
 typedef vptr_t VkSurfaceKHR;
@@ -58,13 +37,6 @@ typedef uint32_t VkImageUsageFlags;
 typedef uint32_t VkImageLayout;
 #endif
 
-struct vkdev_t {
-	VkInstance					instance	= VK_NULL_HANDLE;
-	VkDebugUtilsMessengerEXT	dbg_msg		= VK_NULL_HANDLE;
-	VkPhysicalDevice			physical	= VK_NULL_HANDLE;
-	VkCommandPool				cmd_pool	= VK_NULL_HANDLE;
-	VkQueue						gqueue		= VK_NULL_HANDLE;
-	VkQueue						pqueue		= VK_NULL_HANDLE;
-};
 
-#endif // !TG_VK_DEF
+
+#endif // !TG_VK_DEFINES

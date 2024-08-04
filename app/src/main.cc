@@ -1,5 +1,4 @@
 #include "trigon/trigon.h"
-#include "trigon/shader/shader.h"
 
 #include <stdio.h>
 

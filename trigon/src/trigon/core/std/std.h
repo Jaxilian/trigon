@@ -21,7 +21,7 @@ typedef uint64_t    u64;
 typedef float       f32;
 typedef double      f64;
 typedef const char* cstr_t;
-
+typedef bool        b8;
 
 /* ------------------------------- VERSION ----------------------------------*/
 
@@ -30,6 +30,7 @@ class version_t {
 public:
     version_t() {};
     version_t(u32 version, u32 major, u32 minor, u32 patch);
+    void set(u32 version, u32 major, u32 minor, u32 patch);
 
     u32     _version    = 1;
     u32     _major      = 0;

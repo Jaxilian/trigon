@@ -2,7 +2,6 @@
 #include "core/std/std.h"
 
 
-
 struct app_info_t {
 	cstr_t		name;
 	version_t	version;
@@ -20,6 +19,7 @@ private:
     trigon_t();
     ~trigon_t();
     bool running = true;
+
 
 public:
     trigon_t(const trigon_t&) = delete;
