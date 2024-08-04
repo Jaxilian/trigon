@@ -122,6 +122,8 @@ void window_t::close() {
 }
 
 void window_t::create_surface() {
+    if (surface) return;
+
     HWND        hwnd = (HWND)handles[0];
     HINSTANCE   hinstance = (HINSTANCE)handles[1];
 
@@ -216,9 +218,10 @@ void window_t::set_name(cstr_t new_name) {
 }
 
 void window_t::destroy_surface() {
-    if (surface) {
-        vkDestroySurfaceKHR(vkinst_t::ref().vki, surface, NULL);
-        surface = VK_NULL_HANDLE;
+    if (window_t::main().surface) {
+        debug_log("destroying surface...\n");
+        vkDestroySurfaceKHR(vkinst_t::ref().vki, window_t::main().surface, NULL);
+        window_t::main().surface = VK_NULL_HANDLE;
     }
 }
 

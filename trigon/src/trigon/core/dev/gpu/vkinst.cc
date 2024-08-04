@@ -192,7 +192,7 @@ void vkinst_t::load(cstr_t app_name, version_t app_ver) {
 
 void vkinst_t::destroy() {
     if (!vki) return;
-
+    debug_log("destroying instance...\n");
 #ifdef _DEBUG
     destroy_debug_util(vki, vkdbg, NULL);
 #endif

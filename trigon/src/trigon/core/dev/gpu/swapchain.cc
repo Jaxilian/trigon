@@ -562,6 +562,7 @@ void swap_t::create() {
 }
 
 void swap_t::destroy() {
+	debug_log("destroying swapchain...\n");
 	destroy_old_swap();
 	destroy_swap();
 	destroy_imgs();

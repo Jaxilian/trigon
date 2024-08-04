@@ -67,6 +67,7 @@ vgpu_t::vgpu_t() {
 }
 
 void vgpu_t::destroy() {
+    debug_log("destroying vgpu...\n");
     if (cmdpool) {
         vkDestroyCommandPool(handle, cmdpool, NULL);
         cmdpool = VK_NULL_HANDLE;
