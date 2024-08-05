@@ -10,46 +10,57 @@ local function link_vulkan()
     end
 
     defines { "_USING_VULKAN_SDK" }
-
     includedirs { path.join(vulkan_sdk, "Include") }
     libdirs { path.join(vulkan_sdk, "Lib") }
     links { "vulkan-1" }
 end
 
-local function project_new(name, isApp, hide_console)
+local function project_new(name, is_app, hide_console)
     project(name)
     location(name)
     objdir(name .. "/obj/%{cfg.buildcfg}")
     targetdir(name .. "/bin/%{cfg.buildcfg}")
     debugdir(name .. "/bin/%{cfg.buildcfg}")
-    includedirs({ name .. "/src/" })
+    includedirs { name .. "/src/" }
     files {
         name .. "/src/**.h",
         name .. "/src/**.c",
-        name .. "/src/**.cpp"
+        name .. "/ven/src/**.c",
+        name .. "/ven/src/**.h",
     }
 
-    if not isApp then
-        kind("StaticLib")
-    else
+    if USE_CPP then
+        files {
+            name .. "/src/**.cpp",
+            name .. "/src/**.cc",
+            name .. "/ven/src/**.cc",
+            name ..  "/ven/src/**.cpp",
+        }
+    end
+
+    includedirs { name .. "/ven/include/" }
+    libdirs { name .. "/ven/lib/" }
+
+    if is_app then
         kind "ConsoleApp"
-        includedirs({ LIB_NAME .. "/src/" })
-        links(LIB_NAME)
+        includedirs { LIB_NAME .. "/src/" }
+        links { LIB_NAME }
+    else
+        kind "StaticLib"
     end
 
-    if os.target() == "windows" then
+    filter { "system:windows" }
         defines { "_WIN32" }
-    elseif os.target() == "linux" then
+    filter { "system:linux" }
         defines { "_LINUX", "_UNIX" }
-    elseif os.target() == "macosx" then
+    filter { "system:macosx" }
         defines { "_MACOSX", "_UNIX" }
-    end
 
-    filter "configurations:debug"
+    filter { "configurations:debug" }
         -- Add debug-specific settings here
 
-    filter "configurations:release"
-        if isApp and hide_console then
+    filter { "configurations:release" }
+        if is_app and hide_console then
             kind "WindowedApp"
         end
 
@@ -58,36 +69,34 @@ end
 
 local function setup_workspace()
     workspace(WORKSPACE_NAME)
-
-    defines { "CGLM_STATIC" }
     configurations { "debug", "release" }
-    architecture("x86_64")
+    architecture "x86_64"
     startproject(APP_NAME)
-    cdialect("C17")
-    includedirs { LIB_NAME .. "/src/cglm/include" }
-    
-    if USE_CPP then
-        compileas "C++"
-        language("C++")
-        cppdialect("C++latest")
-    else
-        compileas "C"
-        language("C")
-    end
+    cdialect "C17"
+    defines { "CGLM_STATIC" }
 
-    if os.target() == "windows" then
-        defines { "VISUAL_STUDIO", "_WIN32", "_WIN64" }
-        buildoptions { "/GR-", "/wd4996" }
-        disablewarnings { 4996 }
+    if USE_CPP then
+        language "C++"
+        cppdialect "C++latest"
+    else
+        language "C"
     end
 
     flags { "FatalWarnings" }
 
-    filter "configurations:debug"
+    filter { "action:gmake*" }
+        buildoptions { "-march=native" }
+        linkoptions { "-march=native" }
+    filter { "action:vs*" }
+        defines { "VISUAL_STUDIO", "_WIN32", "_WIN64" }
+        buildoptions { "/GR-", "/wd4996", "/arch:AVX2" }
+        disablewarnings { "4996" }
+
+    filter { "configurations:debug" }
         symbols "On"
         defines { "_DEBUG" }
 
-    filter "configurations:release"
+    filter { "configurations:release" }
         flags {
             "LinkTimeOptimization",
             "MultiProcessorCompile",
@@ -96,6 +105,10 @@ local function setup_workspace()
             "NoBufferSecurityCheck",
             "NoIncrementalLink"
         }
+
+        optimize "Full"
+        symbols "Off"
+        defines { "_NDEBUG", "_RELEASE" }
 
         if os.target() == "windows" then
             buildoptions { "/O2", "/arch:AVX2", "/GL", "/wd4996" }
@@ -112,10 +125,6 @@ local function setup_workspace()
             }
             linkoptions { "-flto" }
         end
-
-        optimize "Full"
-        symbols "Off"
-        defines { "_NDEBUG", "_RELEASE" }
 
     filter {}
 end
