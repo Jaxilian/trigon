@@ -1,4 +1,4 @@
-#include "gpu.h"
+#include "vulkan.h"
 #include <stdlib.h>
 #include "trigon/core/dev/win/window.h"
 
@@ -29,7 +29,7 @@ qfi_t::qfi_t(VkPhysicalDevice& gpu) {
         vkGetPhysicalDeviceSurfaceSupportKHR(
             gpu,
             i,
-            window_t::main().surface,
+            vkdev_t::ref().surface,
             &present_supported
         );
 

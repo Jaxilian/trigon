@@ -1,19 +1,12 @@
 #include "trigon/trigon.h"
 #include <stdio.h>
 
-#include "trigon/core/dev/gpu/gpu.h"
 #include "trigon/renderer/renderer.h"
 #include "trigon/core/dev/win/window.h"
 
 trigon_t::trigon_t() {
-    app_info_t app = app_main();
-    cassert(
-        strlen(app.name) >= 3,
-        "app_info_t.name needs to be at least 3 chars\n"
-    );
-
-    vkinst_t& instance = vkinst_t::ref();
-    instance.load(app.name, app.version);
+   
+   
 }  
 
 trigon_t::~trigon_t() {
@@ -25,7 +18,18 @@ void trigon_t::quit() {
 }
 
 int trigon_t::__trigon_main() {
-    renderer_t::ref();
+    app_info_t app = app_main();
+
+    cassert(
+        strlen(app.name) >= 3,
+        "app_info_t.name needs to be at least 3 chars\n"
+    );
+
+    renderer_t rend(app.name, app.version);
+    window_t::main().set_name(app.name);
+
+
+    app.start_cb();
 
     while (trigon_t::running) {
         window_t::poll_events();
@@ -34,16 +38,17 @@ int trigon_t::__trigon_main() {
             continue;
         }
         
-       
+        app.update_cb();
+    
+        if (rend.get_cmdr().frame_begin() != VK_SUCCESS) continue;
 
-        if (renderer_t::ref().frame_begin() != VK_SUCCESS) continue;
 
-
-        renderer_t::ref().frame_end();
+        rend.get_cmdr().frame_end();
        
     }
-
-    renderer_t::ref().destroy();
+    vkDeviceWaitIdle(rend.get_device().device);
+  
+    rend.get_swap().destroy();
     return 0;
 }
 

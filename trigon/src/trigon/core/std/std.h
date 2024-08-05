@@ -130,5 +130,33 @@ void _debug_logger_add(
 void debug_log_clear();
 
 
-/* ----------------------------- DEBUG_LOG ----------------------------------*/
+/* --------------------------------- U32 ------------------------------------*/
 
+
+u32 get_next_power_of_two(u32 number);
+
+
+/* -------------------------------- CPOOL -----------------------------------*/
+
+
+class cpool_t {
+public:
+     cpool_t(size_t stride, u32 predef_len);
+    ~cpool_t();
+
+    vptr_t  get(u32 idx);
+    u32     add(vptr_t opt_data = nullptr);
+    u32     max_len(){return max;}
+    void    pop(u32);
+
+private:
+    vptr_t  data    = nullptr;
+    u32*    queue   = nullptr;
+    u32     max     = 8;
+    u32     len     = 0;
+    u32     qiptr   = 0; // queue in ptr
+    u32     qoptr   = 0; // queue out ptr
+    size_t  stride  = 0;
+    
+    void resize();
+};

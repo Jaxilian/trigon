@@ -7,8 +7,7 @@
 #include <vulkan/vulkan_win32.h>
 
 #include "window.h"
-#include "trigon/core/dev/gpu/gpu.h"
-
+#include "trigon/renderer/renderer.h"
 
 win_event_cb_t window_t::resize_callback = NULL;
 void window_t::connect_resize(win_event_cb_t cb) { resize_callback = cb; }
@@ -60,8 +59,8 @@ void window_t::sync(window_t* win) {
 
         if (first_check) {
             if (w != 0 || h != 0) {
-                vkDeviceWaitIdle(vgpu_t::ref().handle);
-                swap_t::ref().create();
+                vkDeviceWaitIdle(vkdev_t::ref().device);
+                renderer_t::ref().get_swap().create();
             }
         }
         first_check = true;
@@ -121,29 +120,6 @@ void window_t::close() {
     UnregisterClassA("WIN_CREATION", hinstance);
 }
 
-void window_t::create_surface() {
-    if (surface) return;
-
-    HWND        hwnd = (HWND)handles[0];
-    HINSTANCE   hinstance = (HINSTANCE)handles[1];
-
-    VkWin32SurfaceCreateInfoKHR info = {
-        .sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
-        .pNext = NULL,
-        .hinstance = hinstance,
-        .hwnd = hwnd
-    };
-
-    cassert(
-        vkCreateWin32SurfaceKHR(
-            vkinst_t::ref().vki,
-            &info,
-            NULL,
-            &surface) == VK_SUCCESS,
-        "failed to create window surface! [WIN32] \n"
-    );
-}
-
 window_t::window_t() {
     HWND        hwnd = NULL;
     HINSTANCE   hinstance = NULL;
@@ -194,7 +170,6 @@ window_t::window_t() {
     if (resize_callback) resize_callback(this, WIN_EVENT::CREATED);
 
     debug_log("created window\n");
-    create_surface();
 }
 
 
@@ -217,12 +192,28 @@ void window_t::set_name(cstr_t new_name) {
     SetWindowText((HWND)handles[0], buffer);
 }
 
-void window_t::destroy_surface() {
-    if (window_t::main().surface) {
-        debug_log("destroying surface...\n");
-        vkDestroySurfaceKHR(vkinst_t::ref().vki, window_t::main().surface, NULL);
-        window_t::main().surface = VK_NULL_HANDLE;
-    }
+
+void window_t::create_surface(window_t& window, VkSurfaceKHR& surface) {
+
+    HWND        hwnd = (HWND)window.handles[0];
+    HINSTANCE   hinstance = (HINSTANCE)window.handles[1];
+
+    VkWin32SurfaceCreateInfoKHR info = {
+        .sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
+        .pNext = NULL,
+        .hinstance = hinstance,
+        .hwnd = hwnd
+    };
+
+    cassert(
+        vkCreateWin32SurfaceKHR(
+            vkdev_t::ref().instance,
+            &info,
+            NULL,
+            &surface) == VK_SUCCESS,
+        "failed to create window surface! [WIN32] \n"
+    );
 }
+
 
 #endif

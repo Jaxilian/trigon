@@ -1,4 +1,4 @@
-#include "gpu.h"
+#include "vulkan.h"
 #include "trigon/core/dev/win/window.h"
 #include <stdlib.h>
 
@@ -6,13 +6,13 @@ swapsupp_t::swapsupp_t(VkPhysicalDevice& gpu) {
 
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
         gpu,
-        window_t::main().surface,
+        vkdev_t::ref().surface,
         &capabilities
     );
 
     vkGetPhysicalDeviceSurfaceFormatsKHR(
         gpu,
-        window_t::main().surface,
+        vkdev_t::ref().surface,
         &format_count,
         NULL
     );
@@ -24,7 +24,7 @@ swapsupp_t::swapsupp_t(VkPhysicalDevice& gpu) {
 
         vkGetPhysicalDeviceSurfaceFormatsKHR(
             gpu,
-            window_t::main().surface,
+            vkdev_t::ref().surface,
             &format_count, 
             formats
         );
@@ -32,7 +32,7 @@ swapsupp_t::swapsupp_t(VkPhysicalDevice& gpu) {
 
     vkGetPhysicalDeviceSurfacePresentModesKHR(
         gpu,
-        window_t::main().surface,
+        vkdev_t::ref().surface,
         &present_count,
         NULL
     );
@@ -45,7 +45,7 @@ swapsupp_t::swapsupp_t(VkPhysicalDevice& gpu) {
 
         vkGetPhysicalDeviceSurfacePresentModesKHR(
             gpu,
-            window_t::main().surface,
+            vkdev_t::ref().surface,
             &present_count,
             presents
         );

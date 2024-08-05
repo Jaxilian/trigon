@@ -1,16 +1,15 @@
-#include "gpu.h"
-#
+#include "vulkan.h"
+
 #include <stdlib.h>
 #include <memory.h>
 #include "trigon/core/dev/win/window.h"
 
 VkResult swap_t::submit(const VkCommandBuffer* buffers, u32* img_idx) {
 
-	VkDevice& dev = vgpu_t::ref().handle;
 	if (images_in_flight[*img_idx] != VK_NULL_HANDLE) {
 		VkFence fence = images_in_flight[*img_idx];
 		vkWaitForFences(
-			dev,
+			device.device,
 			1,
 			&fence,
 			VK_TRUE,
@@ -39,11 +38,11 @@ VkResult swap_t::submit(const VkCommandBuffer* buffers, u32* img_idx) {
 	submit_info.signalSemaphoreCount = 1;
 	submit_info.pSignalSemaphores = signal;
 
-	vkResetFences(dev, 1, &in_flight_fences[current_frame]);
+	vkResetFences(device.device, 1, &in_flight_fences[current_frame]);
 
 	cassert(
 		vkQueueSubmit(
-			vgpu_t::ref().graphics_queue,
+			device.graphics_queue,
 			1,
 			&submit_info,
 			in_flight_fences[current_frame]
@@ -62,7 +61,7 @@ VkResult swap_t::submit(const VkCommandBuffer* buffers, u32* img_idx) {
 	present_info.pImageIndices = img_idx;
 
 	VkResult result = vkQueuePresentKHR(
-		vgpu_t::ref().present_queue,
+		device.present_queue,
 		&present_info
 	);
 
@@ -72,7 +71,7 @@ VkResult swap_t::submit(const VkCommandBuffer* buffers, u32* img_idx) {
 
 VkResult swap_t::acquire_next(u32* img_idx) {
 	vkWaitForFences(
-		vgpu_t::ref().handle,
+		device.device,
 		1,
 		&in_flight_fences[current_frame],
 		VK_TRUE,
@@ -80,7 +79,7 @@ VkResult swap_t::acquire_next(u32* img_idx) {
 	);
 
 	VkResult result = vkAcquireNextImageKHR(
-		vgpu_t::ref().handle,
+		device.device,
 		new_swap,
 		UINT64_MAX,
 		available_semaphores[current_frame],
@@ -94,7 +93,7 @@ VkResult swap_t::acquire_next(u32* img_idx) {
 void swap_t::destroy_old_swap() {
 	if (old_swap) {
 		vkDestroySwapchainKHR(
-			vgpu_t::ref().handle,
+			device.device,
 			old_swap,
 			NULL
 		);
@@ -105,7 +104,7 @@ void swap_t::destroy_old_swap() {
 void swap_t::destroy_swap() {
 	if (new_swap) {
 		vkDestroySwapchainKHR(
-			vgpu_t::ref().handle,
+			device.device,
 			new_swap,
 			NULL
 		);
@@ -127,7 +126,7 @@ void swap_t::destroy_imgs() {
 void swap_t::destroy_render() {
 	if (renderpass) {
 		vkDestroyRenderPass(
-			vgpu_t::ref().handle,
+			device.device,
 			renderpass,
 			nullptr
 		);
@@ -147,7 +146,7 @@ void  swap_t::destroy_framebuffers() {
 	if (framebuffers) {
 		for (u32 i = 0; i < framebuffer_count; i++) {
 			vkDestroyFramebuffer(
-				vgpu_t::ref().handle,
+				device.device,
 				framebuffers[i], 
 				NULL
 			);
@@ -161,19 +160,18 @@ void  swap_t::destroy_framebuffers() {
 
 void  swap_t::destroy_sync_objects() {
 	for (u32 i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-		VkDevice& gpu = vgpu_t::ref().handle;
 
 		if (finished_semaphores[i]) {
-			vkDestroySemaphore(gpu, finished_semaphores[i], nullptr);
+			vkDestroySemaphore(device.device, finished_semaphores[i], nullptr);
 			finished_semaphores[i] = VK_NULL_HANDLE;
 		}
 
 		if (available_semaphores[i]) {
-			vkDestroySemaphore(gpu, available_semaphores[i], nullptr);
+			vkDestroySemaphore(device.device, available_semaphores[i], nullptr);
 			available_semaphores[i] = VK_NULL_HANDLE;
 		}
 		if (in_flight_fences[i]) {
-			vkDestroyFence(gpu, in_flight_fences[i], nullptr);
+			vkDestroyFence(device.device, in_flight_fences[i], nullptr);
 			in_flight_fences[i] = VK_NULL_HANDLE;
 		}
 	}
@@ -201,8 +199,8 @@ VkPresentModeKHR swap_t::get_present_mode(
 VkExtent2D swap_t::get_extent() {
 	VkSurfaceCapabilitiesKHR capabilities;
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-		gpu_t::ref().handle,
-		window_t::main().surface,
+		device.physical,
+		vkdev_t::ref().surface,
 		&capabilities
 	);
 	
@@ -231,7 +229,7 @@ VkExtent2D swap_t::get_extent() {
 void swap_t::create_swap() {
 	old_swap = new_swap;
 
-	swapsupp_t swapsupp(gpu_t::ref().handle);
+	swapsupp_t swapsupp(device.physical);
 
 	VkSurfaceFormatKHR	surface_format = vkimage_t::swap_format();
 	VkPresentModeKHR	present_mode = get_present_mode(
@@ -250,7 +248,7 @@ void swap_t::create_swap() {
 
 	VkSwapchainCreateInfoKHR info = {};
 	info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	info.surface = window_t::main().surface;
+	info.surface = vkdev_t::ref().surface;
 
 	info.minImageCount		= images_count;
 	info.imageFormat		= surface_format.format;
@@ -259,7 +257,7 @@ void swap_t::create_swap() {
 	info.imageArrayLayers	= 1;
 	info.imageUsage			= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-	qfi_t qfi(gpu_t::ref().handle);
+	qfi_t qfi(device.physical);
 	u32 qfis[] = { qfi.gfam, qfi.pfam };
 
 	if (qfi.gfam != qfi.pfam) {
@@ -283,7 +281,7 @@ void swap_t::create_swap() {
 
 	cassert(
 		vkCreateSwapchainKHR(
-			vgpu_t::ref().handle,
+			device.device,
 			&info,
 			nullptr,
 			&new_swap
@@ -298,7 +296,7 @@ void swap_t::create_imgs() {
 	destroy_imgs();
 
 	vkGetSwapchainImagesKHR(
-		vgpu_t::ref().handle,
+		device.device,
 		new_swap,
 		&images_count,
 		nullptr
@@ -307,7 +305,7 @@ void swap_t::create_imgs() {
 	VkImage* imgs = new VkImage[images_count];
 
 	vkGetSwapchainImagesKHR(
-		vgpu_t::ref().handle,
+		device.device,
 		new_swap,
 		&images_count,
 		imgs
@@ -334,7 +332,7 @@ void swap_t::create_imgs() {
 
 		cassert(
 			vkCreateImageView(
-				vgpu_t::ref().handle,
+				device.device,
 				&view_inf,
 				NULL,
 				&images[i].view
@@ -410,7 +408,7 @@ void swap_t::create_render() {
 
 	cassert(
 		vkCreateRenderPass(
-			vgpu_t::ref().handle,
+			device.device,
 			&rpi,
 			NULL,
 			&renderpass
@@ -459,7 +457,7 @@ void swap_t::create_depth() {
 
 		cassert(
 			vkCreateImageView(
-				vgpu_t::ref().handle,
+				device.device,
 				&view_info,
 				nullptr,
 				&depth_images[i].view
@@ -495,7 +493,7 @@ void swap_t::create_framebuffers() {
 
 		cassert(
 			vkCreateFramebuffer(
-				vgpu_t::ref().handle,
+				device.device,
 				&fi,
 				nullptr,
 				&framebuffers[i]
@@ -523,7 +521,7 @@ void swap_t::create_sync_objects() {
 
 		cassert(
 			vkCreateSemaphore(
-				vgpu_t::ref().handle,
+				device.device,
 				&info,
 				nullptr,
 				&available_semaphores[i]
@@ -533,7 +531,7 @@ void swap_t::create_sync_objects() {
 
 		cassert(
 			vkCreateSemaphore(
-				vgpu_t::ref().handle,
+				device.device,
 				&info,
 				nullptr,
 				&finished_semaphores[i]) == VK_SUCCESS,
@@ -542,7 +540,7 @@ void swap_t::create_sync_objects() {
 
 		cassert(
 			vkCreateFence(
-				vgpu_t::ref().handle,
+				device.device,
 				&fence_info,
 				nullptr,
 				&in_flight_fences[i]
@@ -562,7 +560,6 @@ void swap_t::create() {
 }
 
 void swap_t::destroy() {
-	debug_log("destroying swapchain...\n");
 	destroy_old_swap();
 	destroy_swap();
 	destroy_imgs();
@@ -572,7 +569,7 @@ void swap_t::destroy() {
 	destroy_sync_objects();
 }
 
-swap_t::swap_t(){
+swap_t::swap_t(vkdev_t& dev) :device(dev){
 	current_frame = 0;
 	create();
 }

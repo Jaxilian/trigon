@@ -1,6 +1,5 @@
 #pragma once
 #include "trigon/core/std/std.h"
-#include "trigon/core/dev/gpu/vk.h"
 
 #define WIN_MAX_NAME_LEN 16
 class renderer_t;
@@ -34,7 +33,7 @@ public:
     bool    active() { return running; }
     void    set_name(cstr_t new_name);
 
-    VkSurfaceKHR    surface = NULL;
+    static void create_surface(window_t& window, VkSurfaceKHR& surface);
 
 private:
     vptr_t          handles[2] = { NULL,NULL };
@@ -49,9 +48,6 @@ private:
     };
 
     static win_event_cb_t resize_callback;
-    void create_surface();
-    void destroy_surface();
-
 public:
     static void connect_resize(win_event_cb_t cb);
     static void sync(window_t* win);

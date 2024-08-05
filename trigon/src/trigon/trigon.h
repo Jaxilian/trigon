@@ -5,6 +5,8 @@
 struct app_info_t {
 	cstr_t		name;
 	version_t	version;
+    vptrcb_t    update_cb;
+    vptrcb_t    start_cb;
 };
 
 extern app_info_t app_main();
@@ -13,9 +15,9 @@ extern app_info_t app_main();
 class trigon_t{
 public:
 
-
     int     __trigon_main();
     void    quit();
+
 private:
     trigon_t();
     ~trigon_t();
