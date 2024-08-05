@@ -2,6 +2,7 @@
 #define TR_VK_H
 
 #include "trigon/core/std/std.h"
+#include <cglm/cglm.h>
 
 #ifdef _USING_VULKAN_SDK
 #include <vulkan/vulkan.h>
@@ -44,6 +45,18 @@ typedef u32 VkImageLayout;
 #define WIN_MAX_NAME_LEN 16
 
 typedef struct {
+	vec3 position;
+	vec3 normal;
+	vec3 color;
+	vec2 uv;
+} vertex3_t;
+
+typedef struct {
+	vec3 position;
+	vec2 uv;
+} vertex2_t;
+
+typedef struct {
 	u32		extent[2];
 	u32		position[2];
 	vptr_t	handles[2];
@@ -63,6 +76,26 @@ typedef struct {
 	u32 format_count;
 	u32 present_count;
 } vk_ssd_t; // swapchain support details
+
+
+typedef struct {
+	VkPipelineViewportStateCreateInfo		viewport;
+	VkPipelineInputAssemblyStateCreateInfo	input_assembly;
+	VkPipelineRasterizationStateCreateInfo	rasterization;
+	VkPipelineMultisampleStateCreateInfo	multisample;
+	VkPipelineColorBlendAttachmentState		color_blend_attachment;
+	VkPipelineColorBlendStateCreateInfo		color_blend_state;
+	VkPipelineDepthStencilStateCreateInfo	depth_stencil;
+	VkPipelineDynamicStateCreateInfo		dynamic_state;
+	VkVertexInputBindingDescription* vertex_binding;
+	VkVertexInputAttributeDescription* vertex_attribute;
+	uint32_t								subpass;
+	uint32_t								vertex_binding_count;
+	uint32_t								vertex_attribute_count;
+	bool									use3D;
+} vkpipeline_conf_t;
+
+void vkpipeline_conf_default(vkpipeline_conf_t* conf);
 
 
 typedef struct {
@@ -123,4 +156,7 @@ void		vkctx_poll();
 VkCommandBuffer vkctx_current_cmd();
 VkResult vkctx_frame_begin();
 VkResult vkctx_frame_end();
+
+
+
 #endif // !TR_VK_H

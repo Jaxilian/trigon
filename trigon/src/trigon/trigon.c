@@ -13,14 +13,17 @@ i32 trigon_main() {
     app_info_t info = app_main();
     vkctx_new(info.app_name, info.app_version);
 
+    info.app_start_cb();
+
     while (!vkctx_get()->win_closing) {
         vkctx_poll();
+        info.app_update_cb();
 
         vkctx_frame_begin();
 
         vkctx_frame_end();
     }
-
+    info.app_quit_cb();
     vkctx_del();
 
     return 0;

@@ -111,4 +111,28 @@ void _debug_logger_add(
 void debug_log_clear();
 
 
+/* -------------------------------  CPOOL  ----------------------------------*/
+
+
+typedef struct {
+    u32         max_count;  // max slots
+    u32         length;     // occupied slots
+    size_t      stride;     // size of each slots
+    vptr_t      data;       // buffer
+
+    u32         queue_out_ptr;  // next id going out
+    u32         queue_in_ptr;   // next id going in
+    u32*        queue;          // queue buffer
+} cpool_t;
+
+inline
+vptr_t      cpool_get(cpool_t* pool, u32 id);
+void        cpool_new(cpool_t* pool, size_t stride, u32 preset_length);
+u32         cpool_add(cpool_t* pool, vptr_t data);
+u32         cpool_len(cpool_t* pool);
+void        cpool_pop(cpool_t* pool, u32 index);
+void        cpool_del(cpool_t* pool);
+size_t      cpool_mem(cpool_t* pool);
+
+
 #endif // !TRIGON_STD_H
