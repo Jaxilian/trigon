@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "cglm/vec2.h"
+#include "trigon/core/dev/vk/vk.h"
 
 typedef struct {
 	vec2 pos;

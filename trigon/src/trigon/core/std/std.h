@@ -135,4 +135,44 @@ void        cpool_del(cpool_t* pool);
 size_t      cpool_mem(cpool_t* pool);
 
 
+/* ------------------------------ FILE SYSTEM ------------------------------- */
+
+
+#define __TG_FS_MAX 260
+typedef char fs_t[__TG_FS_MAX];
+
+void fs_usr(fs_t dest);
+void fs_root(fs_t dest);
+void fs_append(fs_t dest, fs_t extra);
+bool fs_exist(fs_t dest);
+bool fs_isfile(fs_t dest);
+bool fs_find(fs_t path, fs_t child);
+void fs_get(fs_t path, fs_t child);
+void fs_valid(fs_t path);
+int  fs_ls(fs_t path, fs_t* out, const char* exc_ext, bool recursive);
+void fs_ext(fs_t dest, fs_t path);
+void fs_name(fs_t dest, fs_t path);
+void fs_rel(fs_t dest, fs_t ancestor, fs_t descandant);
+void fs_dir(fs_t dest);
+void fs_app(fs_t dest);
+void fs_parent(fs_t dest, fs_t path);
+void fs_cd(fs_t dest, fs_t new_dest);
+
+/* ------------------------------ MD5 HASHING -------------------------------*/
+
+
+typedef u8 md5_t[16];
+typedef char md5str_t[33]; // + 1 for the null terminator
+
+void md5_str(char* input, md5_t result);
+void md5_file(vptr_t file, md5_t result);
+void md5_to_str(md5_t hash, md5str_t output);
+
+/* ------------------------------ FNV1A HASHING -------------------------------*/
+
+u32 fnv1a_hash(cstr_t text);
+
+u32 murmur3_32(const u8* key, u64 len, u32 seed);
+u64 murmur3_64(const u8* key, u64 len, u32 seed);
+
 #endif // !TRIGON_STD_H

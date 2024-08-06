@@ -87,8 +87,8 @@ typedef struct {
 	VkPipelineColorBlendStateCreateInfo		color_blend_state;
 	VkPipelineDepthStencilStateCreateInfo	depth_stencil;
 	VkPipelineDynamicStateCreateInfo		dynamic_state;
-	VkVertexInputBindingDescription* vertex_binding;
-	VkVertexInputAttributeDescription* vertex_attribute;
+	VkVertexInputBindingDescription*		vertex_binding;
+	VkVertexInputAttributeDescription*		vertex_attribute;
 	uint32_t								subpass;
 	uint32_t								vertex_binding_count;
 	uint32_t								vertex_attribute_count;

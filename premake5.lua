@@ -15,6 +15,19 @@ local function link_vulkan()
     links { "vulkan-1" }
 end
 
+local function compile_shaders()
+    if os.target() == "windows" then
+        prebuildcommands {
+            "$(ProjectDir)\\res\\shaders\\compile.bat %{cfg.buildcfg}"
+        }
+    else
+        prebuildcommands {
+            "chmod +x " .. APP_NAME .. "/res/shaders/compile.sh",
+            "./" .. APP_NAME .. "/res/shaders/compile.sh %{cfg.buildcfg}"
+        }
+    end
+end
+
 local function project_new(name, is_app, hide_console)
     project(name)
     location(name)
@@ -28,6 +41,7 @@ local function project_new(name, is_app, hide_console)
         name .. "/ven/src/**.c",
         name .. "/ven/src/**.h",
     }
+
 
     if USE_CPP then
         files {
@@ -133,3 +147,4 @@ setup_workspace()
 project_new(LIB_NAME, false, true)
 link_vulkan()
 project_new(APP_NAME, true, true)
+compile_shaders()

@@ -1,7 +1,7 @@
 #include "trigon.h"
 #include <stdio.h>
 #include "trigon/core/dev/vk/vk.h"
-
+#include "trigon/shaders/shader.h"
 
 
 
@@ -12,6 +12,7 @@
 i32 trigon_main() {
     app_info_t info = app_main();
     vkctx_new(info.app_name, info.app_version);
+    __sys_shader_init();
 
     info.app_start_cb();
 
