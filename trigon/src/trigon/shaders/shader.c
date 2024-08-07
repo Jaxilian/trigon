@@ -51,8 +51,8 @@ typedef struct {
 void shader_new(shader_info_t* info) {
 	vkpipeline_t pipe = { 0 };
 
-	u64 id = murmur3_64(info->name, strlen(info->name), 0) % 60;
-	printf("%zu\n", id);
+
+
 	/*
 	char module_name[1024] = { 0 };
 	

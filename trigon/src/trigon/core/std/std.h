@@ -168,11 +168,90 @@ void md5_str(char* input, md5_t result);
 void md5_file(vptr_t file, md5_t result);
 void md5_to_str(md5_t hash, md5str_t output);
 
-/* ------------------------------ FNV1A HASHING -------------------------------*/
+/* ------------------------------ FNV1A HASHING -----------------------------*/
 
 u32 fnv1a_hash(cstr_t text);
 
 u32 murmur3_32(const u8* key, u64 len, u32 seed);
 u64 murmur3_64(const u8* key, u64 len, u32 seed);
+
+
+/* ------------------------------- HASHMAP.c --------------------------------*/
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2020 Joshua J Baker
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Modified by Jax Carls,
+changes on the original code is copyrighted by Jax Carls
+
+*/
+
+struct hashmap;
+
+struct hashmap* hashmap_new(size_t elsize, size_t cap, u64 seed0,
+    u64 seed1,
+    u64(*hash)(const vptr_t  item, u64 seed0, u64 seed1),
+    int (*compare)(const vptr_t  a, const vptr_t  b, vptr_t  udata),
+    void (*elfree)(vptr_t  item),
+    vptr_t  udata);
+
+struct hashmap* hashmap_new_with_allocator(vptr_t(*malloc)(size_t),
+    vptr_t(*realloc)(vptr_t, size_t), void (*free)(vptr_t), size_t elsize,
+    size_t cap, u64 seed0, u64 seed1,
+    u64(*hash)(const vptr_t  item, u64 seed0, u64 seed1),
+    int (*compare)(const vptr_t  a, const vptr_t  b, vptr_t  udata),
+    void (*elfree)(vptr_t  item),
+    vptr_t  udata);
+
+void hashmap_free(struct hashmap* map);
+void hashmap_clear(struct hashmap* map, b8 update_cap);
+size_t hashmap_count(struct hashmap* map);
+b8 hashmap_oom(struct hashmap* map);
+const vptr_t  hashmap_get(struct hashmap* map, const vptr_t  item);
+const vptr_t  hashmap_set(struct hashmap* map, const vptr_t  item);
+const vptr_t  hashmap_delete(struct hashmap* map, const vptr_t  item);
+const vptr_t  hashmap_probe(struct hashmap* map, u64 position);
+
+b8 hashmap_scan(
+    struct hashmap* map,
+    b8(*iter)
+    (const vptr_t  item, vptr_t udata),
+    vptr_t  udata
+);
+
+b8 hashmap_iter(
+    struct hashmap* map, size_t* i, vptr_t* item);
+
+const vptr_t  hashmap_get_with_hash(
+    struct hashmap* map, const vptr_t  key, u64 hash);
+
+const vptr_t  hashmap_delete_with_hash(
+    struct hashmap* map, const vptr_t  key, u64 hash);
+
+const vptr_t  hashmap_set_with_hash(
+    struct hashmap* map, const vptr_t  item, u64 hash);
+
+void hashmap_set_grow_by_power(struct hashmap* map, size_t power);
+void hashmap_set_load_factor(struct hashmap* map, f64 load_factor);
+
 
 #endif // !TRIGON_STD_H
