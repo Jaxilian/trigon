@@ -8,6 +8,8 @@ void app_start() {
 	shader_info_t shainf = { 0 };
 	shainf.name = "default2d";
 	shader_new(&shainf);
+
+	
 }
 
 void app_update() {

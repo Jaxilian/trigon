@@ -205,16 +205,16 @@ changes on the original code is copyrighted by Jax Carls
 
 */
 
-struct hashmap;
+struct hashmap_t;
 
-struct hashmap* hashmap_new(size_t elsize, size_t cap, u64 seed0,
+struct hashmap_t* hashmap_new(size_t elsize, size_t cap, u64 seed0,
     u64 seed1,
     u64(*hash)(const vptr_t  item, u64 seed0, u64 seed1),
     int (*compare)(const vptr_t  a, const vptr_t  b, vptr_t  udata),
     void (*elfree)(vptr_t  item),
     vptr_t  udata);
 
-struct hashmap* hashmap_new_with_allocator(vptr_t(*malloc)(size_t),
+struct hashmap_t* hashmap_new_with_allocator(vptr_t(*malloc)(size_t),
     vptr_t(*realloc)(vptr_t, size_t), void (*free)(vptr_t), size_t elsize,
     size_t cap, u64 seed0, u64 seed1,
     u64(*hash)(const vptr_t  item, u64 seed0, u64 seed1),
@@ -222,36 +222,36 @@ struct hashmap* hashmap_new_with_allocator(vptr_t(*malloc)(size_t),
     void (*elfree)(vptr_t  item),
     vptr_t  udata);
 
-void hashmap_free(struct hashmap* map);
-void hashmap_clear(struct hashmap* map, b8 update_cap);
-size_t hashmap_count(struct hashmap* map);
-b8 hashmap_oom(struct hashmap* map);
-const vptr_t  hashmap_get(struct hashmap* map, const vptr_t  item);
-const vptr_t  hashmap_set(struct hashmap* map, const vptr_t  item);
-const vptr_t  hashmap_delete(struct hashmap* map, const vptr_t  item);
-const vptr_t  hashmap_probe(struct hashmap* map, u64 position);
+void hashmap_free(struct hashmap_t* map);
+void hashmap_clear(struct hashmap_t* map, b8 update_cap);
+size_t hashmap_count(struct hashmap_t* map);
+b8 hashmap_oom(struct hashmap_t* map);
+const vptr_t  hashmap_get(struct hashmap_t* map, const vptr_t  item);
+const vptr_t  hashmap_set(struct hashmap_t* map, const vptr_t  item);
+const vptr_t  hashmap_delete(struct hashmap_t* map, const vptr_t  item);
+const vptr_t  hashmap_probe(struct hashmap_t* map, u64 position);
 
 b8 hashmap_scan(
-    struct hashmap* map,
+    struct hashmap_t* map,
     b8(*iter)
     (const vptr_t  item, vptr_t udata),
     vptr_t  udata
 );
 
 b8 hashmap_iter(
-    struct hashmap* map, size_t* i, vptr_t* item);
+    struct hashmap_t* map, size_t* i, vptr_t* item);
 
 const vptr_t  hashmap_get_with_hash(
-    struct hashmap* map, const vptr_t  key, u64 hash);
+    struct hashmap_t* map, const vptr_t  key, u64 hash);
 
 const vptr_t  hashmap_delete_with_hash(
-    struct hashmap* map, const vptr_t  key, u64 hash);
+    struct hashmap_t* map, const vptr_t  key, u64 hash);
 
 const vptr_t  hashmap_set_with_hash(
-    struct hashmap* map, const vptr_t  item, u64 hash);
+    struct hashmap_t* map, const vptr_t  item, u64 hash);
 
-void hashmap_set_grow_by_power(struct hashmap* map, size_t power);
-void hashmap_set_load_factor(struct hashmap* map, f64 load_factor);
+void hashmap_set_grow_by_power(struct hashmap_t* map, size_t power);
+void hashmap_set_load_factor(struct hashmap_t* map, f64 load_factor);
 
 
 #endif // !TRIGON_STD_H
