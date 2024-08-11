@@ -1,8 +1,9 @@
 @echo off
 
-set ENABLE_LUAU=false
-set ENABLE_CGLM=false
+set ENABLE_LUAU=true
+set ENABLE_CGLM=true
 set ENABLE_SDL=true
+set ENABLE_ASSIMP=true
 
 if "%ENABLE_LUAU%"=="true" (
     if not exist "trigon\ven\include" (
@@ -137,6 +138,34 @@ if "%ENABLE_SDL%"=="true" (
     popd
 
     rmdir /S /Q SDL
+)
+
+if "%ENABLE_ASSIMP%"=="true" (
+    if not exist "assimp" (
+        git clone https://github.com/assimp/assimp.git
+    )
+
+    pushd assimp
+    xcopy /E /I /Y ".\include" "..\trigon\ven\include"
+    
+    if not exist "build" (
+        mkdir build
+    )
+
+
+    pushd build
+    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF ..
+    cmake --build . --config Release --parallel
+    xcopy lib\Release\assimp-vc143-mt.lib ..\..\trigon\ven\lib\release
+
+    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF ..
+    cmake --build . --config RelWithDebInfo --parallel
+    xcopy lib\RelWithDebInfo\assimp-vc143-mt.lib ..\..\trigon\ven\lib\debug
+
+    popd
+    popd
+
+     rmdir /S /Q assimp
 )
 
 
