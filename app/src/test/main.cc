@@ -1,4 +1,8 @@
+#include "trigon/trigon.h"
 
-int main(){
-	return 0;
+extern app_info_t app_init() {
+	app_info_t info = {};
+	info.test = 1;
+
+	return info;
 }

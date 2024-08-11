@@ -18,12 +18,12 @@ end
 local function compile_shaders()
     if os.target() == "windows" then
         prebuildcommands {
-            "$(ProjectDir)\\res\\shaders\\compile.bat %{cfg.buildcfg}"
+            --"$(ProjectDir)\\res\\shaders\\compile.bat %{cfg.buildcfg}"
         }
     else
         prebuildcommands {
-            "chmod +x " .. APP_NAME .. "/res/shaders/compile.sh",
-            "./" .. APP_NAME .. "/res/shaders/compile.sh %{cfg.buildcfg}"
+          --  "chmod +x " .. APP_NAME .. "/res/shaders/compile.sh",
+          --  "./" .. APP_NAME .. "/res/shaders/compile.sh %{cfg.buildcfg}"
         }
     end
 end
@@ -55,19 +55,7 @@ local function project_new(name, is_app, hide_console)
     includedirs { name .. "/ven/include/" }
     libdirs { name .. "/ven/lib/%{cfg.buildcfg}" }
 
-    links({
-        "SDL3-static",
-        "Luau.VM",
-        "Luau.EqSat",
-        "Luau.Config",
-        "Luau.Compiler",
-        "Luau.CodeGen",
-        "Luau.CLI.lib",
-        "Luau.Ast",
-        "Luau.Analysis",
-        "isocline",
-        "assimp-vc143-mt"
-    })
+    
 
     if is_app then
         kind "ConsoleApp"
@@ -75,10 +63,28 @@ local function project_new(name, is_app, hide_console)
         links { LIB_NAME }
     else
         kind "StaticLib"
+
+        links({
+           -- "SDL3",
+            "SDL3-static",
+            "Luau.VM",
+            "Luau.EqSat",
+            "Luau.Config",
+            "Luau.Compiler",
+            "Luau.CodeGen",
+            "Luau.CLI.lib.lib",
+            "Luau.Ast",
+            "Luau.Analysis",
+            "isocline",
+            "assimp-vc143-mt"
+        })
     end
 
     filter { "system:windows" }
         defines { "_WIN32" }
+        if is_app then
+            links { "winmm", "setupapi", "cfgmgr32", "version", "imm32" }
+        end
     filter { "system:linux" }
         defines { "_LINUX", "_UNIX" }
     filter { "system:macosx" }
@@ -117,8 +123,8 @@ local function setup_workspace()
         linkoptions { "-march=native" }
     filter { "action:vs*" }
         defines { "VISUAL_STUDIO", "_WIN32", "_WIN64" }
-        buildoptions { "/GR-", "/wd4996", "/arch:AVX2" }
-        disablewarnings { "4996" }
+        buildoptions { "/GR-", "/wd4996", "/wd4099", "/arch:AVX2" }
+        disablewarnings { "4996", "4099", 4099}
 
     filter { "configurations:debug" }
         symbols "On"

@@ -1,9 +1,9 @@
 @echo off
 
-set ENABLE_LUAU=true
-set ENABLE_CGLM=true
+set ENABLE_LUAU=false
+set ENABLE_CGLM=false
 set ENABLE_SDL=true
-set ENABLE_ASSIMP=true
+set ENABLE_ASSIMP=false
 
 if "%ENABLE_LUAU%"=="true" (
     if not exist "trigon\ven\include" (
@@ -124,15 +124,16 @@ if "%ENABLE_SDL%"=="true" (
 
     pushd build
 
-    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSDL_STATIC=ON ..
-    cmake --build . --config RelWithDebInfo --parallel
+    cmake -DCMAKE_BUILD_TYPE=Debug -DSDL_STATIC=ON ..
+    cmake --build . --config Debug --parallel
 
-    xcopy RelWithDebInfo\SDL3-static.lib ..\..\trigon\ven\lib\debug
+    xcopy /E /I /Y "Debug\" "..\..\trigon\ven\lib\debug"
 
     cmake -DCMAKE_BUILD_TYPE=Release -DSDL_STATIC=ON ..
     cmake --build . --config Release --parallel
     
-    xcopy Release\SDL3-static.lib ..\..\trigon\ven\lib\release
+    xcopy /E /I /Y "Release\" "..\..\trigon\ven\lib\release"
+
 
     popd
     popd
