@@ -1,8 +1,8 @@
 @echo off
 
-set ENABLE_LUAU=false
+set ENABLE_LUAU=true
 set ENABLE_CGLM=false
-set ENABLE_SDL=true
+set ENABLE_SDL=false
 set ENABLE_ASSIMP=false
 
 if "%ENABLE_LUAU%"=="true" (
@@ -49,45 +49,26 @@ if "%ENABLE_LUAU%"=="true" (
     cmake --build . --target Luau.Repl.CLI --config Release
     cmake --build . --target Luau.Analyze.CLI --config Release
 
-    rem Move .lib files to the destination folder
-    pushd RelWithDebInfo
-    set "dest=..\..\..\trigon\ven\lib\debug"
+    rem Copy the built libraries to the appropriate directories
+    xcopy /E /I /Y "Release\*.lib" "..\..\trigon\ven\lib\release"
+    xcopy /E /I /Y "RelWithDebInfo\*.lib" "..\..\trigon\ven\lib\debug"
 
-    if not exist "%dest%" (
-        mkdir "%dest%"
-    )
-    move /Y *.lib "%dest%"
     popd
 
-    set "dest=..\..\..\trigon\ven\lib\release"
-    if not exist "%dest%" (
-        mkdir "%dest%"
-    )
-
-    pushd Release
-    move /Y *.lib "%dest%"
-    popd
-
-    rem Copy header files from include folders
-    set "dest=..\..\..\trigon\ven\include"
-
-    if not exist "%dest%" (
-        echo Creating destination folder "%dest%"
-        mkdir "%dest%"
-    )
-
-    for /d %%d in (*) do (
+    set "dest=..\trigon\ven\include"
+    
+    rem Copy only the contents of the include directories without the parent folder
+    for /d %%d in (.\*) do (
         if exist "%%d\include" (
             echo Found include folder in "%%d"
-            xcopy /E /I /Y "%%d\include" "%dest%\%%~nd"
+            xcopy /E /I /Y "%%d\include\*" "%dest%\"
+            echo Copied contents of %%d\include\* to "%dest%\"
         )
     )
 
-    echo All header files have been copied to "%dest%"
-    popd
     popd
     
-    rmdir /S /Q luau
+    REM rmdir /S /Q luau
 )
 
 if "%ENABLE_CGLM%"=="true" (
@@ -169,5 +150,6 @@ if "%ENABLE_ASSIMP%"=="true" (
      rmdir /S /Q assimp
 )
 
+xcopy /Y /S /I "trigon\ven\lib\debug\*.pdb" "..\..\trigon\bin\debug"
 
 premake5 vs2022

@@ -3,6 +3,11 @@ local WORKSPACE_NAME = "trigon"
 local LIB_NAME = "trigon"
 local APP_NAME = "app"
 
+newoption {
+    trigger = "server",
+    description = "server code"
+}
+
 local function link_vulkan()
     local vulkan_sdk = os.getenv("VULKAN_SDK")
     if not vulkan_sdk then
@@ -108,6 +113,13 @@ local function setup_workspace()
     startproject(APP_NAME)
     cdialect "C17"
     defines { "CGLM_STATIC" }
+
+    if _OPTIONS["server"] then
+        defines { "_SERVER" }
+        has_option = true
+    else
+        defines { "_NSERVER" }
+    end
 
     if USE_CPP then
         language "C++"
