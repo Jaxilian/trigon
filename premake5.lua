@@ -1,4 +1,4 @@
-local USE_CPP = false
+local USE_CPP = true
 local WORKSPACE_NAME = "trigon"
 local LIB_NAME = "trigon"
 local APP_NAME = "app"
@@ -53,7 +53,21 @@ local function project_new(name, is_app, hide_console)
     end
 
     includedirs { name .. "/ven/include/" }
-    libdirs { name .. "/ven/lib/" }
+    libdirs { name .. "/ven/lib/%{cfg.buildcfg}" }
+
+    links({
+        "SDL3-static",
+        "Luau.VM",
+        "Luau.EqSat",
+        "Luau.Config",
+        "Luau.Compiler",
+        "Luau.CodeGen",
+        "Luau.CLI.lib",
+        "Luau.Ast",
+        "Luau.Analysis",
+        "isocline",
+        "assimp-vc143-mt"
+    })
 
     if is_app then
         kind "ConsoleApp"
