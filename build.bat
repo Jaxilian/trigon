@@ -85,9 +85,9 @@ if "%ENABLE_LUAU%"=="true" (
 
     echo All header files have been copied to "%dest%"
     popd
-
-    rmdir /S /Q luau
     popd
+    
+    rmdir /S /Q luau
 )
 
 if "%ENABLE_CGLM%"=="true" (
