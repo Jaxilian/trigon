@@ -60,8 +60,6 @@ local function project_new(name, is_app, hide_console)
     includedirs { name .. "/ven/include/" }
     libdirs { name .. "/ven/lib/%{cfg.buildcfg}" }
 
-    
-
     if is_app then
         kind "ConsoleApp"
         includedirs { LIB_NAME .. "/src/" }
@@ -70,8 +68,6 @@ local function project_new(name, is_app, hide_console)
         kind "StaticLib"
 
         links({
-           -- "SDL3",
-            "SDL3-static",
             "Luau.VM",
             "Luau.EqSat",
             "Luau.Config",
@@ -80,8 +76,7 @@ local function project_new(name, is_app, hide_console)
             "Luau.CLI.lib.lib",
             "Luau.Ast",
             "Luau.Analysis",
-            "isocline",
-            "assimp-vc143-mt"
+            "isocline"
         })
     end
 
