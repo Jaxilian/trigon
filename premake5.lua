@@ -9,14 +9,18 @@ newoption {
 }
 
 local function link_vulkan()
-    local vulkan_sdk = os.getenv("VULKAN_SDK")
-    if not vulkan_sdk then
-        error("VULKAN_SDK environment variable is not set. Have you installed Vulkan SDK?")
-    end
+    if os.target() == "windows" then
+        local vulkan_sdk = os.getenv("VULKAN_SDK")
+        if not vulkan_sdk then
+            error("VULKAN_SDK environment variable is not set. Have you installed Vulkan SDK?")
+        end
 
+        includedirs { path.join(vulkan_sdk, "Include") }
+        libdirs { path.join(vulkan_sdk, "Lib") }
+    else
+    end
+    
     defines { "_USING_VULKAN_SDK" }
-    includedirs { path.join(vulkan_sdk, "Include") }
-    libdirs { path.join(vulkan_sdk, "Lib") }
     links { "vulkan-1" }
 end
 
@@ -80,15 +84,16 @@ local function project_new(name, is_app, hide_console)
         })
     end
 
-    filter { "system:windows" }
+    if os.target() == "windows" then
         defines { "_WIN32" }
         if is_app then
             links { "winmm", "setupapi", "cfgmgr32", "version", "imm32" }
         end
-    filter { "system:linux" }
+    else
         defines { "_LINUX", "_UNIX" }
-    filter { "system:macosx" }
-        defines { "_MACOSX", "_UNIX" }
+    end
+    -- filter { "system:macosx" }
+    --     defines { "_MACOSX", "_UNIX" }
 
     filter { "configurations:debug" }
         -- Add debug-specific settings here
