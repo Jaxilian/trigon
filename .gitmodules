@@ -1,0 +1,6 @@
+[submodule "trigon/ven/cglm"]
+	path = trigon/ven/cglm
+	url = https://github.com/recp/cglm.git
+[submodule "trigon/ven/luna"]
+	path = trigon/ven/luna
+	url = https://github.com/Jaxilian/luna.git
