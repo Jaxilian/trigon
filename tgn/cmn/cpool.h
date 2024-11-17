@@ -35,4 +35,7 @@ uint32_t cpool_len(cpool_t* pool);
 // Returns the total memory used by the pool.
 size_t cpool_mem(cpool_t* pool);
 
+// Removes all unsed slots and decreases memory being used at a cost
+void cpool_trim(cpool_t* pool);
+
 #endif // !TGN_CPOOL_H

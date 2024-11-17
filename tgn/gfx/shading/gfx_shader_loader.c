@@ -1,7 +1,7 @@
 #include "gfx/shading/shaders/headers/fonts_default.h"
 #include "gfx_shading.h"
 
-gfx_shader_t font_shader = { 0 };
+static gfx_shader_t font_shader = { 0 };
 
 void gfx_shader_load_defaults() {
 

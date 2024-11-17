@@ -112,6 +112,7 @@ void win_frame_begin(win_t* win) {
     }
 
     gfx_frame_begin(win);
+    
 }
 
 void win_frame_end(win_t* win) {

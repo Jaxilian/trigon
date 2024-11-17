@@ -3,6 +3,9 @@
 #include <string.h>
 #include <assert.h>
 
+#define MIN_TRIM_SIZE 8
+#define DEFAULT_INITIAL_CAPACITY 16
+
 static uint32_t get_next_power_of_two(uint32_t number) {
     if (number == 0) return 1;
     uint32_t n = 1;
@@ -13,7 +16,11 @@ static uint32_t get_next_power_of_two(uint32_t number) {
 }
 
 void cpool_new(cpool_t* pool, size_t stride, uint32_t initial_capacity) {
-    uint32_t capacity = get_next_power_of_two(initial_capacity ? initial_capacity : 16);
+    if (initial_capacity < 0) initial_capacity = 0;
+
+    uint32_t capacity = get_next_power_of_two(
+        initial_capacity ? initial_capacity : DEFAULT_INITIAL_CAPACITY
+    );
 
     pool->capacity = capacity;
     pool->length = 0;
@@ -116,4 +123,15 @@ uint32_t cpool_len(cpool_t* pool) {
 
 size_t cpool_mem(cpool_t* pool) {
     return pool->capacity * pool->stride + pool->capacity * sizeof(uint32_t);
+}
+
+void cpool_trim(cpool_t* pool) {
+    uint32_t delta = pool->capacity - pool->length;
+
+    if (delta < MIN_TRIM_SIZE) {
+        return;
+    }
+
+    // not implemented yet
+
 }
