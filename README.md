@@ -10,7 +10,34 @@ A fun project
 
 ## Getting Started
 
-todo
+Here's a small example on how to create a super small project with Trigon
+```C
+#include "trigon/trigon.h"
+
+int main(){
+    gfx_init("Cards of power", (version_t){1,0,0,0});
+
+    win_t win = { 0 };
+    win_new(&win, "Window", 800, 600, 0);
+
+    win.color[0] = 0.01f;
+    win.color[1] = 0.01f;
+    win.color[2] = 0.01f;
+    win.color[3] = 1.0f;
+
+    while (win.active) {
+        win_frame_begin(&win);
+
+
+        win_frame_end(&win);
+    }
+    
+    win_del(&win);
+
+    gfx_quit();
+    return 0;
+}
+```
 
 ### Dependencies
 
@@ -25,35 +52,20 @@ cd %USERPROFILE%/Downloads
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
-trigon.sln
-echo you deserve a cookie
+tgn.sln
 ```
 #### Linux:
 ```
 cd ~
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
-premake5 vs2022
+premake5 gmake2
 make
-echo you deserve a cookie
 ```
 
 ## Authors
 
 Jax Carls
-
-## License
-
-Personal Use License
-
-This code is licensed under the Personal Use License.
-
-1. You are allowed to view and fork this repository for personal use only.
-2. You are not allowed to distribute, modify, or use the code in any form for commercial or public purposes without explicit permission from the author.
-3. This code is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement.
-4. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the code or the use or other dealings in the code.
-
-## Acknowledgments & Third Parties
 
 ### Trigon uses the fellowing packages:
 - [cglm](https://github.com/recp/cglm)
