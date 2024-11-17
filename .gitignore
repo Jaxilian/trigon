@@ -1,8 +1,5 @@
-bin
-obj
-/.vs
+.vs/
+gen/
+*.vcxproj.*
 *.vcxproj
-*.filters
-*.user
 *.sln
-Makefile
