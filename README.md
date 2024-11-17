@@ -59,7 +59,7 @@ tgn.sln
 cd ~
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
-premake5 gmak2
+premake5 gmake2
 make
 ```
 
