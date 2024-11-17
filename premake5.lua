@@ -14,7 +14,7 @@ local function link_vulkan()
     links { "vulkan-1" , "glslang"}
 end
 
-workspace("cop")
+workspace("tgn")
 configurations({"debug", "release"})
 
 startproject("cop")
