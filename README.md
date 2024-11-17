@@ -25,17 +25,15 @@ cd %USERPROFILE%/Downloads
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
 premake5 vs2022
-trigon.sln
-echo you deserve a cookie
+tgn.sln
 ```
 #### Linux:
 ```
 cd ~
 git clone https://github.com/Jaxilian/trigon.git
 cd trigon
-premake5 vs2022
+premake5 gmak2
 make
-echo you deserve a cookie
 ```
 
 ## Authors
