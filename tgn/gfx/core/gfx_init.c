@@ -108,9 +108,9 @@ void gfx_init(str_t app_name, version_t app_version) {
 
 	VkApplicationInfo appinfo = {
 		.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-		.engineVersion = "Trigon",
+		.pEngineName = "Trigon",
 		.apiVersion = VK_API_VERSION_1_3,
-		.applicationVersion = app_name,
+		.pApplicationName = app_name,
 		.engineVersion = VK_MAKE_API_VERSION(1,0,0,0),
 		.applicationVersion = VERSION_TO_INT(app_version),
 		.pNext = NULL,

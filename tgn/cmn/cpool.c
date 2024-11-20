@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #define MIN_TRIM_SIZE 8
-#define DEFAULT_INITIAL_CAPACITY 16
+#define DEFAULT_INITIAL_CAPACITY 2
 
 static uint32_t get_next_power_of_two(uint32_t number) {
     if (number == 0) return 1;

@@ -43,6 +43,21 @@ typedef void* VkPipeline;
 typedef void* VkSurfaceFormatKHR;
 typedef void* VkPresentModeKHR;
 typedef bool  VkResult;
+
+typedef void* VkPipelineViewportStateCreateInfo;
+typedef void* VkPipelineInputAssemblyStateCreateInfo;
+typedef void* VkPipelineRasterizationStateCreateInfo;
+typedef void* VkPipelineMultisampleStateCreateInfo;
+typedef void* VkPipelineColorBlendAttachmentState;
+typedef void* VkPipelineColorBlendStateCreateInfo;
+typedef void* VkPipelineDepthStencilStateCreateInfo;
+typedef void* VkPipelineDynamicStateCreateInfo;
+typedef void* VkDescriptorSetLayoutBinding;
+typedef void* VkDescriptorSetLayout;
+typedef void* VkDynamicState;
+typedef void* VkVertexInputBindingDescription;
+typedef void* VkVertexInputAttributeDescription;
+
 #endif
 
 /* ------------------------ COMMON INFORMATION -------------------------- */

@@ -116,5 +116,4 @@ void gfx_pipe_add(
 );
 
 void gfx_pipe_del(gfx_shader_t* in);
-
 #endif // !GFX_SHADING_H
