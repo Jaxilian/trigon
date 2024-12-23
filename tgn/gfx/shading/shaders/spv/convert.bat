@@ -1,3 +1,3 @@
- python convert.py fonts_default_frag.spv fonts_default_frag.h fonts_default_frag
+ python convert.py test_frag.spv test_frag.h SHADER_TEST_FRAG
 
- python convert.py fonts_default_vert.spv fonts_default_vert.h fonts_default_vert
+ python convert.py test_vert.spv test_vert.h SHADER_TEST_VERT

@@ -1,5 +1,5 @@
 #include "trigon/trigon.h"
-#include "test/tests.h"
+#include "trigon/shading/shader.h"
 
 int main(){
     gfx_init("Cards of power", (version_t){1,0,0,0});
@@ -12,16 +12,20 @@ int main(){
     win.color[2] = 0.01f;
     win.color[3] = 1.0f;
 
-    tests_init();
+
+    shader_info_t info = { 0 };
+    info.window = &win;
+
+    shader_t shader = { 0 };
+    shader_new(&shader, &info);
 
     while (win.active) {
         win_frame_begin(&win);
-        tests_update();
-        tests_draw();
+
         win_frame_end(&win);
     }
     
-    tests_stop();
+    shader_del(&shader);
 
     win_del(&win);
 

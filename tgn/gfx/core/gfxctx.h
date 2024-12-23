@@ -123,8 +123,6 @@ typedef struct {
 	win_resize_cb	callback;
 	vkdev_t*		device;
 	vkswap_t		swapchain;
-
-
 } win_t;
 
 

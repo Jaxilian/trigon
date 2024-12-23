@@ -115,7 +115,7 @@ void gfx_init(str_t app_name, version_t app_version) {
 		.applicationVersion = VERSION_TO_INT(app_version),
 		.pNext = NULL,
 	};
-
+    
 	VkDebugUtilsMessengerCreateInfoEXT debug_info = {
 		.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
 		.messageSeverity =
@@ -150,7 +150,8 @@ void gfx_init(str_t app_name, version_t app_version) {
         .ppEnabledLayerNames = validations,
 		.pNext = debug_info_ptr
 	};
-
+    
+    
 	vkCreateInstance(&createinfo, NULL, &vkinstance);
 
 #ifdef _DEBUG

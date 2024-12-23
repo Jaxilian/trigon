@@ -50,7 +50,7 @@ typedef struct {
 
 typedef struct {
     uint32_t                    resource_count;
-    gfx_shader_resource_t*          resources;
+    gfx_shader_resource_t*      resources;
     VkDescriptorSetLayout       set_layout;
 } gfx_shader_layout_t;
 

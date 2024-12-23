@@ -11,6 +11,8 @@
 #endif
 
 #define __STD_FS_MAX 240
+#define __STD_FS_TAG_MAX 32
+#define __STD_FS_TAG_COUNT 16
 typedef char fs_t[__STD_FS_MAX];
 
 void fs_usr(fs_t dest);
@@ -30,6 +32,6 @@ void fs_dir(fs_t dest);
 void fs_app(fs_t dest);
 void fs_parent(fs_t dest, fs_t path);
 void fs_cd(fs_t dest, fs_t new_dest);
-
+void fs_mkdir(fs_t dir, fs_t name);
 
 #endif

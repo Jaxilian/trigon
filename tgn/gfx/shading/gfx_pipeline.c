@@ -96,8 +96,7 @@ void gfx_pipe_add(
     in->frag_module = NULL;
 
     // CREATE DESCRIPTOR SET
-
-    VkDescriptorPool descriptor_pool;
+    VkDescriptorPool descriptor_pool = { 0 };
     gfx_desc_pool_new(
         layout->shader_layouts,
         layout->shader_layout_count,

@@ -11,7 +11,7 @@ def bin_to_header(input_file, output_file, array_name):
                 f.write("\n   ")
             f.write(f"0x{byte:02x}, ")
         f.write("\n};\n")
-        f.write(f"unsigned int {array_name}_len = {len(data)};\n")
+        f.write(f"unsigned int {array_name}_LEN = {len(data)};\n")
 
 if len(sys.argv) != 4:
     print("Usage: python bin_to_header.py <input_file> <output_file> <array_name>")
