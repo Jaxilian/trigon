@@ -28,11 +28,7 @@ void res_shader_load(const char* path, const char* pack) {
 void res_shader_build(const char* path, const char* pack) {
 	
 	fs_t bin = { 0 };
-	fs_dir(bin);
-	fs_add(bin, "bin/");
-	fs_add(bin, pack);
-	fs_add(bin, "/shaders/");
-	fs_validate(bin);
+	res_asset_folder(pack, RESOURCE_ENUM_SHADER, bin);
 	fs_mkdir(bin);
 
 	int fc		= fs_ls(path, NULL, NULL, true, NULL);

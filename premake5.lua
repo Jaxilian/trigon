@@ -105,4 +105,6 @@ project(PNAME)
     includedirs { PNAME .. "/", "tgn/" }
     location(PNAME)
     links("tgn")
-
+    if os.target() == "windows" then
+        linkoptions { "/NODEFAULTLIB:MSVCRT" }
+    end
