@@ -77,7 +77,7 @@ typedef struct {
     VkDescriptorPool    pool;
 } gfx_shader_t;
 
-void gfx_shader_new(gfx_shader_info_t* info, gfx_shader_t* out);
+void gfx_shader_new1(gfx_shader_info_t* info, gfx_shader_t* out);
 void gfx_shader_del(gfx_shader_t* in);
 void gfx_shader_load_defaults();
 void gfx_shader_unload_defaults();

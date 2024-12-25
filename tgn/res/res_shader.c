@@ -63,11 +63,11 @@ void res_shader_build(const char* path, const char* pack) {
 
 		if (is_vert) {
 			kind = shaderc_glsl_default_vertex_shader;
-			shader_extension = "_vert.spv";
+			shader_extension = VERT_FORMAT;
 		}
 		else {
 			kind = shaderc_glsl_default_fragment_shader;
-			shader_extension = "_frag.spv";
+			shader_extension = FRAG_FORMAT;
 		}
 
 		fs_add(outfile, shader_extension);

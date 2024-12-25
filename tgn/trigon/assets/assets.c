@@ -39,7 +39,9 @@ static void build(const char* pack) {
 }
 
 void tgn_assets_load(const char* pack, bool build_assets) {
+#ifdef _DEBUG
 	if (build_assets) build(pack);
+#endif
 
 
 	

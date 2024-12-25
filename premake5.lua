@@ -41,6 +41,9 @@ filter { "action:vs*" }
 filter("configurations:debug")
     symbols "On"
     defines { "_DEBUG" }
+    if os.target() == "windows" then
+        linkoptions { "/NODEFAULTLIB:MSVCRT" }
+    end
 
 filter("configurations:release")
     flags {
@@ -88,9 +91,6 @@ project(PNAME)
     includedirs { PNAME .. "/", PNAME .. "/cglm/include" }
     location(PNAME)
     link_vulkan()
-    if os.target() == "windows" then
-        linkoptions { "/NODEFAULTLIB:MSVCRT" }
-    end
 
 PNAME = PROJECT_NAME
 PROJECT_DIR = _MAIN_SCRIPT_DIR .. "/" .. PROJECT_NAME
@@ -105,6 +105,4 @@ project(PNAME)
     includedirs { PNAME .. "/", "tgn/" }
     location(PNAME)
     links("tgn")
-    if os.target() == "windows" then
-        linkoptions { "/NODEFAULTLIB:MSVCRT" }
-    end
+   

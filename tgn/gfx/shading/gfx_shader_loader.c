@@ -11,7 +11,7 @@ void gfx_shader_load_defaults() {
     info.frag_bin = (uint32_t*)fonts_default_frag;
     info.frag_bin_len = fonts_default_frag_len;
 
-    gfx_shader_new(&info, &font_shader);
+    gfx_shader_new1(&info, &font_shader);
 
    
 

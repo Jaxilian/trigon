@@ -3,6 +3,9 @@
 
 #include "cmn/fs.h"
 
+#define VERT_FORMAT "_vert.spv"
+#define FRAG_FORMAT "_frag.spv"
+
 #define RESOURCE_TYPE_COUNT 2
 static const char* RESOURCE_TYPES[RESOURCE_TYPE_COUNT] = {
 	"shaders",

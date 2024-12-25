@@ -3,15 +3,21 @@
 #include "gfx/gfx.h"
 #include <inttypes.h>
 
-typedef struct{
-	unsigned char*	data;
-	uint32_t		data_len;
-} shader_data_t;
+typedef enum {
+	SHADER_STAGE_FRAGMENT,
+	SHADER_STAGE_VERTEX
+} SHADER_STAGE;
+
+typedef enum {
+	SHADER_BUFFER_TYPE_STATIC,
+	SHADER_BUFFER_TYPE_DYNAMIC,
+	SHADER_BUFFER_TYPE_SAMPLER
+} SHADER_BUFFER_TYPE;
 
 typedef struct {
-	shader_data_t vertex_data;
-	shader_data_t fragment_data;
-	win_t* window;
+	const char*		pack;
+	const char*		name;
+	win_t*			window;
 } shader_info_t;
 
 typedef struct {

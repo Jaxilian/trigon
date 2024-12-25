@@ -1,5 +1,5 @@
 #include "trigon/trigon.h"
-#include "trigon/shading/shader.h"
+#include "trigon/shading/shaders.h"
 #include "trigon/assets/assets.h"
 
 int main(){
@@ -13,13 +13,20 @@ int main(){
     win.color[2] = 0.01f;
     win.color[3] = 1.00f;
 
+    //compiles and builds assets for release
     tgn_assets_load("base", true);
 
-    shader_info_t info = { 0 };
-    info.window = &win;
+    // creates a new shader from compilation
+    shader_info_t info  = { 
+        .pack = "base",
+        .name = "triangle",
+        .window = &win
+    };
+
     shader_t shader = { 0 };
     shader_new(&shader, &info);
 
+    // update loop
     while (win.active) {
         win_frame_begin(&win);
 
