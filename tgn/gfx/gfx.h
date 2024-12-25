@@ -26,9 +26,6 @@ void win_frame_begin(win_t* win);
 void win_frame_end(win_t* win);
 void win_del(win_t* win);
 
-#if _USING_VULKAN_SDK
-void gfx_load_requirements();
-void gfx_unload_requirements();
-#endif
+
 
 #endif // !TGN_WIN_H

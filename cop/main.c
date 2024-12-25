@@ -18,9 +18,10 @@ int main(){
 
     // creates a new shader from compilation
     shader_info_t info  = { 
-        .pack = "base",
-        .name = "triangle",
-        .window = &win
+        .pack = "base", // where the shader lies
+        .name = "triangle", // name of shader file
+        .window = &win // window that contains render pass 
+
     };
 
     shader_t shader = { 0 };

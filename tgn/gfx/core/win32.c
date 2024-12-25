@@ -95,7 +95,6 @@ void win_new(win_t* win, str_t win_name, uint32_t width, uint32_t height, uint32
     win->device = gfx_device_get(win);
     gfx_swap_sync(win);
     gfx_sync_objects_create(win);
-    gfx_load_requirements();
 }
 
 void win_frame_begin(win_t* win) {
@@ -120,7 +119,6 @@ void win_frame_end(win_t* win) {
 }
 
 void win_del(win_t* win) {
-    gfx_unload_requirements();
     gfx_swap_del(win);
     gfx_sync_objects_destroy(win);
     gfx_device_del(win);
