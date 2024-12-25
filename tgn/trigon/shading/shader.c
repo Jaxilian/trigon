@@ -5,10 +5,10 @@
 #include "cmn/fs.h"
 
 void shader_new(shader_t* shader, shader_info_t* info) {
-	fs_t fs = { 0 };
-	fs_dir(fs);
-	fs_mkdir(fs, "shaders");
-	printf("%s\n", fs);
+
+
+
+
 }
 
 

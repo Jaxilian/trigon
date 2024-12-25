@@ -1306,6 +1306,8 @@ extern "C" {
 #define __FS_NSTD_DIREND '\\'
 #endif
 
+fs_t fs_custom_projdir = { 0 };
+
 typedef struct {
 	int     len;
 	int     max;
@@ -1328,7 +1330,6 @@ void fs_validate(fs_t in) {
 		in[str_len] = __FS_STD_DIREND;
 		in[str_len + 1] = '\0';
 	}
-
 }
 
 void fs_parent(fs_t dest, fs_t path) {
@@ -1364,6 +1365,7 @@ void fs_dir(fs_t dest) {
 #else
 	getcwd(dest, __TG_FS_MAX);
 #endif
+	fs_validate(dest);
 }
 
 bool fs_isfile(fs_t dest) {
@@ -1398,7 +1400,7 @@ void fs_root(fs_t dest) {
 #endif
 }
 
-void fs_add(fs_t dest, fs_t extra) {
+void fs_add(fs_t dest, const fs_t extra) {
 	strcat(dest, extra);
 }
 
@@ -1414,9 +1416,10 @@ bool fs_exist(fs_t dest) {
 }
 
 
-void fs_cd(fs_t dest, fs_t src) {
-	strcpy(dest, src);
+bool fs_cd(fs_t dest, const fs_t src) {
+	strcat(dest, src);
 	fs_validate(dest);
+	return fs_exist(dest);
 }
 
 bool fs_find(fs_t path, fs_t child) {
@@ -1447,18 +1450,18 @@ void fs_get(fs_t path, fs_t child) {
 }
 
 
-void fs_ext(fs_t dest, fs_t path) {
+void fs_ext(fs_t out, fs_t path) {
 	const char* dot = strrchr(path, '.');
 	if (!dot || dot == path) {
-		memset(dest, 0, sizeof(fs_t));
+		memset(out, 0, sizeof(fs_t));
 		return;
 	}
 
-	strcpy(dest, dot + 1);
+	strcpy(out, dot + 1);
 }
 
 void fs_name(fs_t dest, fs_t path) {
-	const char* filename = strrchr(path, '/');
+	const char* filename = strrchr(path, __FS_STD_DIREND);
 	if (filename) {
 		filename++;
 	}
@@ -1496,7 +1499,7 @@ void fs_rel(fs_t dest, fs_t ancestor, fs_t descandant) {
 	}
 }
 
-int fs_ls(fs_t inpath, fs_t* out, const char* exc_ext, bool recursive) {
+int fs_ls(const fs_t inpath, fs_t* out, const char* exc_ext, bool recursive, const char* name) {
 	fs_t path = { 0 };
 	strcpy(path, inpath);
 	fs_validate(path);
@@ -1528,6 +1531,10 @@ int fs_ls(fs_t inpath, fs_t* out, const char* exc_ext, bool recursive) {
 
 		while ((dir = readdir(d)) != NULL) {
 			if (strcmp(dir->d_name, "..") == 0 || strcmp(dir->d_name, ".") == 0) {
+				continue;
+			}
+
+			if (name && strcmp(dir->d_name, name) != 0) {
 				continue;
 			}
 
@@ -1593,17 +1600,86 @@ void fs_pop(fs_t path) {
 	}
 }
 
-void fs_mkdir(fs_t dir, fs_t name) {
+void fs_mkdir(fs_t dir) {
 	fs_validate(dir);
 
-	fs_t path = { 0 };
-	strcpy(path, dir);
-	strcat(path, name);
-
-	if (fs_exist(path)) return;
+	if (fs_exist(dir)) return;
 
 	char cmd[512] = { 0 };
 	strcpy(cmd, "mkdir ");
-	strcat(cmd, path);
+	strcat(cmd, dir);
 	system(cmd);
+}
+
+size_t fs_readf(fs_t file, char* buffer) {
+	FILE* f = fopen(file, "rb");
+
+	if (!f) {
+		printf("failed to read file %s\n", file);
+		return 0;
+	}
+	
+	fseek(f, 0, SEEK_END);
+	size_t len = (size_t)ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	if (!buffer) {
+		fclose(f);
+		return len;
+	}
+
+	fread(buffer, 1, len, f);
+	fclose(f);
+
+	buffer[len] = '\0';
+	return len;
+}
+
+void fs_writef(fs_t file, char* buffer, size_t size) {
+	FILE* f = fopen(file, "wb");
+
+	if (!f) {
+		printf("failed to write file %s\n", file);
+		return;
+	}
+
+	if (!buffer) {
+		printf("write buffer was NULL\n");
+		fclose(f);
+		return;
+	}
+
+	fwrite(buffer, size, 1, f);
+	fclose(f);
+	return;
+}
+
+void fs_projdir(fs_t path) {
+
+	if (strlen(fs_custom_projdir) > 0) {
+		strcpy(path, fs_custom_projdir);
+		fs_validate(path);
+	}
+	else {
+		strcpy(path, PROJ_ROOT);
+		fs_validate(path);
+	}
+}
+
+void fs_new(fs_t dest, const char* str) {
+	strcpy(dest, str);
+}
+
+void fs_last(const char* path, char* out) {
+	const char* slash_back = strrchr(path, '\\');
+	const char* slash_fwd = strrchr(path, '/');
+
+	const char* last_slash = (slash_back > slash_fwd) ? slash_back : slash_fwd;
+
+	if (last_slash == NULL) {
+		strcpy(out, path);
+	}
+	else {
+		strcpy(out, last_slash + 1);
+	}
 }

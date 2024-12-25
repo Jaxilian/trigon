@@ -77,7 +77,6 @@ typedef struct {
     VkDescriptorPool    pool;
 } gfx_shader_t;
 
-void gfx_shader_compile(str_t shader_str, uint32_t str_len);
 void gfx_shader_new(gfx_shader_info_t* info, gfx_shader_t* out);
 void gfx_shader_del(gfx_shader_t* in);
 void gfx_shader_load_defaults();
@@ -116,4 +115,15 @@ void gfx_pipe_add(
 );
 
 void gfx_pipe_del(gfx_shader_t* in);
+
+
+size_t gfx_compile_shader(
+    char* src,
+    size_t size,
+    shaderc_shader_kind kind,
+    char* out,
+    const char* filename
+
+);
+
 #endif // !GFX_SHADING_H

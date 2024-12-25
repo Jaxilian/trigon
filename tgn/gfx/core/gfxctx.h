@@ -13,10 +13,11 @@ typedef void (*win_resize_cb) (void* win);
 
 #include <vulkan/vulkan.h>
 #include <stdbool.h>
-
+#include <shaderc/shaderc.h>
 
 /* --------------------- VULKAN HIDDEN DEFINITIONS ---------------------- */
 #else
+typedef void* shaderc_shader_kind;
 typedef void* VkSurfaceKHR;
 typedef void* VkInstance;
 typedef void* VkDebugUtilsMessengerEXT;

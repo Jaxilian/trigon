@@ -3,10 +3,6 @@
 #include <vulkan/vulkan.h>
 
 
-void gfx_shader_compile(str_t shader_str, uint32_t str_len) {
-	debug_wrn("gfx_shader_compile is not implemented yet!\n");
-}
-
 void gfx_shader_new(gfx_shader_info_t* info, gfx_shader_t* out) {
 
     VkShaderModuleCreateInfo fshamod_info = {0};

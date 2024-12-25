@@ -14,7 +14,7 @@ static unsigned long hash_string(const char* str) {
     return hash;
 }
 
-void dict_new(size_t initial_capacity, dict_t* dict) {
+void dict_new(dict_t* dict, size_t initial_capacity) {
     assert(dict != NULL && "dict ptr was NULL");
 
     size_t capacity = 1;

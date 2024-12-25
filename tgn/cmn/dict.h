@@ -21,7 +21,7 @@ typedef struct {
     dict_pair_t* free_list;    // Linked list of free dict_pair_t entries
 } dict_t;
 
-void dict_new(size_t initial_capacity, dict_t* dict);
+void dict_new(dict_t* dict, size_t initial_capacity);
 void dict_del(dict_t* dict);
 bool dict_add(dict_t* dict, const char* key, void* value, size_t value_size);
 bool dict_pop(dict_t* dict, const char* key);

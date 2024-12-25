@@ -11,7 +11,7 @@ local function link_vulkan()
     end
     
     defines { "_USING_VULKAN_SDK" }
-    links { "vulkan-1" , "glslang"}
+    links { "vulkan-1" , "shaderc_combined"}
 end
 
 workspace("tgn")
@@ -35,8 +35,8 @@ filter { "action:gmake*" }
     linkoptions { "-march=native" }
 filter { "action:vs*" }
     defines { "VISUAL_STUDIO", "_WIN32", "_WIN64" }
-    buildoptions { "/GR-", "/wd4996", "/wd4099", "/arch:AVX2" }
-    disablewarnings { "4996", "4099", 4099}
+    buildoptions { "/GR-", "/wd6011", "/wd4996", "/wd4099", "/arch:AVX2" }
+    disablewarnings { "4996", "4099", 4099, "6011"}
 
 filter("configurations:debug")
     symbols "On"
@@ -75,24 +75,33 @@ filter("configurations:release")
 
 filter({})
 
+local PROJECT_NAME = "cop"
 local PNAME = "tgn"
+local PROJECT_DIR = _MAIN_SCRIPT_DIR .. "/" .. PROJECT_NAME
 project(PNAME)
     kind("StaticLib")
     files({ PNAME.."/**.h", PNAME.."/**.c" })
     targetdir("gen/bin/"..PNAME.."-%{cfg.buildcfg}")
     objdir("gen/obj/"..PNAME.."-%{cfg.buildcfg}")
     debugdir("gen/bin/"..PNAME.."-%{cfg.buildcfg}")
+    defines { "PROJ_ROOT=\"" .. PROJECT_DIR .. "\"" }
     includedirs { PNAME .. "/", PNAME .. "/cglm/include" }
     location(PNAME)
     link_vulkan()
+    if os.target() == "windows" then
+        linkoptions { "/NODEFAULTLIB:MSVCRT" }
+    end
 
-PNAME = "cop"
+PNAME = PROJECT_NAME
+PROJECT_DIR = _MAIN_SCRIPT_DIR .. "/" .. PROJECT_NAME
 project(PNAME)
+
     kind("ConsoleApp")
     files({ PNAME.."/**.h", PNAME.."/**.c" })
     targetdir("gen/bin/"..PNAME.."-%{cfg.buildcfg}")
     objdir("gen/obj/"..PNAME.."-%{cfg.buildcfg}")
     debugdir("gen/bin/"..PNAME.."-%{cfg.buildcfg}")
+    defines { "PROJ_ROOT=\"" .. PROJECT_DIR .. "\"" }
     includedirs { PNAME .. "/", "tgn/" }
     location(PNAME)
     links("tgn")
