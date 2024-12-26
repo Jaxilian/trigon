@@ -13,6 +13,7 @@ A fun project
 Here's a small example on how to create a super small project with Trigon
 ```C
 #include "trigon/trigon.h"
+#include "trigon/assets/assets.h"
 
 int main(){
     gfx_init("Cards of power", (version_t){1,0,0,0});
@@ -23,18 +24,35 @@ int main(){
     win.color[0] = 0.01f;
     win.color[1] = 0.01f;
     win.color[2] = 0.01f;
-    win.color[3] = 1.0f;
+    win.color[3] = 1.00f;
 
+    //compiles and builds assets for release
+    tgn_assets_load("base", true);
+
+    shader_info_t info  = { 
+        .pack = "base",     // which pack owns this shader
+        .name = "triangle", // name of shader file
+        .window = &win      // which window should it be rendered on
+
+    };
+
+    shader_t shader = { 0 };
+    shader_new(&shader, &info);
+
+    // update loop
     while (win.active) {
         win_frame_begin(&win);
 
+        // test drawing
+        tgn_upd_test(&shader);
 
         win_frame_end(&win);
     }
     
+    shader_del(&shader);
     win_del(&win);
-
     gfx_quit();
+
     return 0;
 }
 ```
