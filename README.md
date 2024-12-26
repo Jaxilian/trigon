@@ -87,4 +87,5 @@ Jax Carls
 
 ### Trigon uses the fellowing packages:
 - [cglm](https://github.com/recp/cglm)
-
+- [stb](https://github.com/nothings/stb)
+- [cgltf](https://github.com/jkuhlmann/cgltf?tab=MIT-1-ov-file)
