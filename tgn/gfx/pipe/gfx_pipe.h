@@ -25,7 +25,8 @@ typedef struct {
 } gfx_pipe_info_t;
 
 typedef struct {
-    VkPipeline pipeline;
+    VkPipeline          pipeline;
+    VkPipelineLayout    layout;
 } gfx_pipe_t;
 
 

@@ -6,7 +6,7 @@
 #define MAX_FRAMES_IN_FLIGHT 2
 
 typedef void (*win_resize_cb) (void* win);
-
+typedef void (*win_del_cb)(void* win);
 /* -------------------- VULKAN EXPOSED DEFINITIONS ---------------------- */
 
 #if _USING_VULKAN_SDK
@@ -121,7 +121,8 @@ typedef struct {
 	float	color[4];
 
 	VkSurfaceKHR	surface;
-	win_resize_cb	callback;
+	win_resize_cb	resize_cb;
+	win_del_cb		delete_cb;
 	vkdev_t*		device;
 	vkswap_t		swapchain;
 } win_t;

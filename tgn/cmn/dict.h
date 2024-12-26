@@ -23,6 +23,8 @@ typedef struct {
 
 void dict_new(dict_t* dict, size_t initial_capacity);
 void dict_del(dict_t* dict);
+
+// copies the pointer into the dictonary
 bool dict_add(dict_t* dict, const char* key, void* value, size_t value_size);
 bool dict_pop(dict_t* dict, const char* key);
 void* dict_get(dict_t* dict, const char* key);

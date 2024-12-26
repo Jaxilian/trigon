@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <memory.h>
 
 static unsigned long hash_string(const char* str) {
     unsigned long hash = 5381;
@@ -191,6 +192,8 @@ void dict_del(dict_t* dict) {
 
     dict->capacity = dict->count = 0;
     dict->free_list = NULL;
+
+    memset(dict, 0, sizeof(dict_t));
 }
 
 void dict_shrink(dict_t* dict) {

@@ -45,6 +45,8 @@ static const VkDynamicState dynamic_states[] = {
 };
 
 void gfx_shader_new(const uint32_t* bin, size_t bin_size, VkShaderModule* mod) {
+    if (!gfx_dev()) return;
+
 	VkShaderModuleCreateInfo info = {
 		.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
 		.codeSize = bin_size,
@@ -93,8 +95,7 @@ void gfx_pipe_new(gfx_pipe_info_t* info, gfx_pipe_t* out) {
 
 
     printf("\nNEED TO PASS IN LAYOUT INFO\n\n");
-    VkPipelineLayout temp_layout = { 0 };
-    
+
     VkPipelineLayoutCreateInfo temp_info = {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
         .setLayoutCount = 0,         // Optional for now
@@ -103,11 +104,11 @@ void gfx_pipe_new(gfx_pipe_info_t* info, gfx_pipe_t* out) {
         .pPushConstantRanges = NULL  // Optional for now
     };
 
-    if (vkCreatePipelineLayout(gfx_dev()->device, &temp_info, NULL, &temp_layout) != VK_SUCCESS) {
+    if (vkCreatePipelineLayout(gfx_dev()->device, &temp_info, NULL, &out->layout) != VK_SUCCESS) {
         debug_err("failed to create pipeline layout");
     }
 
-    info->settings.pipeline_layout = temp_layout;
+    info->settings.pipeline_layout = out->layout;
 
     VkGraphicsPipelineCreateInfo pipeline_info = {
         .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,

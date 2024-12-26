@@ -30,5 +30,6 @@ typedef struct {
 
 void shader_new(shader_t* shader, shader_info_t* info);
 void shader_del(shader_t* shader);
+void shaders_clear();
 
 #endif // !SHADER_H

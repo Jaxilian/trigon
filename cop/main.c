@@ -1,6 +1,9 @@
 #include "trigon/trigon.h"
-#include "trigon/shading/shaders.h"
 #include "trigon/assets/assets.h"
+
+void on_win_del(win_t* win) {
+    shaders_clear();
+}
 
 int main(){
     gfx_init("Cards of power", (version_t){1,0,0,0});
@@ -13,14 +16,15 @@ int main(){
     win.color[2] = 0.01f;
     win.color[3] = 1.00f;
 
-    //compiles and builds assets for release
+    win_connect_to_del(&win, on_win_del);
+
+    //compiles and builds assets for release (only runs in debug currently)
     tgn_assets_load("base", true);
 
-    // creates a new shader from compilation
     shader_info_t info  = { 
-        .pack = "base", // where the shader lies
+        .pack = "base",     // which pack owns this shader
         .name = "triangle", // name of shader file
-        .window = &win // window that contains render pass 
+        .window = &win      // which window should it be rendered on
 
     };
 
@@ -29,12 +33,17 @@ int main(){
 
     // update loop
     while (win.active) {
-        win_frame_begin(&win);
+        bool valid =  win_frame_begin(&win);
+        if (!valid) continue;
+
+        // test drawing
         tgn_upd_test(&shader);
+
         win_frame_end(&win);
     }
-    
-    shader_del(&shader);
+    debug_log("Shutting down\n");
+
+   
     win_del(&win);
     gfx_quit();
 

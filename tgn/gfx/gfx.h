@@ -22,7 +22,8 @@ void gfx_init(str_t app_name, version_t app_version);
 void gfx_quit();
 
 void win_new(win_t* win, str_t win_name, uint32_t width, uint32_t height, uint32_t flags);
-void win_frame_begin(win_t* win);
+void win_connect_to_del(win_t* win, win_del_cb cb);
+bool win_frame_begin(win_t* win); // returns true if successfully began a frame
 void win_frame_end(win_t* win);
 void win_del(win_t* win);
 

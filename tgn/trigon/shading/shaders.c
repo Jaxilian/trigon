@@ -4,8 +4,20 @@
 #include "res/res.h"
 #include <stdlib.h>
 #include "cmn/cmn.h"
+#include "cmn/dict.h"
+
+static dict_t shader_lib = { 0 };
+
 
 void shader_new(shader_t* shader, shader_info_t* info) {
+	if (!shader_lib.table) {
+		dict_new(&shader_lib, 16);
+	}
+
+	void* ptr = dict_get(&shader_lib, info->name);
+	if (ptr) {
+		debug_err("shader with name %s already exists\n", info->name);
+	}
 
 	fs_t shader_folder = { 0 };
 	res_asset_folder(
@@ -55,13 +67,49 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	shader->pack	= info->pack;
 	shader->win		= info->window;
 	
+	dict_add(&shader_lib, info->name, shader, sizeof(shader_t));
 
 	// do lastly
 	vkDestroyShaderModule(gfx_dev()->device, fragmod, NULL);
 	vkDestroyShaderModule(gfx_dev()->device, vertmod, NULL);
+
 }
 
 
 void shader_del(shader_t* shader) {
+	if (!shader) return;
 
+	if (shader->pipe.pipeline) {
+		vkDestroyPipeline(gfx_dev()->device, shader->pipe.pipeline, NULL);
+		shader->pipe.pipeline = VK_NULL_HANDLE;
+	}
+
+	if (shader->pipe.layout) {
+		vkDestroyPipelineLayout(gfx_dev()->device, shader->pipe.layout, NULL);
+		shader->pipe.layout = VK_NULL_HANDLE;
+	}
+
+
+	dict_pop(&shader_lib, shader->name);
+}
+
+
+static void shader_lib_loop(const char* key, void* val) {
+	shader_t* shader = (shader_t*)val;
+	if (shader->pipe.pipeline) {
+		vkDestroyPipeline(gfx_dev()->device, shader->pipe.pipeline, NULL);
+		shader->pipe.pipeline = VK_NULL_HANDLE;
+	}
+
+	if (shader->pipe.layout) {
+		vkDestroyPipelineLayout(gfx_dev()->device, shader->pipe.layout, NULL);
+		shader->pipe.layout = VK_NULL_HANDLE;
+	}
+
+}
+
+void shaders_clear() {
+	dict_loop(&shader_lib, shader_lib_loop);
+	dict_del(&shader_lib);
+	
 }

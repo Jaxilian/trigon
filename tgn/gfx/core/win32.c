@@ -23,8 +23,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             win->width  = width;
             win->aspect = (float)win->width / (float)win->height;
 
-            if (win->callback) {
-                win->callback(win);
+            if (win->resize_cb) {
+                win->resize_cb(win);
             }
 
             gfx_swap_sync(win);
@@ -97,7 +97,7 @@ void win_new(win_t* win, str_t win_name, uint32_t width, uint32_t height, uint32
     gfx_sync_objects_create(win);
 }
 
-void win_frame_begin(win_t* win) {
+bool win_frame_begin(win_t* win) {
 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         TranslateMessage(&msg);
@@ -109,16 +109,31 @@ void win_frame_begin(win_t* win) {
             break;
         }
     }
+    if (!win->active) return false;
 
     gfx_frame_begin(win);
-    
+    return true;
 }
 
 void win_frame_end(win_t* win) {
-    gfx_frame_end(win);
+    if (win->active) {
+        gfx_frame_end(win);
+    }
 }
 
 void win_del(win_t* win) {
+    if (!win->handle) {
+        win->active = false;
+        return;
+    }
+
+    vkDeviceWaitIdle(gfx_dev()->device);
+
+    if (win->delete_cb) {
+        win->delete_cb(win);
+        win->delete_cb = NULL;
+    }
+
     gfx_swap_del(win);
     gfx_sync_objects_destroy(win);
     gfx_device_del(win);
@@ -134,6 +149,11 @@ void win_del(win_t* win) {
     }
 
     UnregisterClassA(CLASS_NAME, win->instance);
+    memset(win, 0, sizeof(win_t));
+}
+
+void win_connect_to_del(win_t* win, win_del_cb cb) {
+    win->delete_cb = cb;
 }
 
 #endif
