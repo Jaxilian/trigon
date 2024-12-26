@@ -3,9 +3,10 @@
 #include "cmn/dict.h"
 #include "cmn/cmn.h"
 #include <stdlib.h>
-#include "gfx/shading/gfx_shading.h"
 #include "string.h"
 #include "cmn/dict.h"
+#include <shaderc/shaderc.h>
+#include "gfx/pipe/gfx_pipe.h"
 
 static dict_t shaders = { 0 };
 
