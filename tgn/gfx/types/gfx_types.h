@@ -3,14 +3,20 @@
 #include "gfx/core/gfxctx.h"
 
 typedef struct {
-    VkDeviceSize size;
-    VkBufferUsageFlags usage;
-    VkMemoryPropertyFlags properties;
+    VkDeviceSize            size;
+    VkBufferUsageFlags      usage;
+    VkMemoryPropertyFlags   properties;
+    uint32_t                count;
+    size_t                  stride;
 } gfx_buffer_info_t;
 
 typedef struct {
-    VkDeviceMemory  memory;
-    VkBuffer        buffer;
+    VkBufferUsageFlags  usage;
+    VkDeviceMemory      memory;
+    VkBuffer            buffer;
+    size_t              size;
+    size_t              stride;
+    uint32_t            count;
 } gfx_buffer_t;
 
 VkResult gfx_buffer_new(gfx_buffer_info_t* info, gfx_buffer_t* out);

@@ -247,7 +247,7 @@ void gfx_image_texture(VkFormat format, uint32_t width, uint32_t height, uint32_
     info.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
     info.properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-    gfx_buffer_t buffer = { VK_NULL_HANDLE, VK_NULL_HANDLE };
+    gfx_buffer_t buffer = { 0 };
     VkResult result = gfx_buffer_new(&info, &buffer);
     if (result != VK_SUCCESS) {
         debug_err("Failed to create staging buffer. VkResult: %d\n", result);

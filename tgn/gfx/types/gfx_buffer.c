@@ -1,5 +1,6 @@
 #include "gfx_types.h"
 #include "cmn/cmn.h"
+#include <memory.h>
 
 VkResult gfx_buffer_new(gfx_buffer_info_t* info, gfx_buffer_t* out) {
 
@@ -9,14 +10,19 @@ VkResult gfx_buffer_new(gfx_buffer_info_t* info, gfx_buffer_t* out) {
     buff_info.usage = info->usage; // Buffer usage flags
     buff_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE; // Exclusive access
 
-    VkResult result = vkCreateBuffer(gfx_device_get(NULL)->device, &buff_info, NULL, &out->buffer);
+    out->size = info->count * info->stride;
+    out->stride = info->stride;
+    out->count = info->count;
+    out->usage = info->usage;
+
+    VkResult result = vkCreateBuffer(gfx_dev()->device, &buff_info, NULL, &out->buffer);
     if (result != VK_SUCCESS) {
         debug_err("Failed to create buffer!\n");
         return result;
     }
 
     VkMemoryRequirements memreq = { 0 };
-    vkGetBufferMemoryRequirements(gfx_device_get(NULL)->device, out->buffer, &memreq);
+    vkGetBufferMemoryRequirements(gfx_dev()->device, out->buffer, &memreq);
 
     VkMemoryAllocateInfo alloc_info = { 0 };
     alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -27,21 +33,33 @@ VkResult gfx_buffer_new(gfx_buffer_info_t* info, gfx_buffer_t* out) {
         info->properties
     );
 
-    result = vkAllocateMemory(gfx_device_get(NULL)->device, &alloc_info, NULL, &out->memory);
+    result = vkAllocateMemory(gfx_dev()->device, &alloc_info, NULL, &out->memory);
     if (result != VK_SUCCESS) {
         debug_err("Failed to allocate buffer memory!\n");
-        vkDestroyBuffer(gfx_device_get(NULL)->device, out->buffer, NULL);
+        vkDestroyBuffer(gfx_dev()->device, out->buffer, NULL);
         return result;
     }
 
-    vkBindBufferMemory(gfx_device_get(NULL)->device, out->buffer, out->memory, 0);
+    vkBindBufferMemory(gfx_dev()->device, out->buffer, out->memory, 0);
 
     return VK_SUCCESS;
 }
 
+void vkl_buffer_set(gfx_buffer_t* buffer, void* data) {
+    if (!buffer || !data) return;
+
+    void* mapped_memory;
+    if (vkMapMemory(gfx_dev()->device, buffer->memory, 0, buffer->size, 0, &mapped_memory) != VK_SUCCESS) {
+        debug_err("Failed to map Vulkan buffer memory!\n");
+    }
+
+    memcpy(mapped_memory, data, buffer->size);
+    vkUnmapMemory(gfx_dev()->device, buffer->memory);
+}
+
 void gfx_buffer_del(gfx_buffer_t* buffer) {
-    vkDestroyBuffer(gfx_device_get(NULL)->device, buffer->buffer, NULL);
-    vkFreeMemory(gfx_device_get(NULL)->device, buffer->memory, NULL);
+    vkDestroyBuffer(gfx_dev()->device, buffer->buffer, NULL);
+    vkFreeMemory(gfx_dev()->device, buffer->memory, NULL);
     buffer->buffer = VK_NULL_HANDLE;
     buffer->memory = VK_NULL_HANDLE;
 }

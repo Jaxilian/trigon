@@ -93,23 +93,6 @@ void gfx_pipe_new(gfx_pipe_info_t* info, gfx_pipe_t* out) {
         .pVertexAttributeDescriptions = NULL, //vertex3_attributes,
     };
 
-
-    printf("\nNEED TO PASS IN LAYOUT INFO\n\n");
-
-    VkPipelineLayoutCreateInfo temp_info = {
-        .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-        .setLayoutCount = 0,         // Optional for now
-        .pSetLayouts = NULL,         // Optional for now
-        .pushConstantRangeCount = 0, // Optional  for now
-        .pPushConstantRanges = NULL  // Optional for now
-    };
-
-    if (vkCreatePipelineLayout(gfx_dev()->device, &temp_info, NULL, &out->layout) != VK_SUCCESS) {
-        debug_err("failed to create pipeline layout");
-    }
-
-    info->settings.pipeline_layout = out->layout;
-
     VkGraphicsPipelineCreateInfo pipeline_info = {
         .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
         .stageCount = 2,

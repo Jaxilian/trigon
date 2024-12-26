@@ -61,6 +61,17 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	pipeinf.fragmod = fragmod;
 	pipeinf.vertmod = vertmod;
 	gfx_pipe_def(&pipeinf.settings);
+
+	tgn_pipe_layout_gen(info->sets, info->set_count, &pipeinf.settings.pipeline_layout);
+
+	VkPipelineLayoutCreateInfo temp_info = {
+	  .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+	  .setLayoutCount = 0,         // Optional for now
+	  .pSetLayouts = NULL,         // Optional for now
+	  .pushConstantRangeCount = 0, // Optional  for now
+	  .pPushConstantRanges = NULL  // Optional for now
+	};
+
 	gfx_pipe_new(&pipeinf, &shader->pipe);
 
 	shader->name	= info->name;

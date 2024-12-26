@@ -58,6 +58,9 @@ typedef void* VkDescriptorSetLayout;
 typedef void* VkDynamicState;
 typedef void* VkVertexInputBindingDescription;
 typedef void* VkVertexInputAttributeDescription;
+typedef void* VkDescriptorPool;
+typedef void* VkDescriptorSet;
+
 
 #endif
 

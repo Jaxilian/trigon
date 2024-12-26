@@ -24,8 +24,20 @@ int main(){
     shader_info_t info  = { 
         .pack = "base",     // which pack owns this shader
         .name = "triangle", // name of shader file
-        .window = &win      // which window should it be rendered on
-
+        .window = &win,     // which window should it be rendered on
+        .set_count = 1,
+        .sets = {
+            {
+                .resource_count = 1,
+                .resources = {
+                    {
+                        .count = 1,
+                        .location = 0,
+                        .buffer_type = SHADER_BUFFER_TYPE_STATIC
+                    }
+                }
+            }
+        },
     };
 
     shader_t shader = { 0 };
@@ -41,9 +53,7 @@ int main(){
 
         win_frame_end(&win);
     }
-    debug_log("Shutting down\n");
-
-   
+ 
     win_del(&win);
     gfx_quit();
 
