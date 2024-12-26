@@ -2,6 +2,7 @@
 #define TRIGON_SHADER_H
 #include "gfx/gfx.h"
 #include <inttypes.h>
+#include "gfx/pipe/gfx_pipe.h"
 
 typedef enum {
 	SHADER_STAGE_FRAGMENT,
@@ -21,7 +22,10 @@ typedef struct {
 } shader_info_t;
 
 typedef struct {
-	int placeholder;
+	const char* pack;
+	const char* name;
+	gfx_pipe_t	pipe;
+	win_t*		win;
 } shader_t;
 
 void shader_new(shader_t* shader, shader_info_t* info);

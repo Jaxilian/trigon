@@ -133,6 +133,11 @@ bool gfx_frame_begin(win_t* win) {
     return win->frame_ready;
 }
 
+VkCommandBuffer gfx_cmdbuff(win_t* win) {
+    uint32_t current_frame = win->swapchain.current_frame;
+    return win->device->cmd_buffers[current_frame];
+}
+
 // End the current frame and submit it for presentation
 VkResult gfx_frame_end(win_t* win) {
 

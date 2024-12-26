@@ -30,7 +30,7 @@ int main(){
     // update loop
     while (win.active) {
         win_frame_begin(&win);
-
+        tgn_upd_test(&shader);
         win_frame_end(&win);
     }
     

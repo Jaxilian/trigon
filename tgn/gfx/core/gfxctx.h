@@ -144,6 +144,9 @@ VkResult	gfx_frame_end(win_t* win);
 void		gfx_sync_objects_create(win_t* win);
 void		gfx_sync_objects_destroy(win_t* win);
 
+
+VkCommandBuffer gfx_cmdbuff(win_t* win);
+
 VkCommandBuffer gfx_cmd_begin();
 void gfx_cmd_end(VkCommandBuffer cmd_buff);
 uint32_t gfx_find_memory_type(VkPhysicalDevice physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags properties);

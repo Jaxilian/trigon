@@ -1,6 +1,6 @@
 #include "shaders.h"
 #include "cmn/fs.h"
-#include "gfx/pipe/gfx_pipe.h"
+
 #include "res/res.h"
 #include <stdlib.h>
 #include "cmn/cmn.h"
@@ -27,8 +27,6 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	char* bin = malloc(bin_size+1);
 	fs_readf(shader_name, bin);
 
-
-
 	gfx_shader_new((uint32_t*)bin, bin_size, &vertmod);
 	free(bin);
 
@@ -46,13 +44,17 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	free(bin);
 
     // pipeline
-	gfx_pipe_t pipe = { 0 };
 	gfx_pipe_info_t pipeinf = { 0 };
 	pipeinf.window = info->window;
 	pipeinf.fragmod = fragmod;
 	pipeinf.vertmod = vertmod;
 	gfx_pipe_def(&pipeinf.settings);
-	gfx_pipe_new(&pipeinf, &pipe);
+	gfx_pipe_new(&pipeinf, &shader->pipe);
+
+	shader->name	= info->name;
+	shader->pack	= info->pack;
+	shader->win		= info->window;
+	
 
 	// do lastly
 	vkDestroyShaderModule(gfx_dev()->device, fragmod, NULL);
