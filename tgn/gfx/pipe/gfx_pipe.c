@@ -117,19 +117,4 @@ void gfx_pipe_new(gfx_pipe_info_t* info, gfx_pipe_t* out) {
         debug_err("Failed to create graphics pipeline.\n");
     }
  
-   
-
-    //vkDestroyPipelineLayout(gfx_dev()->device, temp_layout, NULL);
-
-    /*
-    // CREATE DESCRIPTOR SET
-    VkDescriptorPool descriptor_pool = { 0 };
-    gfx_desc_pool_new(
-        layout->shader_layouts,
-        layout->shader_layout_count,
-        1, // Number of descriptor sets per layout
-        &descriptor_pool
-    );
-    */
-
 }

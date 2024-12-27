@@ -62,7 +62,7 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	pipeinf.vertmod = vertmod;
 	gfx_pipe_def(&pipeinf.settings);
 
-	tgn_pipe_layout_gen(info->sets, info->set_count, &pipeinf.settings.pipeline_layout);
+	gfx_pipe_layout_setup(info->sets, info->set_count, &pipeinf.settings.pipeline_layout);
 
 	VkPipelineLayoutCreateInfo temp_info = {
 	  .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
@@ -72,18 +72,22 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	  .pPushConstantRanges = NULL  // Optional for now
 	};
 
+
 	gfx_pipe_new(&pipeinf, &shader->pipe);
 
 	shader->name	= info->name;
 	shader->pack	= info->pack;
 	shader->win		= info->window;
 	
-	dict_add(&shader_lib, info->name, shader, sizeof(shader_t));
 
-	// do lastly
+	// do after pipeline creation
 	vkDestroyShaderModule(gfx_dev()->device, fragmod, NULL);
 	vkDestroyShaderModule(gfx_dev()->device, vertmod, NULL);
 
+
+	gfx_desc_pool_setup(&shader->pipe, info->sets, info->set_count);
+
+	dict_add(&shader_lib, info->name, shader, sizeof(shader_t));
 }
 
 
@@ -99,6 +103,7 @@ void shader_del(shader_t* shader) {
 		vkDestroyPipelineLayout(gfx_dev()->device, shader->pipe.layout, NULL);
 		shader->pipe.layout = VK_NULL_HANDLE;
 	}
+
 
 
 	dict_pop(&shader_lib, shader->name);
