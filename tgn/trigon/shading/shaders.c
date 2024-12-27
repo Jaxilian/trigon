@@ -87,6 +87,7 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 
 	gfx_desc_pool_setup(&shader->pipe, info->sets, info->set_count);
 
+	gfx_desc_pool_alloc(&shader->pipe, info->sets, info->set_count);
 	dict_add(&shader_lib, info->name, shader, sizeof(shader_t));
 }
 
