@@ -18,12 +18,11 @@
 
 #define __STD_FS_MAX 240
 typedef char fs_t[__STD_FS_MAX];
-fs_t fs_custom_projdir;
 
 void fs_new(fs_t dest, const char* str);
 void fs_usr(fs_t dest);
 void fs_root(fs_t dest);
-void fs_add(fs_t dest, const fs_t extra);
+void fs_add(fs_t dest, const char* extra);
 void fs_pop(fs_t path);
 bool fs_exist(fs_t dest);
 bool fs_isfile(fs_t dest);
@@ -45,7 +44,7 @@ void fs_dir(fs_t dest);
 void fs_app(fs_t dest);
 void fs_parent(fs_t dest, fs_t path);
 void fs_last(const fs_t path, fs_t out);
-bool fs_cd(fs_t dest, const fs_t new_dest);
+bool fs_cd(fs_t dest, const char* new_dest);
 void fs_mkdir(fs_t dir);
 
 // make sure malloc is added with one malloc(size_t + 1)

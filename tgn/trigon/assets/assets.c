@@ -18,7 +18,8 @@ static void build(const char* pack) {
 		);
 	}
 
-	if (!fs_cd(root, "res")) {
+	fs_t res_path = {"res"};
+	if (!fs_cd(root, res_path)) {
 		debug_err("%s does not have a sub dir called \"res\"\n", root);
 	}
 

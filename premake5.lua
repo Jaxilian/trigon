@@ -7,11 +7,14 @@ local function link_vulkan()
 
         includedirs { path.join(vulkan_sdk, "Include") }
         libdirs { path.join(vulkan_sdk, "Lib") }
+        links { "vulkan-1" , "shaderc_combined"}
     else
+        links { "vulkan", "shaderc_combined", "pthread", "dl", "m" }
+        includedirs { "/usr/include" }
+        libdirs { "/usr/lib", "/usr/local/lib" }
     end
     
     defines { "_USING_VULKAN_SDK" }
-    links { "vulkan-1" , "shaderc_combined"}
 end
 
 workspace("tgn")
@@ -25,7 +28,7 @@ architecture "x86_64"
 if os.target() == "windows" then
     defines { "_WIN32" }
 else
-    defines { "_LINUX", "_UNIX" }
+    defines { "_LINUX", "_UNIX", "_GNU_SOURCE" }
 end
 
 flags { "FatalWarnings" }

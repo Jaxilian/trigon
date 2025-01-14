@@ -5,15 +5,22 @@
 #ifdef _DEBUG
 
 #ifdef _WIN32
-#define EXTENSIONS {"VK_KHR_surface", "VK_KHR_win32_surface", VK_EXT_DEBUG_UTILS_EXTENSION_NAME }
-#define EXTENSION_COUNT 3
+    #define EXTENSIONS {"VK_KHR_surface", "VK_KHR_win32_surface", VK_EXT_DEBUG_UTILS_EXTENSION_NAME }
+    #define EXTENSION_COUNT 3
+
+#else
+    #define EXTENSIONS { "VK_KHR_surface", "VK_KHR_wayland_surface", VK_EXT_DEBUG_UTILS_EXTENSION_NAME }
+    #define EXTENSION_COUNT 3
 #endif
 
 #else
 
 #ifdef _WIN32
-#define EXTENSIONS {"VK_KHR_surface", "VK_KHR_win32_surface" }
-#define EXTENSION_COUNT 2
+    #define EXTENSIONS {"VK_KHR_surface", "VK_KHR_win32_surface" }
+    #define EXTENSION_COUNT 2
+#else
+    #define EXTENSIONS { "VK_KHR_surface", "VK_KHR_wayland_surface"}
+    #define EXTENSION_COUNT 2
 #endif
 
 #endif

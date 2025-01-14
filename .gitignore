@@ -3,3 +3,6 @@ gen/
 *.vcxproj.*
 *.vcxproj
 *.sln
+.vscode/settings.json
+/.vscode
+Makefile
