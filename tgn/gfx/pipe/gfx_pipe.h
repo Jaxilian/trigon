@@ -72,7 +72,7 @@ typedef struct {
     shader_res_set_t    sets[MAX_DESC_SETS_IN_USE];
 } shader_info_t;
 
-void gfx_pipe_def(gfx_pipe_setting_t* settings);
+void gfx_pipe_default(gfx_pipe_setting_t* settings);
 void gfx_shader_new(const uint32_t* bin, size_t bin_size, VkShaderModule* mod);
 void gfx_pipe_new(gfx_pipe_info_t* info, gfx_pipe_t* out);
 

@@ -60,7 +60,7 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	pipeinf.window = info->window;
 	pipeinf.fragmod = fragmod;
 	pipeinf.vertmod = vertmod;
-	gfx_pipe_def(&pipeinf.settings);
+	gfx_pipe_default(&pipeinf.settings);
 
 	gfx_pipe_layout_setup(info->sets, info->set_count, &pipeinf.settings.pipeline_layout);
 

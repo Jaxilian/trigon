@@ -11,7 +11,7 @@ void gfx_enable_alpha_blending(gfx_pipe_setting_t* config_info) {
     config_info->color_blend_attachment.alphaBlendOp = VK_BLEND_OP_ADD;
 }
 
-void gfx_pipe_def(gfx_pipe_setting_t* config_info) {
+void gfx_pipe_default(gfx_pipe_setting_t* config_info) {
     if (!config_info) debug_err("default_pipeline_config_info() -> \"config_info\" can't be NULL");
 
     // Input assembly state
