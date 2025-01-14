@@ -89,6 +89,25 @@ void gfx_desc_pool_setup(gfx_pipe_t* pipe,
     debug_log("Pool setup!\n");
 }
 
+void gfx_desc_layout_setup(shader_res_set_t* set) {
+    VkDevice dev = gfx_dev()->device;
+
+    VkDescriptorSetLayoutBinding bindings[MAX_DESC_PER_SET] = { 0 };
+    for (uint32_t i = 0; i < set->resource_count; i++) {
+        bindings[i] = set->resources[i]._binding; // from gfx_descriptor_setup()
+    }
+
+    VkDescriptorSetLayoutCreateInfo layout_info = {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+        .bindingCount = set->resource_count,
+        .pBindings = bindings
+    };
+
+    if (vkCreateDescriptorSetLayout(dev, &layout_info, NULL, &set->_layout) != VK_SUCCESS) {
+        debug_err("failed to create descriptor set layout\n");
+    }
+}
+
 void gfx_desc_pool_alloc(gfx_pipe_t* pipe, shader_res_set_t sets[MAX_DESC_SETS_IN_USE], uint32_t set_count)
 {
 

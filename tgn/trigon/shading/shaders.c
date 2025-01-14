@@ -62,6 +62,15 @@ void shader_new(shader_t* shader, shader_info_t* info) {
 	pipeinf.vertmod = vertmod;
 	gfx_pipe_default(&pipeinf.settings);
 
+	for (uint32_t i = 0; i < info->set_count; i++) {
+		shader_res_set_t* set = &info->sets[i];
+		for (uint32_t j = 0; j < set->resource_count; j++) {
+			gfx_descriptor_setup(&set->resources[j]);
+		}
+
+		gfx_desc_layout_setup(set);
+	}
+
 	gfx_pipe_layout_setup(info->sets, info->set_count, &pipeinf.settings.pipeline_layout);
 
 	VkPipelineLayoutCreateInfo temp_info = {
