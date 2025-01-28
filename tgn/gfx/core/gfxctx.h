@@ -2,6 +2,7 @@
 #define TGN_GFXCTX_H
 
 #include <stdbool.h>
+#include <inttypes.h>
 
 #define MAX_FRAMES_IN_FLIGHT 2
 

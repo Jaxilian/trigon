@@ -1,6 +1,5 @@
 #include "trigon/trigon.h"
 #include "trigon/assets/assets.h"
-#include "trigon/entities/camera.h"
 
 void on_win_del(win_t* win) {
     shaders_clear();
@@ -16,23 +15,11 @@ int main(){
     win.color[1] = 0.01f;
     win.color[2] = 0.01f;
     win.color[3] = 1.00f;
-    
-    win_connect_to_del(&win, on_win_del);
+
+    win_connect_to_del(&win, (win_del_cb)on_win_del);
 
     //compiles and builds assets for release (only runs in debug currently)
-    tgn_assets_load("base", false); 
-
-    camera_info_t caminfo = {
-        .window = &win,
-        .fov = 45.0f,
-        .position = {1,0,0},
-        .look_at = {0,0,0},
-        .near = 0.1f,
-        .far = 1000.0f
-    };
-
-    camera_t camera = { 0 };
-    camera_new(&camera, &caminfo);
+    tgn_assets_load("base", true);
 
     shader_info_t info  = { 
         .pack = "base",     // which pack owns this shader
@@ -67,8 +54,6 @@ int main(){
         win_frame_end(&win);
     }
  
-   // camera_del(&camera);
-
     win_del(&win);
     gfx_quit();
 

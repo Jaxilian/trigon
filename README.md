@@ -61,6 +61,7 @@ int main(){
 
 - [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
 - [Premake5](https://premake.github.io/)
+- [wayland-devel](https://packages.fedoraproject.org/pkgs/wayland/wayland-devel/index.html) (linux)
 
 ### Building in a nutshell
 

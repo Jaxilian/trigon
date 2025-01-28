@@ -1306,7 +1306,7 @@ extern "C" {
 #define __FS_NSTD_DIREND '\\'
 #endif
 
-fs_t fs_custom_projdir = { 0 };
+static fs_t fs_custom_projdir = { 0 };
 
 typedef struct {
 	int     len;
@@ -1347,7 +1347,7 @@ void fs_app(fs_t dest) {
 #ifdef _WIN32
 	GetModuleFileNameA(NULL, dest, __STD_FS_MAX);
 #else
-	readlink("/proc/self/exe", p, __TG_FS_MAX);
+	readlink("/proc/self/exe", dest, __STD_FS_MAX);
 #endif
 }
 
@@ -1363,7 +1363,7 @@ void fs_dir(fs_t dest) {
 	free(buffer);
 
 #else
-	getcwd(dest, __TG_FS_MAX);
+	getcwd(dest, __STD_FS_MAX);
 #endif
 	fs_validate(dest);
 }
@@ -1400,7 +1400,7 @@ void fs_root(fs_t dest) {
 #endif
 }
 
-void fs_add(fs_t dest, const fs_t extra) {
+void fs_add(fs_t dest, const char* extra) {
 	strcat(dest, extra);
 }
 
@@ -1416,7 +1416,7 @@ bool fs_exist(fs_t dest) {
 }
 
 
-bool fs_cd(fs_t dest, const fs_t src) {
+bool fs_cd(fs_t dest, const char* src) {
 	strcat(dest, src);
 	fs_validate(dest);
 	return fs_exist(dest);
@@ -1440,7 +1440,11 @@ void fs_get(fs_t path, fs_t child) {
 	}
 
 	if (path[strlen(path) - 1] == __FS_STD_DIREND) {
-		int result = _mkdir(path);
+		#ifdef _WIN32 
+			int result = _mkdir(path);
+		#else
+			int result = mkdir(path, 0700);
+		#endif
 		return;
 	}
 
