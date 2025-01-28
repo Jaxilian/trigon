@@ -85,8 +85,6 @@ void gfx_desc_pool_setup(gfx_pipe_t* pipe,
     if (vkCreateDescriptorPool(dev, &pool_info, NULL, &pipe->descriptor_pool) != VK_SUCCESS) {
         debug_err("failed to create descriptor pool\n");
     }
-
-    debug_log("Pool setup!\n");
 }
 
 void gfx_desc_layout_setup(shader_res_set_t* set) {
@@ -108,10 +106,7 @@ void gfx_desc_layout_setup(shader_res_set_t* set) {
     }
 }
 
-void gfx_desc_pool_alloc(gfx_pipe_t* pipe, shader_res_set_t sets[MAX_DESC_SETS_IN_USE], uint32_t set_count)
-{
-
-    debug_log("\nCRASH HERE ; gfx_descriptor.c\n\n");
+void gfx_desc_pool_alloc(gfx_pipe_t* pipe, shader_res_set_t sets[MAX_DESC_SETS_IN_USE], uint32_t set_count){
 
     VkDevice dev = gfx_dev()->device;
     if (!dev || pipe->descriptor_pool == VK_NULL_HANDLE) {

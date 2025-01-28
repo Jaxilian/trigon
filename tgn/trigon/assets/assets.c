@@ -35,7 +35,6 @@ static void build(const char* pack) {
 			res_shader_build(res_path, pack);
 		}
 	}
-	debug_log("build completed\n");
 }
 
 void tgn_assets_load(const char* pack, bool build_assets) {

@@ -15,28 +15,33 @@ void assert(bool statement, str_t msg, ...) {
     }
 }
 
-void debug_err(str_t format, ...) {
+void __debug_err(const char* file, int line, str_t format, ...) {
     printf("[err] ");
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
+
+    printf("(%s : %d)\n ", file, line);
+
     exit(EXIT_FAILURE);
 }
 
-void debug_wrn(str_t format, ...) {
+void __debug_wrn(const char* file, int line, str_t format, ...) {
     printf("[wrn] ");
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
+    printf("(%s : %d)\n ", file, line);
 }
 
-void debug_log(str_t format, ...) {
+void __debug_log(const char* file, int line, str_t format, ...) {
     printf("[log] ");
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
+    printf("(%s : %d)\n ", file, line);
 }
 

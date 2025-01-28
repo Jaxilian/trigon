@@ -9,9 +9,13 @@
 typedef const char* str_t;
 
 
-void debug_err(str_t format, ...);
-void debug_wrn(str_t format, ...);
-void debug_log(str_t format, ...);
+void __debug_err(const char* file, int line, str_t format, ...);
+void __debug_wrn(const char* file, int line, str_t format, ...);
+void __debug_log(const char* file, int line, str_t format, ...);
+
+#define debug_err(fmt, ...) __debug_err( __FILE__, __LINE__,fmt, ##__VA_ARGS__)
+#define debug_wrn(fmt, ...) __debug_wrn( __FILE__, __LINE__,fmt, ##__VA_ARGS__)
+#define debug_log(fmt, ...) __debug_log( __FILE__, __LINE__,fmt, ##__VA_ARGS__)
 
 void assert(bool statement, str_t msg, ...);
 
