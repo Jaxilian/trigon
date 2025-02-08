@@ -83,13 +83,7 @@ void gfx_desc_pool_setup(gfx_pipe_t* pipe, shader_res_set_t sets[MAX_DESC_SETS_I
 void gfx_desc_pool_alloc(gfx_pipe_t* pipe, shader_res_set_t sets[MAX_DESC_SETS_IN_USE], uint32_t set_count);
 void gfx_desc_layout_setup(shader_res_set_t* set);
 
-size_t gfx_compile_shader(
-    char* src,
-    size_t size,
-    shaderc_shader_kind kind,
-    char* out,
-    const char* filename
-);
+
 
 void gfx_pipe_layout_setup(
     shader_res_set_t sets[MAX_DESC_SETS_IN_USE],

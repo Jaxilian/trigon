@@ -155,6 +155,15 @@ VkCommandBuffer gfx_cmdbuff(win_t* win);
 VkCommandBuffer gfx_cmd_begin();
 void gfx_cmd_end(VkCommandBuffer cmd_buff);
 uint32_t gfx_find_memory_type(VkPhysicalDevice physicalDevice, uint32_t typeFilter, VkMemoryPropertyFlags properties);
+
+size_t gfx_compile_shader(
+	char* src,
+	size_t size,
+	shaderc_shader_kind kind,
+	char* out,
+	const char* filename
+);
+
 #endif
 
 

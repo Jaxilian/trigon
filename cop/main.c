@@ -17,7 +17,7 @@ int main(){
     win.color[2] = 0.01f;
     win.color[3] = 1.00f;
     
-    win_connect_to_del(&win, on_win_del);
+    win_connect_to_del(&win, (win_del_cb)on_win_del);
 
     //compiles and builds assets for release (only runs in debug currently)
     tgn_assets_load("base", false); 
@@ -33,6 +33,7 @@ int main(){
 
     camera_t camera = { 0 };
     camera_new(&camera, &caminfo);
+
 
     shader_info_t info  = { 
         .pack = "base",     // which pack owns this shader

@@ -1,4 +1,4 @@
-#include "gfx_pipe.h"
+#include "gfxctx.h"
 #include <stdio.h>
 #include <memory.h>
 
