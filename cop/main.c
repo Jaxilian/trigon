@@ -1,6 +1,7 @@
 #include "trigon/trigon.h"
 #include "trigon/assets/assets.h"
 #include "trigon/entities/camera.h"
+#include "trigon/data/tgn_data.h"
 
 void on_win_del(win_t* win) {
     shaders_clear();
@@ -21,6 +22,10 @@ int main(){
 
     //compiles and builds assets for release (only runs in debug currently)
     tgn_assets_load("base", false); 
+
+    tgn_scene_data_init();
+
+    
 
     camera_info_t caminfo = {
         .window = &win,
@@ -69,6 +74,8 @@ int main(){
     }
  
    // camera_del(&camera);
+
+    tgn_scene_data_cleanup();
 
     win_del(&win);
     gfx_quit();

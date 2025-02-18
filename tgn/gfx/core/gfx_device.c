@@ -75,7 +75,9 @@ static bool is_device_suitable(vkdev_t* device, VkSurfaceKHR surface) {
 
 vkdev_t* gfx_device_get(win_t* win) {
 	if (device.initialized) return &device;
-
+	if (!win) {
+		printf("s");
+	}
 	uint32_t device_count = 0;
 	vkEnumeratePhysicalDevices(gfx_vkinstance(), &device_count, NULL);
 	if (device_count == 0) { debug_err("No Vulkan-supported GPUs found"); return NULL; }

@@ -24,7 +24,7 @@ void __debug_err(const char* file, int line, str_t format, ...) {
 
     printf("(%s : %d)\n ", file, line);
 
-    exit(EXIT_FAILURE);
+    //exit(EXIT_FAILURE);
 }
 
 void __debug_wrn(const char* file, int line, str_t format, ...) {
